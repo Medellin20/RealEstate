@@ -227,7 +227,24 @@ Les tableaux admin passent en mode « cartes empilées » sur mobile.
 
 ## Déploiement
 
-### Vercel (recommandé)
+### Netlify
+
+Le dépôt contient un fichier `netlify.toml` configuré pour Next.js 14 avec le
+runtime Netlify. Dans Netlify :
+
+1. Importez le dépôt GitHub et laissez Netlify lire `netlify.toml`.
+2. Ajoutez les variables de `.env.example` dans **Site configuration → Environment variables**.
+3. Déployez une première fois, puis remplacez `NEXT_PUBLIC_SITE_URL` par l'URL
+   publique finale et relancez le déploiement.
+4. Si Stripe est activé, configurez son webhook vers
+   `https://votre-domaine/api/webhooks/stripe` pour l'événement
+   `checkout.session.completed`, puis renseignez `STRIPE_WEBHOOK_SECRET`.
+
+Ne copiez jamais `.env.local` dans Git et n'exposez jamais
+`SUPABASE_SERVICE_ROLE_KEY`, `ADMIN_PASSWORD` ou `ADMIN_SESSION_SECRET` avec un
+préfixe `NEXT_PUBLIC_`.
+
+### Vercel
 
 1. Importez le repository dans Vercel.
 2. Ajoutez les variables d'environnement (identiques à `.env.local`).

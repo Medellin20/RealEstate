@@ -34,7 +34,7 @@ export default function MentionsLegalesPage() {
       </p>
 
       <h2>Contact</h2>
-      <p>Pour toute question relative aux présentes mentions légales : contact@realestate-nl.example</p>
+      <p>Pour toute question relative aux présentes mentions légales : contacts@realestatenl.agency</p>
     </LegalPage>
   );
 }

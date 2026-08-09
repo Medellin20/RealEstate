@@ -91,11 +91,11 @@ export function Footer() {
           <ul className="mt-4 space-y-3">
             <li>
               <a
-                href="mailto:contact@realestate-nl.example"
+                href="mailto:contacts@realestatenl.agency"
                 className="flex items-center gap-2.5 text-sm text-sand-300 transition-colors hover:text-white"
               >
                 <Mail className="h-4 w-4 shrink-0" />
-                contact@realestate-nl.example
+                contacts@realestatenl.agency
               </a>
             </li>
             <li>

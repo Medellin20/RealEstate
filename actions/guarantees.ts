@@ -12,7 +12,10 @@ import type { ActionResult } from '@/types';
  * passe à "payment_declared" ; la validation finale ("payment_received")
  * reste une action manuelle de l'administrateur (voir actions/admin-guarantees.ts).
  */
-export async function declareGuaranteeTransfer(formData: FormData): Promise<ActionResult> {
+export async function declareGuaranteeTransfer(
+  _previousState: ActionResult,
+  formData: FormData
+): Promise<ActionResult> {
   const raw = {
     guaranteePaymentId: String(formData.get('guaranteePaymentId') || ''),
     transferDate: String(formData.get('transferDate') || ''),

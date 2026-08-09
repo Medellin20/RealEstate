@@ -7,8 +7,9 @@ import { declareGuaranteeTransfer } from '@/actions/guarantees';
 import { Input } from '@/components/ui/input';
 import { Label, FieldError } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import type { ActionResult } from '@/types';
 
-const initialState = { success: false, message: '' };
+const initialState: ActionResult = { success: false, message: '' };
 
 function SubmitButton() {
   const { pending } = useFormStatus();
