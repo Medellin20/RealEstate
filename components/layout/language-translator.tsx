@@ -24,6 +24,11 @@ export function LanguageTranslator({ id, className }: { id: string; className?: 
   const initialized = React.useRef(false);
 
   React.useEffect(() => {
+    const hasLanguagePreference = document.cookie.split(';').some((cookie) => cookie.trim().startsWith('googtrans='));
+    if (!hasLanguagePreference) {
+      document.cookie = 'googtrans=/fr/nl; path=/; SameSite=Lax';
+    }
+
     const initialize = () => {
       if (initialized.current || !window.google?.translate || !document.getElementById(id)) return;
 

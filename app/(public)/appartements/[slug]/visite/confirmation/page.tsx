@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { CheckCircle2, Clock, Home, Mail } from 'lucide-react';
 import { getViewingByReference } from '@/lib/data/dossier';
-import { getBankSettings } from '@/lib/data/bank';
+import { DEMO_BANK_SETTINGS, getBankSettings, isDemoBankSettings } from '@/lib/data/bank';
 import { Button } from '@/components/ui/button';
 import { BankTransferInstructions } from '@/components/shared/bank-transfer-instructions';
 import { VIEWING_STATUS_LABELS } from '@/lib/utils/constants';
@@ -20,6 +20,7 @@ export default async function ViewingConfirmationPage({
   const viewing = await getViewingByReference(searchParams.ref);
   if (!viewing) notFound();
   const bankSettings = await getBankSettings();
+  const displayedBankSettings = bankSettings ?? DEMO_BANK_SETTINGS;
 
   const property = (viewing as any).properties;
   const isAwaitingPayment = viewing.status === 'payment_pending';
@@ -47,16 +48,15 @@ export default async function ViewingConfirmationPage({
           {viewing.fee_amount > 0 && <Row label="Frais de visite" value={formatPrice(viewing.fee_amount)} />}
         </div>
 
-        {isAwaitingPayment && bankSettings && (
+        {isAwaitingPayment && (
           <div className="mt-5 text-left">
-            <BankTransferInstructions bankSettings={bankSettings} reference={viewing.reference} amount={100} />
+            <BankTransferInstructions
+              bankSettings={displayedBankSettings}
+              reference={viewing.reference}
+              amount={100}
+              isExample={isDemoBankSettings(displayedBankSettings)}
+            />
           </div>
-        )}
-
-        {isAwaitingPayment && !bankSettings && (
-          <p className="mt-5 rounded-xl bg-brick-50 p-4 text-sm text-brick-700">
-            Les coordonnées bancaires sont momentanément indisponibles. Contactez notre équipe avant d’effectuer le paiement.
-          </p>
         )}
 
         <div className="mt-5 flex items-start gap-3 rounded-xl border border-canal-100 bg-canal-50/60 p-4 text-left">

@@ -2,6 +2,22 @@ import 'server-only';
 import { createAdminClient } from '@/lib/supabase/admin';
 import type { BankSettings } from '@/types/database';
 
+export const DEMO_BANK_SETTINGS: BankSettings = {
+  id: 1,
+  beneficiary_name: 'Real Estate NL B.V. (EXEMPLE)',
+  iban: 'NL00 TEST 0000 0000 00',
+  bic: 'TESTNL2A',
+  bank_name: 'Nederlandse Voorbeeldbank',
+  payment_instructions: 'RIB de démonstration — ne pas effectuer de virement avant son remplacement dans l’espace administrateur.',
+  default_deposit_amount: 0,
+  updated_at: new Date(0).toISOString(),
+};
+
+export function isDemoBankSettings(settings: BankSettings) {
+  const iban = settings.iban.replace(/\s/g, '').toUpperCase();
+  return iban === 'NL91ABNA0417164300' || iban.startsWith('NL00BANK') || iban.startsWith('NL00TEST');
+}
+
 /**
  * Les coordonnées bancaires sont stockées dans bank_settings (RLS activée,
  * aucune policy anon — voir supabase/rls_policies.sql) et modifiables

@@ -284,8 +284,8 @@ create table bank_settings (
 );
 
 insert into bank_settings (id, beneficiary_name, iban, bic, bank_name, payment_instructions, default_deposit_amount)
-values (1, 'Real Estate NL B.V.', 'NL00 BANK 0000 0000 00', 'BANKNL2A', 'Exemple Bank N.V.',
-        'Merci d''indiquer impérativement la référence de garantie dans le libellé de votre virement.', 1500)
+values (1, 'Real Estate NL B.V. (EXEMPLE)', 'NL00 TEST 0000 0000 00', 'TESTNL2A', 'Nederlandse Voorbeeldbank',
+        'RIB de démonstration — ne pas effectuer de virement avant son remplacement dans l''espace administrateur.', 0)
 on conflict (id) do nothing;
 
 -- -----------------------------------------------------------------------------

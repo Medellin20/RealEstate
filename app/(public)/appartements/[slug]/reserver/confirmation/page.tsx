@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { CheckCircle2, Home, Mail } from 'lucide-react';
 import { getReservationByReference } from '@/lib/data/dossier';
-import { getBankSettings } from '@/lib/data/bank';
+import { DEMO_BANK_SETTINGS, getBankSettings, isDemoBankSettings } from '@/lib/data/bank';
 import { Button } from '@/components/ui/button';
 import { BankTransferInstructions } from '@/components/shared/bank-transfer-instructions';
 import { RESERVATION_STATUS_LABELS } from '@/lib/utils/constants';
@@ -20,6 +20,7 @@ export default async function ReservationConfirmationPage({
   const reservation = await getReservationByReference(searchParams.ref);
   if (!reservation) notFound();
   const bankSettings = await getBankSettings();
+  const displayedBankSettings = bankSettings ?? DEMO_BANK_SETTINGS;
 
   const property = (reservation as any).properties;
   const monthlyPrice = Number(property?.monthly_price) || 0;
@@ -48,15 +49,14 @@ export default async function ReservationConfirmationPage({
           <Row label="Total à verser" value={formatPrice(paymentAmount)} />
         </div>
 
-        {bankSettings ? (
-          <div className="mt-5 text-left">
-            <BankTransferInstructions bankSettings={bankSettings} reference={reservation.reference} amount={paymentAmount} />
-          </div>
-        ) : (
-          <p className="mt-5 rounded-xl bg-brick-50 p-4 text-sm text-brick-700">
-            Les coordonnées bancaires sont momentanément indisponibles. Contactez notre équipe avant d’effectuer le paiement.
-          </p>
-        )}
+        <div className="mt-5 text-left">
+          <BankTransferInstructions
+            bankSettings={displayedBankSettings}
+            reference={reservation.reference}
+            amount={paymentAmount}
+            isExample={isDemoBankSettings(displayedBankSettings)}
+          />
+        </div>
 
         <div className="mt-5 flex items-start gap-3 rounded-xl border border-canal-100 bg-canal-50/60 p-4 text-left">
           <Mail className="mt-0.5 h-5 w-5 shrink-0 text-canal-600" />

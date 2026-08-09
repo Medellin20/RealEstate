@@ -1,4 +1,4 @@
-import { Landmark } from 'lucide-react';
+import { AlertTriangle, Landmark } from 'lucide-react';
 import type { BankSettings } from '@/types/database';
 import { formatPrice } from '@/lib/utils/format';
 import { CopyableField } from '@/components/shared/copyable-field';
@@ -7,10 +7,12 @@ export function BankTransferInstructions({
   bankSettings,
   reference,
   amount,
+  isExample = false,
 }: {
   bankSettings: BankSettings;
   reference: string;
   amount: number;
+  isExample?: boolean;
 }) {
   return (
     <div className="rounded-2xl border border-ink-100 bg-white p-5 sm:p-6">
@@ -18,6 +20,13 @@ export function BankTransferInstructions({
         <Landmark className="h-5 w-5 text-canal-600" />
         <h3 className="font-bold">Coordonnées bancaires pour votre virement</h3>
       </div>
+
+      {isExample && (
+        <div className="mt-4 flex items-start gap-2 rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm font-semibold text-amber-800">
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+          RIB de démonstration : ne pas effectuer de virement. Remplacez-le dans l’espace administrateur.
+        </div>
+      )}
 
       <div className="mt-4 flex items-center justify-between rounded-xl bg-ink-700 px-4 py-3.5 text-white">
         <span className="text-sm font-medium">Montant à verser</span>

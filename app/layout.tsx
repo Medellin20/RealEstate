@@ -49,7 +49,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={openSans.variable}>
+    <html lang="nl" className={openSans.variable}>
       <body className="font-sans">
         {children}
         <Toaster

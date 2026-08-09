@@ -217,10 +217,10 @@ on conflict do nothing;
 -- -----------------------------------------------------------------------------
 
 update bank_settings set
-  beneficiary_name = 'Real Estate NL B.V.',
-  iban = 'NL91 ABNA 0417 1643 00',
-  bic = 'ABNANL2A',
-  bank_name = 'ABN AMRO Bank N.V.',
-  payment_instructions = 'Veuillez impérativement indiquer la référence de garantie fournie (ex : GUARANTEE-REN-000123) dans le libellé de votre virement. Le traitement peut prendre 2 à 3 jours ouvrés après réception.',
-  default_deposit_amount = 1500
+  beneficiary_name = 'Real Estate NL B.V. (EXEMPLE)',
+  iban = 'NL00 TEST 0000 0000 00',
+  bic = 'TESTNL2A',
+  bank_name = 'Nederlandse Voorbeeldbank',
+  payment_instructions = 'RIB de démonstration — ne pas effectuer de virement avant son remplacement dans l’espace administrateur.',
+  default_deposit_amount = 0
 where id = 1;
