@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Home, Menu, Search, User, X } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 import { Button } from '@/components/ui/button';
+import { LanguageTranslator } from '@/components/layout/language-translator';
 
 const NAV_LINKS = [
   { href: '/', label: 'Accueil' },
@@ -70,6 +71,7 @@ export function Navbar() {
         </div>
 
         <div className="hidden items-center gap-2 lg:flex">
+          <LanguageTranslator id="desktop-language-translator" />
           <Link
             href="/mon-compte"
             className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-ink-500 transition-colors hover:text-ink-900"
@@ -122,6 +124,7 @@ export function Navbar() {
                 </button>
               </div>
               <div className="flex flex-1 flex-col gap-1 overflow-y-auto p-4">
+                <LanguageTranslator id="mobile-language-translator" className="mb-3 w-full" />
                 {NAV_LINKS.map((link, i) => (
                   <motion.div
                     key={link.href}

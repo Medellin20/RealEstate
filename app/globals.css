@@ -53,3 +53,36 @@
   from { background-position: -700px 0; }
   to { background-position: 700px 0; }
 }
+
+/* Intégration compacte du sélecteur Google Translate dans la navigation. */
+.language-translator .goog-te-gadget {
+  color: transparent;
+  font-size: 0;
+  line-height: 1;
+}
+
+.language-translator .goog-te-gadget .goog-te-combo {
+  margin: 0;
+  max-width: 9.5rem;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  color: #263238;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  outline: none;
+}
+
+.language-translator .goog-logo-link,
+.language-translator .goog-te-gadget span {
+  display: none !important;
+}
+
+body > .skiptranslate {
+  display: none !important;
+}
+
+body {
+  top: 0 !important;
+}
