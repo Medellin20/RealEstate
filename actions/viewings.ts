@@ -95,8 +95,5 @@ export async function createViewingRequest(
 
   revalidatePath('/admin/visites');
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-  const confirmationUrl = `${siteUrl}/appartements/${propertySlug}/visite/confirmation?ref=${reference}`;
-
-  redirect(confirmationUrl);
+  redirect(`/appartements/${propertySlug}/visite/confirmation?ref=${reference}`);
 }

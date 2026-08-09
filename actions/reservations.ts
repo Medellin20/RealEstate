@@ -94,9 +94,8 @@ export async function createReservation(input: ReservationInput, propertySlug: s
 
   revalidatePath('/admin/reservations');
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   redirect(
-    `${siteUrl}/appartements/${propertySlug}/reserver/confirmation?ref=${reference}&email=${encodeURIComponent(
+    `/appartements/${propertySlug}/reserver/confirmation?ref=${reference}&email=${encodeURIComponent(
       parsed.data.email
     )}`
   );
