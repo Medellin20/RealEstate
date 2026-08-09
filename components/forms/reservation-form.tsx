@@ -246,7 +246,7 @@ export function ReservationForm({
             </Button>
           ) : (
             <Button type="submit" isLoading={isPending}>
-              Confirmer et afficher le RIB
+              Afficher le RIB
             </Button>
           )}
         </div>
