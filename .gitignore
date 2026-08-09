@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Next.js build output
+.next/
+out/
+build/
+dist/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+
+# Testing and coverage
+coverage/
+.nyc_output/
+*.lcov
+
+# TypeScript
+*.tsbuildinfo
+
+# ESLint / caches
+.eslintcache
+.cache/
+
+# Editor and OS files
+.vscode/
+.idea/
+.history/
+.DS_Store
+Thumbs.db
+
+# Supabase / Vercel / Turbo
+.supabase/
+.vercel/
+.turbo/
