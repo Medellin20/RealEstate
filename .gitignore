@@ -1,46 +1,105 @@
 # Dependencies
 node_modules/
+.pnp
+.pnp.js
+.pnp.cjs
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 .pnpm-store/
 
-# Next.js build output
+# Next.js and production builds
 .next/
 out/
 build/
 dist/
+exported/
 
-# Environment variables
+# Environment variables and local secrets
 .env
 .env.*
 !.env.example
 !.env.sample
+!.env.template
+*.pem
+*.key
+*.p12
+*.pfx
 
 # Logs
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
+yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-*.log
 
-# Testing and coverage
+# Tests and coverage
 coverage/
 .nyc_output/
 *.lcov
+test-results/
+playwright-report/
+blob-report/
+.playwright/
 
-# TypeScript
+# TypeScript and lint caches
 *.tsbuildinfo
-
-# ESLint / caches
+next-env.d.ts
 .eslintcache
+.stylelintcache
+
+# Tool and framework caches
 .cache/
-
-# Editor and OS files
-.vscode/
-.idea/
-.history/
-.DS_Store
-Thumbs.db
-
-# Supabase / Vercel / Turbo
-.supabase/
-.vercel/
+.parcel-cache/
 .turbo/
+.swc/
+.sass-cache/
+.vercel/
+.netlify/
+
+# Supabase local development
+.supabase/
+supabase/.branches/
+supabase/.temp/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# Runtime data
+*.pid
+*.pid.lock
+*.seed
+
+# Editors and IDEs
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.iml
+.history/
+
+# Operating system files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Local AI/tool metadata
+.agents/
+.codex/
