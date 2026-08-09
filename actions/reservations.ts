@@ -8,6 +8,8 @@ import { recordStatusChange } from '@/lib/data/history';
 import { reservationSchema, type ReservationInput } from '@/lib/validations/reservation';
 import { generateReference } from '@/lib/utils/reference';
 import type { ActionResult } from '@/types';
+import { sendAdminAlert } from '@/lib/notifications/email';
+import { getReservationPaymentAmount } from '@/lib/payments/bank-transfer';
 
 /**
  * Crée une demande de réservation de logement (dossier locataire). Le
@@ -32,7 +34,7 @@ export async function createReservation(input: ReservationInput, propertySlug: s
 
   const { data: property, error: propertyError } = await supabase
     .from('properties')
-    .select('id, is_published, status')
+    .select('id, monthly_price, is_published, status')
     .eq('id', parsed.data.propertyId)
     .maybeSingle();
 
@@ -78,6 +80,16 @@ export async function createReservation(input: ReservationInput, propertySlug: s
     fromStatus: null,
     toStatus: 'submitted',
     changedBy: 'client',
+  });
+
+  await sendAdminAlert(`Nouvelle réservation — ${reference}`, {
+    Référence: reference,
+    Client: `${parsed.data.firstName} ${parsed.data.lastName}`,
+    Email: parsed.data.email,
+    Téléphone: parsed.data.phone,
+    'Date d’entrée': parsed.data.desiredMoveInDate,
+    Durée: `${parsed.data.durationMonths} mois`,
+    'Montant à verser': `${getReservationPaymentAmount(property.monthly_price)} €`,
   });
 
   revalidatePath('/admin/reservations');

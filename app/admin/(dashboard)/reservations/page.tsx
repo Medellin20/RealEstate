@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Download } from 'lucide-react';
-import { getAllReservationsAdmin } from '@/lib/data/admin-lists';
+import { ChevronDown, Download, History } from 'lucide-react';
+import { getAllReservationsAdmin, getReservationStatusHistory } from '@/lib/data/admin-lists';
 import { updateReservationStatus } from '@/actions/admin-reservations';
 import { StatusSelect } from '@/components/admin/status-select';
 import { Badge } from '@/components/ui/badge';
@@ -22,6 +22,7 @@ const STATUS_OPTIONS = Object.entries(RESERVATION_STATUS_LABELS).map(([value, la
 
 export default async function AdminReservationsPage({ searchParams }: { searchParams: { status?: string } }) {
   const reservations = await getAllReservationsAdmin({ status: searchParams.status });
+  const statusHistory = await getReservationStatusHistory(reservations.map((reservation) => reservation.id));
 
   return (
     <div>
@@ -75,6 +76,34 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
               {reservation.message && (
                 <p className="mt-2 rounded-lg bg-sand-100/60 px-3 py-2 text-xs text-ink-500">{reservation.message}</p>
               )}
+
+              <details className="group mt-3 rounded-xl border border-ink-100 bg-sand-100/30">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 text-sm font-semibold text-ink-700">
+                  <span className="flex items-center gap-2">
+                    <History className="h-4 w-4 text-canal-600" />
+                    Historique de la réservation
+                  </span>
+                  <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
+                </summary>
+                <div className="border-t border-ink-100 px-3 py-2">
+                  {(statusHistory[reservation.id] ?? []).length === 0 ? (
+                    <p className="py-2 text-xs text-ink-400">Aucun changement enregistré.</p>
+                  ) : (
+                    <ol className="space-y-2 py-1">
+                      {(statusHistory[reservation.id] ?? []).map((entry) => (
+                        <li key={entry.id} className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                          <span className="text-ink-600">
+                            {entry.from_status ? `${RESERVATION_STATUS_LABELS[entry.from_status] ?? entry.from_status} → ` : ''}
+                            <strong>{RESERVATION_STATUS_LABELS[entry.to_status] ?? entry.to_status}</strong>
+                            <span className="ml-1 text-ink-400">par {entry.changed_by}</span>
+                          </span>
+                          <time className="text-ink-400">{formatDateTime(entry.created_at)}</time>
+                        </li>
+                      ))}
+                    </ol>
+                  )}
+                </div>
+              </details>
 
               <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-ink-100 pt-3">
                 <span className="text-xs text-ink-400">Reçue le {formatDateTime(reservation.created_at)}</span>

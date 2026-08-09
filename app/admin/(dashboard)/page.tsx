@@ -11,8 +11,9 @@ import {
   ShieldCheck,
   RotateCcw,
   PlusCircle,
+  BellRing,
 } from 'lucide-react';
-import { getDashboardStats, getRecentAdminLogs } from '@/lib/data/admin-stats';
+import { getAdminAlerts, getDashboardStats, getRecentAdminLogs } from '@/lib/data/admin-stats';
 import { StatCard } from '@/components/admin/stat-card';
 import { Button } from '@/components/ui/button';
 import { formatDateTime } from '@/lib/utils/format';
@@ -21,7 +22,7 @@ export const metadata: Metadata = { title: 'Dashboard admin' };
 export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboardPage() {
-  const [stats, logs] = await Promise.all([getDashboardStats(), getRecentAdminLogs()]);
+  const [stats, logs, alerts] = await Promise.all([getDashboardStats(), getRecentAdminLogs(), getAdminAlerts()]);
 
   return (
     <div>
@@ -49,6 +50,28 @@ export default async function AdminDashboardPage() {
         <StatCard icon={CreditCard} label="Paiements en attente" value={stats.paymentsPending} tone="warning" />
         <StatCard icon={ShieldCheck} label="Garanties reçues" value={stats.guaranteesReceived} tone="positive" />
         <StatCard icon={RotateCcw} label="Demandes de remboursement" value={stats.refundRequestsPending} tone="info" />
+      </div>
+
+      <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/70 p-5 sm:p-6">
+        <h2 className="flex items-center gap-2 font-bold text-ink-900">
+          <BellRing className="h-5 w-5 text-amber-600" />
+          Alertes à traiter
+          {alerts.length > 0 && <span className="rounded-full bg-amber-600 px-2 py-0.5 text-xs text-white">{alerts.length}</span>}
+        </h2>
+        {alerts.length === 0 ? (
+          <p className="mt-3 text-sm text-ink-500">Aucune alerte en attente.</p>
+        ) : (
+          <ul className="mt-4 space-y-2">
+            {alerts.map((alert) => (
+              <li key={`${alert.href}-${alert.id}`}>
+                <Link href={alert.href} className="flex items-center justify-between gap-4 rounded-xl bg-white px-4 py-3 text-sm shadow-sm transition hover:shadow-card">
+                  <span className="font-medium text-ink-700">{alert.label}</span>
+                  <time className="shrink-0 text-xs text-ink-400">{formatDateTime(alert.created_at)}</time>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <div className="mt-8 rounded-2xl border border-ink-100 bg-white p-5 sm:p-6">

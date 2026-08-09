@@ -25,7 +25,7 @@ const STEPS = [
     icon: CalendarClock,
     title: 'Réservez une visite',
     description:
-      'Sélectionnez une date et un créneau horaire, renseignez vos coordonnées et réglez les frais de visite en ligne.',
+      'Sélectionnez une date et un créneau horaire, renseignez vos coordonnées, puis versez les 100 € sur le RIB affiché.',
   },
   {
     icon: PenTool,

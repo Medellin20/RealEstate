@@ -25,6 +25,7 @@ import { Button } from '@/components/ui/button';
 import { FadeIn } from '@/components/ui/fade-in';
 import { PROPERTY_STATUS_LABELS } from '@/lib/utils/constants';
 import { formatDate, formatPrice, formatSurface } from '@/lib/utils/format';
+import { VIEWING_FEE, getReservationPaymentAmount } from '@/lib/payments/bank-transfer';
 
 interface PageProps {
   params: { slug: string };
@@ -230,11 +231,11 @@ export default async function PropertyDetailPage({ params }: PageProps) {
               <div className="mt-5 space-y-2 border-t border-ink-100 pt-5 text-sm text-ink-500">
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-1.5"><Euro className="h-3.5 w-3.5" /> Frais de visite</span>
-                  <span className="font-medium text-ink-700">{formatPrice(property.viewing_fee)}</span>
+                  <span className="font-medium text-ink-700">{formatPrice(VIEWING_FEE)}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5" /> Garantie</span>
-                  <span className="font-medium text-ink-700">{formatPrice(property.deposit_amount)}</span>
+                  <span className="font-medium text-ink-700">{formatPrice(getReservationPaymentAmount(property.monthly_price))}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-1.5"><Sofa className="h-3.5 w-3.5" /> Meublé</span>

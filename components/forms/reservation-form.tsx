@@ -14,6 +14,8 @@ import { Select } from '@/components/ui/select';
 import { Label, FieldError } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils/cn';
+import { formatPrice } from '@/lib/utils/format';
+import { getReservationPaymentAmount } from '@/lib/payments/bank-transfer';
 
 const STEPS = ['Vos coordonnées', 'Votre projet de location', 'Récapitulatif'] as const;
 
@@ -21,10 +23,12 @@ export function ReservationForm({
   propertyId,
   propertySlug,
   propertyTitle,
+  monthlyPrice,
 }: {
   propertyId: string;
   propertySlug: string;
   propertyTitle: string;
+  monthlyPrice: number;
 }) {
   const [step, setStep] = React.useState(0);
   const [isPending, startTransition] = React.useTransition();
@@ -47,6 +51,7 @@ export function ReservationForm({
 
   const values = watch();
   const minDate = new Date().toISOString().split('T')[0];
+  const paymentAmount = getReservationPaymentAmount(monthlyPrice);
 
   async function goNext() {
     const fieldsByStep: (keyof ReservationInput)[][] = [
@@ -208,10 +213,16 @@ export function ReservationForm({
                 <Row label="Durée" value={values.durationMonths ? `${values.durationMonths} mois` : '—'} />
                 <Row label="Occupants" value={String(values.occupantsCount || '—')} />
                 <Row label="Profession" value={values.profession || '—'} />
+                <Row label="50 % du loyer" value={formatPrice(monthlyPrice / 2)} />
+                <Row label="Caution (1 mois)" value={formatPrice(monthlyPrice)} />
+              </div>
+              <div className="flex items-center justify-between rounded-xl bg-ink-700 px-4 py-3.5 text-white">
+                <span className="text-sm font-medium">Total à verser</span>
+                <span className="text-lg font-extrabold">{formatPrice(paymentAmount)}</span>
               </div>
               <p className="text-xs leading-relaxed text-ink-400">
-                Après examen de votre dossier par notre équipe, vous recevrez les instructions pour
-                verser la garantie de réservation et sécuriser le logement.
+                Après confirmation, le RIB de l’entreprise s’affichera. Effectuez le virement puis
+                envoyez la capture du paiement à contacts@realestatenl.agency.
               </p>
             </motion.div>
           )}
@@ -235,7 +246,7 @@ export function ReservationForm({
             </Button>
           ) : (
             <Button type="submit" isLoading={isPending}>
-              Envoyer ma demande de réservation
+              Confirmer et afficher le RIB
             </Button>
           )}
         </div>

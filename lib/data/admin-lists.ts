@@ -29,6 +29,23 @@ export async function getAllReservationsAdmin(params: { status?: string } = {}) 
   return data ?? [];
 }
 
+export async function getReservationStatusHistory(reservationIds: string[]) {
+  if (reservationIds.length === 0) return {};
+
+  const supabase = createAdminClient();
+  const { data } = await supabase
+    .from('status_history')
+    .select('*')
+    .eq('entity_type', 'reservation')
+    .in('entity_id', reservationIds)
+    .order('created_at', { ascending: false });
+
+  return (data ?? []).reduce<Record<string, typeof data>>((history, entry) => {
+    (history[entry.entity_id] ??= []).push(entry);
+    return history;
+  }, {});
+}
+
 export async function getAllGuaranteesAdmin(params: { status?: string } = {}) {
   const supabase = createAdminClient();
   let query = supabase

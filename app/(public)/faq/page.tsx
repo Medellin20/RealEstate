@@ -14,7 +14,7 @@ const CATEGORIES = [
       {
         question: 'Comment réserver une visite ?',
         answer:
-          'Depuis la fiche d’un logement, cliquez sur « Réserver une visite », choisissez une date et un créneau horaire, renseignez vos coordonnées puis réglez les frais de visite en ligne.',
+          'Depuis la fiche d’un logement, cliquez sur « Réserver une visite », choisissez une date et un créneau horaire, puis versez les frais fixes de 100 € sur le RIB affiché. Envoyez ensuite le justificatif à contacts@realestatenl.agency.',
       },
       {
         question: 'Les frais de visite sont-ils remboursables ?',

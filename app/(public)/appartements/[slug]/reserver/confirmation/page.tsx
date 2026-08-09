@@ -1,10 +1,13 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { CheckCircle2, Home, ShieldCheck } from 'lucide-react';
+import { CheckCircle2, Home, Mail } from 'lucide-react';
 import { getReservationByReference } from '@/lib/data/dossier';
+import { getBankSettings } from '@/lib/data/bank';
 import { Button } from '@/components/ui/button';
+import { BankTransferInstructions } from '@/components/shared/bank-transfer-instructions';
 import { RESERVATION_STATUS_LABELS } from '@/lib/utils/constants';
-import { formatDate } from '@/lib/utils/format';
+import { formatDate, formatPrice } from '@/lib/utils/format';
+import { getReservationPaymentAmount, PROFESSIONAL_EMAIL } from '@/lib/payments/bank-transfer';
 
 export const metadata = { title: 'Réservation envoyée' };
 
@@ -16,12 +19,15 @@ export default async function ReservationConfirmationPage({
   if (!searchParams.ref) notFound();
   const reservation = await getReservationByReference(searchParams.ref);
   if (!reservation) notFound();
+  const bankSettings = await getBankSettings();
 
   const property = (reservation as any).properties;
+  const monthlyPrice = Number(property?.monthly_price) || 0;
+  const paymentAmount = getReservationPaymentAmount(monthlyPrice);
 
   return (
     <div className="container-app flex min-h-[70vh] items-center justify-center py-14">
-      <div className="w-full max-w-lg rounded-2xl border border-ink-100 bg-white p-8 text-center shadow-card">
+      <div className="w-full max-w-2xl rounded-2xl border border-ink-100 bg-white p-6 text-center shadow-card sm:p-8">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-canal-50 text-canal-600">
           <CheckCircle2 className="h-7 w-7" />
         </div>
@@ -37,14 +43,29 @@ export default async function ReservationConfirmationPage({
           <Row label="Entrée souhaitée" value={formatDate(reservation.desired_move_in_date)} />
           <Row label="Durée" value={`${reservation.duration_months} mois`} />
           <Row label="Statut" value={RESERVATION_STATUS_LABELS[reservation.status] ?? reservation.status} />
+          <Row label="50 % du loyer" value={formatPrice(monthlyPrice / 2)} />
+          <Row label="Caution (1 mois)" value={formatPrice(monthlyPrice)} />
+          <Row label="Total à verser" value={formatPrice(paymentAmount)} />
         </div>
 
+        {bankSettings ? (
+          <div className="mt-5 text-left">
+            <BankTransferInstructions bankSettings={bankSettings} reference={reservation.reference} amount={paymentAmount} />
+          </div>
+        ) : (
+          <p className="mt-5 rounded-xl bg-brick-50 p-4 text-sm text-brick-700">
+            Les coordonnées bancaires sont momentanément indisponibles. Contactez notre équipe avant d’effectuer le paiement.
+          </p>
+        )}
+
         <div className="mt-5 flex items-start gap-3 rounded-xl border border-canal-100 bg-canal-50/60 p-4 text-left">
-          <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-canal-600" />
-          <p className="text-xs leading-relaxed text-canal-800">
-            Notre équipe va examiner votre dossier. Une fois accepté, vous recevrez les instructions
-            pour verser la garantie de réservation et sécuriser définitivement le logement. Vous
-            pouvez suivre l’avancement de votre dossier à tout moment depuis votre espace client.
+          <Mail className="mt-0.5 h-5 w-5 shrink-0 text-canal-600" />
+          <p className="text-sm leading-relaxed text-canal-800">
+            Après le virement, envoyez la capture ou le justificatif à{' '}
+            <a className="font-bold underline" href={`mailto:${PROFESSIONAL_EMAIL}?subject=Justificatif réservation ${reservation.reference}`}>
+              {PROFESSIONAL_EMAIL}
+            </a>{' '}
+            en indiquant la référence <strong>{reservation.reference}</strong>.
           </p>
         </div>
 

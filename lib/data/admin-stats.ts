@@ -69,3 +69,18 @@ export async function getRecentAdminLogs(limit = 8) {
     .limit(limit);
   return data ?? [];
 }
+
+export async function getAdminAlerts() {
+  const supabase = createAdminClient();
+  const [{ data: reservations }, { data: viewings }, { data: refunds }] = await Promise.all([
+    supabase.from('reservations').select('id, reference, created_at').in('status', ['submitted', 'under_review']).order('created_at', { ascending: false }).limit(5),
+    supabase.from('viewing_requests').select('id, reference, created_at').eq('status', 'payment_pending').order('created_at', { ascending: false }).limit(5),
+    supabase.from('refund_requests').select('id, reference, created_at').eq('status', 'requested').order('created_at', { ascending: false }).limit(5),
+  ]);
+
+  return [
+    ...(reservations ?? []).map((item) => ({ ...item, label: `Réservation ${item.reference} à examiner`, href: '/admin/reservations', tone: 'warning' as const })),
+    ...(viewings ?? []).map((item) => ({ ...item, label: `Paiement de visite ${item.reference} à vérifier`, href: '/admin/visites', tone: 'info' as const })),
+    ...(refunds ?? []).map((item) => ({ ...item, label: `Remboursement ${item.reference} demandé`, href: '/admin/remboursements', tone: 'danger' as const })),
+  ].sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, 10);
+}

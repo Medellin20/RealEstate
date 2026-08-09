@@ -26,7 +26,7 @@ export async function getReservationByReference(reference: string) {
   const supabase = createAdminClient();
   const { data, error } = await supabase
     .from('reservations')
-    .select('*, properties(title, slug, city, deposit_amount), clients(first_name, last_name, email)')
+    .select('*, properties(title, slug, city, monthly_price, deposit_amount), clients(first_name, last_name, email)')
     .eq('reference', reference)
     .maybeSingle();
 

@@ -1,10 +1,13 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { CheckCircle2, Clock, Home } from 'lucide-react';
+import { CheckCircle2, Clock, Home, Mail } from 'lucide-react';
 import { getViewingByReference } from '@/lib/data/dossier';
+import { getBankSettings } from '@/lib/data/bank';
 import { Button } from '@/components/ui/button';
+import { BankTransferInstructions } from '@/components/shared/bank-transfer-instructions';
 import { VIEWING_STATUS_LABELS } from '@/lib/utils/constants';
 import { formatDate, formatPrice } from '@/lib/utils/format';
+import { PROFESSIONAL_EMAIL } from '@/lib/payments/bank-transfer';
 
 export const metadata = { title: 'Demande de visite confirmée' };
 
@@ -16,13 +19,14 @@ export default async function ViewingConfirmationPage({
   if (!searchParams.ref) notFound();
   const viewing = await getViewingByReference(searchParams.ref);
   if (!viewing) notFound();
+  const bankSettings = await getBankSettings();
 
   const property = (viewing as any).properties;
   const isAwaitingPayment = viewing.status === 'payment_pending';
 
   return (
     <div className="container-app flex min-h-[70vh] items-center justify-center py-14">
-      <div className="w-full max-w-lg rounded-2xl border border-ink-100 bg-white p-8 text-center shadow-card">
+      <div className="w-full max-w-2xl rounded-2xl border border-ink-100 bg-white p-6 text-center shadow-card sm:p-8">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-canal-50 text-canal-600">
           {isAwaitingPayment ? <Clock className="h-7 w-7" /> : <CheckCircle2 className="h-7 w-7" />}
         </div>
@@ -43,13 +47,28 @@ export default async function ViewingConfirmationPage({
           {viewing.fee_amount > 0 && <Row label="Frais de visite" value={formatPrice(viewing.fee_amount)} />}
         </div>
 
-        {isAwaitingPayment && (
-          <p className="mt-4 text-xs leading-relaxed text-ink-400">
-            Le règlement en ligne n’est pas encore actif sur ce site de démonstration. Notre équipe
-            vous contactera par e-mail pour finaliser le paiement des frais de visite et confirmer
-            votre créneau.
+        {isAwaitingPayment && bankSettings && (
+          <div className="mt-5 text-left">
+            <BankTransferInstructions bankSettings={bankSettings} reference={viewing.reference} amount={100} />
+          </div>
+        )}
+
+        {isAwaitingPayment && !bankSettings && (
+          <p className="mt-5 rounded-xl bg-brick-50 p-4 text-sm text-brick-700">
+            Les coordonnées bancaires sont momentanément indisponibles. Contactez notre équipe avant d’effectuer le paiement.
           </p>
         )}
+
+        <div className="mt-5 flex items-start gap-3 rounded-xl border border-canal-100 bg-canal-50/60 p-4 text-left">
+          <Mail className="mt-0.5 h-5 w-5 shrink-0 text-canal-600" />
+          <p className="text-sm leading-relaxed text-canal-800">
+            Après le virement, envoyez la capture ou le justificatif à{' '}
+            <a className="font-bold underline" href={`mailto:${PROFESSIONAL_EMAIL}?subject=Justificatif visite ${viewing.reference}`}>
+              {PROFESSIONAL_EMAIL}
+            </a>{' '}
+            en indiquant la référence <strong>{viewing.reference}</strong>.
+          </p>
+        </div>
 
         <div className="mt-8 flex flex-col gap-2.5 sm:flex-row">
           <Link href="/mon-compte" className="flex-1">

@@ -197,9 +197,9 @@ export function ViewingRequestForm({
               </div>
 
               <p className="text-xs leading-relaxed text-ink-400">
-                {viewingFee > 0
-                  ? 'En confirmant, vous serez redirigé vers notre prestataire de paiement sécurisé (carte bancaire ou iDEAL) pour régler les frais de visite.'
-                  : 'Cette visite ne nécessite aucun frais. Votre demande sera transmise immédiatement à notre équipe.'}
+                Après confirmation, le RIB de l’entreprise s’affichera afin que vous puissiez
+                effectuer le virement. Envoyez ensuite la capture du paiement à
+                contacts@realestatenl.agency.
               </p>
             </motion.div>
           )}
@@ -223,7 +223,7 @@ export function ViewingRequestForm({
             </Button>
           ) : (
             <Button type="submit" isLoading={isPending}>
-              {viewingFee > 0 ? 'Payer et confirmer' : 'Confirmer la demande'}
+              Confirmer et afficher le RIB
             </Button>
           )}
         </div>
