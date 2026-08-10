@@ -26,8 +26,8 @@ export default async function ViewingConfirmationPage({
   const isAwaitingPayment = viewing.status === 'payment_pending';
 
   return (
-    <div className="container-app flex min-h-[70vh] items-center justify-center py-14">
-      <div className="w-full max-w-2xl rounded-2xl border border-ink-100 bg-white p-6 text-center shadow-card sm:p-8">
+    <div className="container-app flex min-h-[70vh] items-center justify-center py-6 sm:py-14">
+      <div className="w-full max-w-2xl rounded-2xl border border-ink-100 bg-white p-4 text-center shadow-card sm:p-8">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-canal-50 text-canal-600">
           {isAwaitingPayment ? <Clock className="h-7 w-7" /> : <CheckCircle2 className="h-7 w-7" />}
         </div>
@@ -88,9 +88,9 @@ export default async function ViewingConfirmationPage({
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
       <span className="text-ink-400">{label}</span>
-      <span className="font-medium text-ink-700">{value}</span>
+      <span className="break-words font-medium text-ink-700 sm:text-right">{value}</span>
     </div>
   );
 }

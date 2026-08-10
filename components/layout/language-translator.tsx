@@ -66,7 +66,7 @@ export function LanguageTranslator({ id, className }: { id: string; className?: 
 
   return (
     <div
-      className={cn('language-translator flex min-h-10 items-center gap-2 rounded-xl border border-ink-200 bg-white px-3', className)}
+      className={cn('language-translator inline-flex h-9 items-center gap-1.5 rounded-full bg-sand-100 px-2 text-ink-600 transition-colors hover:bg-sand-200', className)}
       aria-label="Choisir la langue du site"
     >
       <Globe2 className="h-4 w-4 shrink-0 text-canal-600" aria-hidden="true" />

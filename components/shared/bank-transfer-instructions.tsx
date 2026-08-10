@@ -15,7 +15,7 @@ export function BankTransferInstructions({
   isExample?: boolean;
 }) {
   return (
-    <div className="rounded-2xl border border-ink-100 bg-white p-5 sm:p-6">
+    <div className="rounded-2xl border border-ink-100 bg-white p-4 sm:p-6">
       <div className="flex items-center gap-2 text-ink-700">
         <Landmark className="h-5 w-5 text-canal-600" />
         <h3 className="font-bold">Coordonnées bancaires pour votre virement</h3>
@@ -28,7 +28,7 @@ export function BankTransferInstructions({
         </div>
       )}
 
-      <div className="mt-4 flex items-center justify-between rounded-xl bg-ink-700 px-4 py-3.5 text-white">
+      <div className="mt-4 flex flex-col gap-1 rounded-xl bg-ink-700 px-4 py-3.5 text-white min-[380px]:flex-row min-[380px]:items-center min-[380px]:justify-between">
         <span className="text-sm font-medium">Montant à verser</span>
         <span className="text-lg font-extrabold">{formatPrice(amount)}</span>
       </div>

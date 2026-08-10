@@ -36,7 +36,7 @@ export function CopyableField({
     >
       <div className="min-w-0">
         <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-400">{label}</p>
-        <p className={cn('truncate text-sm font-medium text-ink-800', mono && 'font-mono tracking-tight')}>
+        <p className={cn('break-all text-sm font-medium text-ink-800', mono && 'font-mono tracking-tight')}>
           {value}
         </p>
       </div>

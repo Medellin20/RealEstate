@@ -124,7 +124,7 @@ export function Navbar() {
                 </button>
               </div>
               <div className="flex flex-1 flex-col gap-1 overflow-y-auto p-4">
-                <LanguageTranslator id="mobile-language-translator" className="mb-3 w-full" />
+                <LanguageTranslator id="mobile-language-translator" className="mb-3 w-fit" />
                 {NAV_LINKS.map((link, i) => (
                   <motion.div
                     key={link.href}

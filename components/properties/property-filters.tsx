@@ -169,17 +169,17 @@ export function PropertyFilters({ resultCount }: { resultCount: number }) {
   );
 
   return (
-    <div className="mb-6 flex items-center justify-between gap-3">
+    <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <p className="text-sm text-ink-500">
         <span className="font-semibold text-ink-900">{resultCount}</span>{' '}
         {resultCount > 1 ? 'logements trouvés' : 'logement trouvé'}
       </p>
 
-      <div className="flex items-center gap-2">
+      <div className="flex w-full items-center gap-2 sm:w-auto">
         <Select
           value={filters.sort}
           onChange={(e) => update('sort', e.target.value)}
-          className="!h-10 w-auto min-w-[9.5rem] text-xs"
+          className="!h-10 min-w-0 flex-1 text-xs sm:w-auto sm:min-w-[9.5rem]"
         >
           <option value="recent">Plus récents</option>
           <option value="price_asc">Prix croissant</option>
@@ -187,7 +187,7 @@ export function PropertyFilters({ resultCount }: { resultCount: number }) {
           <option value="surface">Surface</option>
         </Select>
 
-        <Button variant="outline" size="sm" onClick={() => setDrawerOpen(true)}>
+        <Button variant="outline" size="sm" onClick={() => setDrawerOpen(true)} className="shrink-0">
           <SlidersHorizontal className="h-3.5 w-3.5" />
           Filtres
           {activeCount > 0 && (

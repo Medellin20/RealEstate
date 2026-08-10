@@ -63,13 +63,13 @@
 
 .language-translator .goog-te-gadget .goog-te-combo {
   margin: 0;
-  max-width: 9.5rem;
+  max-width: 6.25rem;
   cursor: pointer;
   border: 0;
   background: transparent;
   color: #263238;
   font-family: inherit;
-  font-size: 0.8125rem;
+  font-size: 0.6875rem;
   font-weight: 600;
   outline: none;
 }

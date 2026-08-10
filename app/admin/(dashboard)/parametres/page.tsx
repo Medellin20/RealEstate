@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
+import { getSiteUrl } from '@/lib/utils/site-url';
 import { Settings, ShieldCheck, CreditCard, Globe } from 'lucide-react';
 
 export const metadata: Metadata = { title: 'Paramètres' };
 
 export default function AdminParametresPage() {
   const stripeConfigured = !!process.env.STRIPE_SECRET_KEY;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const siteUrl = getSiteUrl();
 
   return (
     <div>

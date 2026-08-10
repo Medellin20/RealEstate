@@ -241,7 +241,7 @@ export function PropertyForm({
             <Label htmlFor="neighborhood">Quartier</Label>
             <Input id="neighborhood" {...register('neighborhood')} />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <Label htmlFor="latitude">Latitude</Label>
               <Input id="latitude" type="number" step="0.000001" {...register('latitude')} />
@@ -256,7 +256,7 @@ export function PropertyForm({
 
       {/* TARIFS */}
       <FormSection title="Tarifs">
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 sm:grid-cols-4">
           <div>
             <Label htmlFor="monthlyPrice">Prix mensuel (€)</Label>
             <Input id="monthlyPrice" type="number" step="1" {...register('monthlyPrice')} />
@@ -279,7 +279,7 @@ export function PropertyForm({
 
       {/* CARACTÉRISTIQUES */}
       <FormSection title="Caractéristiques">
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 sm:grid-cols-4">
           <div>
             <Label htmlFor="surfaceM2">Surface (m²)</Label>
             <Input id="surfaceM2" type="number" step="0.5" {...register('surfaceM2')} />
@@ -311,7 +311,7 @@ export function PropertyForm({
           </div>
         </div>
 
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div className="mt-5 grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 sm:grid-cols-3">
           {BOOLEAN_FIELDS.map((field) => (
             <label key={field.key} className="flex cursor-pointer items-center gap-2.5 text-sm text-ink-700">
               <Checkbox {...register(field.key as any)} />
@@ -327,7 +327,7 @@ export function PropertyForm({
           control={control}
           name="amenityIds"
           render={({ field }) => (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 sm:grid-cols-3">
               {amenities.map((amenity) => {
                 const checked = field.value?.includes(amenity.id);
                 return (
@@ -349,7 +349,7 @@ export function PropertyForm({
       </FormSection>
 
       <div className="sticky bottom-4 flex justify-end">
-        <Button type="submit" size="lg" isLoading={isPending} className="shadow-lifted">
+        <Button type="submit" size="lg" isLoading={isPending} className="w-full shadow-lifted sm:w-auto">
           <Save className="h-4.5 w-4.5" />
           {mode === 'create' ? 'Créer l’appartement' : 'Enregistrer les modifications'}
         </Button>

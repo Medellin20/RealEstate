@@ -143,7 +143,7 @@ export function ViewingRequestForm({
                 <User className="h-5 w-5 text-canal-600" />
                 <h3 className="font-bold">Vos coordonnées</h3>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
                   <Label htmlFor="firstName">Prénom</Label>
                   <Input id="firstName" {...register('firstName')} />
@@ -205,24 +205,24 @@ export function ViewingRequestForm({
           )}
         </AnimatePresence>
 
-        <div className="mt-7 flex items-center justify-between gap-3">
+        <div className="mt-7 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Button
             type="button"
             variant="outline"
             onClick={() => setStep((s) => Math.max(0, s - 1))}
-            className={cn(step === 0 && 'invisible')}
+            className={cn('w-full sm:w-auto', step === 0 && 'hidden sm:inline-flex sm:invisible')}
           >
             <ArrowLeft className="h-4 w-4" />
             Retour
           </Button>
 
           {step < STEPS.length - 1 ? (
-            <Button type="button" onClick={goNext}>
+            <Button type="button" onClick={goNext} className="w-full sm:w-auto">
               Continuer
               <ArrowRight className="h-4 w-4" />
             </Button>
           ) : (
-            <Button type="submit" isLoading={isPending}>
+            <Button type="submit" isLoading={isPending} className="w-full sm:w-auto">
               Confirmer et afficher le RIB
             </Button>
           )}
@@ -234,9 +234,9 @@ export function ViewingRequestForm({
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
       <span className="text-ink-400">{label}</span>
-      <span className="font-medium text-ink-700">{value}</span>
+      <span className="break-words font-medium text-ink-700 sm:text-right">{value}</span>
     </div>
   );
 }

@@ -92,7 +92,7 @@ export function Footer() {
             <li>
               <a
                 href="mailto:contacts@realestatenl.agency"
-                className="flex items-center gap-2.5 text-sm text-sand-300 transition-colors hover:text-white"
+                className="flex min-w-0 items-center gap-2.5 break-all text-sm text-sand-300 transition-colors hover:text-white"
               >
                 <Mail className="h-4 w-4 shrink-0" />
                 contacts@realestatenl.agency

@@ -16,7 +16,7 @@ export default async function ViewingRequestPage({ params }: { params: { slug: s
   const primaryImage = property.property_images.find((i) => i.is_primary) ?? property.property_images[0];
 
   return (
-    <div className="container-app py-10 sm:py-14">
+    <div className="container-app py-6 sm:py-14">
       <Link
         href={`/appartements/${property.slug}`}
         className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-ink-500 hover:text-ink-900"
@@ -27,7 +27,7 @@ export default async function ViewingRequestPage({ params }: { params: { slug: s
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-5">
         <div className="lg:col-span-3">
-          <div className="rounded-2xl border border-ink-100 bg-white p-6 shadow-soft sm:p-8">
+          <div className="rounded-2xl border border-ink-100 bg-white p-4 shadow-soft sm:p-8">
             <h1 className="text-display-sm font-extrabold text-ink-900">Réserver une visite</h1>
             <p className="mt-1.5 text-ink-500">{property.title}</p>
             <div className="mt-8">
