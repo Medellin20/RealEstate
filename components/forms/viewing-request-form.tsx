@@ -40,7 +40,7 @@ export function ViewingRequestForm({
     formState: { errors },
   } = useForm<ViewingRequestInput>({
     resolver: zodResolver(viewingRequestSchema),
-    defaultValues: { propertyId, website: '' },
+    defaultValues: { propertyId },
   });
 
   const values = watch();
@@ -94,8 +94,6 @@ export function ViewingRequestForm({
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input type="text" {...register('website')} className="hidden" tabIndex={-1} autoComplete="off" />
-
         <AnimatePresence mode="wait">
           {step === 0 && (
             <motion.div
@@ -197,7 +195,7 @@ export function ViewingRequestForm({
               </div>
 
               <p className="text-xs leading-relaxed text-ink-400">
-                Après confirmation, le RIB de l’entreprise s’affichera afin que vous puissiez
+                Le bouton ci-dessous affichera le RIB de l’entreprise afin que vous puissiez
                 effectuer le virement. Envoyez ensuite la capture du paiement à
                 contacts@realestatenl.agency.
               </p>
@@ -223,7 +221,7 @@ export function ViewingRequestForm({
             </Button>
           ) : (
             <Button type="submit" isLoading={isPending} className="w-full sm:w-auto">
-              Confirmer et afficher le RIB
+              Afficher le RIB
             </Button>
           )}
         </div>

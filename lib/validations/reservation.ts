@@ -16,7 +16,6 @@ export const reservationSchema = z.object({
   profession: z.string().trim().min(2, 'Merci d’indiquer votre profession.'),
   monthlyIncome: z.coerce.number().min(0, 'Le revenu doit être un nombre positif.'),
   message: z.string().trim().max(2000).optional().or(z.literal('')),
-  website: z.string().max(0).optional().or(z.literal('')),
 });
 
 export type ReservationInput = z.infer<typeof reservationSchema>;

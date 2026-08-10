@@ -26,10 +26,6 @@ export async function createReservation(input: ReservationInput, propertySlug: s
     };
   }
 
-  if (parsed.data.website) {
-    return { success: true, message: 'Votre réservation a été enregistrée.' };
-  }
-
   const supabase = createAdminClient();
 
   const { data: property, error: propertyError } = await supabase

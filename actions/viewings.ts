@@ -28,11 +28,6 @@ export async function createViewingRequest(
     };
   }
 
-  // Honeypot anti-spam : si rempli, on prétend réussir sans rien enregistrer.
-  if (parsed.data.website) {
-    return { success: true, message: 'Votre demande a été envoyée.' };
-  }
-
   const supabase = createAdminClient();
 
   const { data: property, error: propertyError } = await supabase

@@ -45,7 +45,6 @@ export function ReservationForm({
       propertyId,
       durationMonths: 12,
       occupantsCount: 1,
-      website: '',
     },
   });
 
@@ -95,8 +94,6 @@ export function ReservationForm({
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input type="text" {...register('website')} className="hidden" tabIndex={-1} autoComplete="off" />
-
         <AnimatePresence mode="wait">
           {step === 0 && (
             <motion.div
@@ -221,7 +218,7 @@ export function ReservationForm({
                 <span className="text-lg font-extrabold">{formatPrice(paymentAmount)}</span>
               </div>
               <p className="text-xs leading-relaxed text-ink-400">
-                Après confirmation, le RIB de l’entreprise s’affichera. Effectuez le virement puis
+                Le bouton ci-dessous affichera le RIB de l’entreprise. Effectuez le virement puis
                 envoyez la capture du paiement à contacts@realestatenl.agency.
               </p>
             </motion.div>

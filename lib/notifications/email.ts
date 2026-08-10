@@ -26,6 +26,9 @@ export async function sendAdminAlert(subject: string, details: AlertDetails) {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: { user, pass: appPassword },
+      connectionTimeout: 3000,
+      greetingTimeout: 3000,
+      socketTimeout: 5000,
     });
 
     await transporter.sendMail({

@@ -17,8 +17,6 @@ export const viewingRequestSchema = z.object({
     .trim()
     .min(8, 'Numéro de téléphone invalide.')
     .max(20, 'Numéro de téléphone invalide.'),
-  // Champ "honeypot" anti-spam : doit rester vide, rempli uniquement par les bots.
-  website: z.string().max(0).optional().or(z.literal('')),
 });
 
 export type ViewingRequestInput = z.infer<typeof viewingRequestSchema>;
