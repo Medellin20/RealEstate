@@ -16,7 +16,9 @@ export function PropertyGrid({ properties }: { properties: PropertyWithRelations
     );
   }
 
-  const cityOrder = new Map(DUTCH_CITIES.map((city, index) => [city, index]));
+  const cityOrder = new Map<string, number>(
+    DUTCH_CITIES.map((city, index) => [city, index])
+  );
   const grouped = Array.from(
     properties.reduce((groups, property) => {
       const cityProperties = groups.get(property.city) ?? [];
