@@ -1,7 +1,7 @@
 import 'server-only';
 import { createAdminClient } from '@/lib/supabase/admin';
 
-export async function getAllPropertiesAdmin(params: { search?: string; status?: string; page?: number } = {}) {
+export async function getAllPropertiesAdmin(params: { search?: string; status?: string; city?: string; page?: number } = {}) {
   const supabase = createAdminClient();
   const pageSize = 12;
   const page = params.page && params.page > 0 ? params.page : 1;
@@ -18,6 +18,9 @@ export async function getAllPropertiesAdmin(params: { search?: string; status?: 
   }
   if (params.status) {
     query = query.eq('status', params.status);
+  }
+  if (params.city) {
+    query = query.eq('city', params.city);
   }
 
   const { data, error, count } = await query.range(from, to);

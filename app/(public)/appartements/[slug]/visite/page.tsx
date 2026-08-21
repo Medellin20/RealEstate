@@ -5,7 +5,6 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { getPropertyBySlug } from '@/lib/data/properties';
 import { ViewingRequestForm } from '@/components/forms/viewing-request-form';
-import { VIEWING_FEE } from '@/lib/payments/bank-transfer';
 
 export const metadata: Metadata = { title: 'Réserver une visite' };
 
@@ -35,7 +34,6 @@ export default async function ViewingRequestPage({ params }: { params: { slug: s
                 propertyId={property.id}
                 propertySlug={property.slug}
                 propertyTitle={property.title}
-                viewingFee={VIEWING_FEE}
               />
             </div>
           </div>

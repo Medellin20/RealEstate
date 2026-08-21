@@ -9,12 +9,10 @@ import { reservationSchema, type ReservationInput } from '@/lib/validations/rese
 import { generateReference } from '@/lib/utils/reference';
 import type { ActionResult } from '@/types';
 import { sendAdminAlert } from '@/lib/notifications/email';
-import { getReservationPaymentAmount } from '@/lib/payments/bank-transfer';
 
 /**
  * Crée une demande de réservation de logement (dossier locataire). Le
- * paiement de la garantie est un parcours distinct (voir actions/guarantees.ts)
- * accessible depuis la page de suivi une fois la demande examinée.
+ * La demande est ensuite examinée et traitée manuellement par l'agence.
  */
 export async function createReservation(input: ReservationInput, propertySlug: string): Promise<ActionResult> {
   const parsed = reservationSchema.safeParse(input);
@@ -30,7 +28,7 @@ export async function createReservation(input: ReservationInput, propertySlug: s
 
   const { data: property, error: propertyError } = await supabase
     .from('properties')
-    .select('id, monthly_price, is_published, status')
+    .select('id, is_published, status')
     .eq('id', parsed.data.propertyId)
     .maybeSingle();
 
@@ -85,7 +83,6 @@ export async function createReservation(input: ReservationInput, propertySlug: s
     Téléphone: parsed.data.phone,
     'Date d’entrée': parsed.data.desiredMoveInDate,
     Durée: `${parsed.data.durationMonths} mois`,
-    'Montant à verser': `${getReservationPaymentAmount(property.monthly_price)} €`,
   });
 
   revalidatePath('/admin/reservations');

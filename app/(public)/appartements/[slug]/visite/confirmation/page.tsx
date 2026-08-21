@@ -1,15 +1,12 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Clock, Home, Mail } from 'lucide-react';
+import { CheckCircle2, Home } from 'lucide-react';
 import { getViewingByReference } from '@/lib/data/dossier';
-import { DEMO_BANK_SETTINGS, getBankSettings, isDemoBankSettings } from '@/lib/data/bank';
 import { Button } from '@/components/ui/button';
-import { BankTransferInstructions } from '@/components/shared/bank-transfer-instructions';
 import { VIEWING_STATUS_LABELS } from '@/lib/utils/constants';
-import { formatDate, formatPrice } from '@/lib/utils/format';
-import { PROFESSIONAL_EMAIL } from '@/lib/payments/bank-transfer';
+import { formatDate } from '@/lib/utils/format';
 
-export const metadata = { title: 'Paiement de la visite' };
+export const metadata = { title: 'Demande de visite envoyée' };
 
 export default async function ViewingConfirmationPage({
   searchParams,
@@ -19,19 +16,17 @@ export default async function ViewingConfirmationPage({
   if (!searchParams.ref) notFound();
   const viewing = await getViewingByReference(searchParams.ref);
   if (!viewing) notFound();
-  const bankSettings = await getBankSettings();
-  const displayedBankSettings = bankSettings ?? DEMO_BANK_SETTINGS;
 
   const property = (viewing as any).properties;
   return (
     <div className="container-app flex min-h-[70vh] items-center justify-center py-6 sm:py-14">
       <div className="w-full max-w-2xl rounded-2xl border border-ink-100 bg-white p-4 text-center shadow-card sm:p-8">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-canal-50 text-canal-600">
-          <Clock className="h-7 w-7" />
+          <CheckCircle2 className="h-7 w-7" />
         </div>
 
         <h1 className="mt-5 text-xl font-extrabold text-ink-900">
-          Paiement de la visite en attente
+          Votre demande de visite est envoyée
         </h1>
 
         <p className="mt-2 text-sm text-ink-500">
@@ -43,32 +38,12 @@ export default async function ViewingConfirmationPage({
           <Row label="Date" value={formatDate(viewing.requested_date)} />
           <Row label="Créneau" value={viewing.requested_time_slot} />
           <Row label="Statut" value={VIEWING_STATUS_LABELS[viewing.status] ?? viewing.status} />
-          {viewing.fee_amount > 0 && <Row label="Frais de visite" value={formatPrice(viewing.fee_amount)} />}
         </div>
 
         <p className="mt-4 text-sm text-ink-500">
-          La visite sera confirmée uniquement après réception et vérification de votre justificatif de virement.
+          Notre équipe va examiner votre demande et vous contactera pour confirmer le rendez-vous.
+          Aucun paiement ni justificatif bancaire n’est demandé sur le site.
         </p>
-
-        <div className="mt-5 text-left">
-          <BankTransferInstructions
-            bankSettings={displayedBankSettings}
-            reference={viewing.reference}
-            amount={100}
-            isExample={isDemoBankSettings(displayedBankSettings)}
-          />
-        </div>
-
-        <div className="mt-5 flex items-start gap-3 rounded-xl border border-canal-100 bg-canal-50/60 p-4 text-left">
-          <Mail className="mt-0.5 h-5 w-5 shrink-0 text-canal-600" />
-          <p className="text-sm leading-relaxed text-canal-800">
-            Après le virement, envoyez la capture ou le justificatif à{' '}
-            <a className="font-bold underline" href={`mailto:${PROFESSIONAL_EMAIL}?subject=Justificatif visite ${viewing.reference}`}>
-              {PROFESSIONAL_EMAIL}
-            </a>{' '}
-            en indiquant la référence <strong>{viewing.reference}</strong>.
-          </p>
-        </div>
 
         <div className="mt-8 flex flex-col gap-2.5 sm:flex-row">
           <Link href="/mon-compte" className="flex-1">

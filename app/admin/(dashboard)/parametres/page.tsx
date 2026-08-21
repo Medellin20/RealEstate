@@ -1,11 +1,10 @@
 import type { Metadata } from 'next';
 import { getSiteUrl } from '@/lib/utils/site-url';
-import { Settings, ShieldCheck, CreditCard, Globe } from 'lucide-react';
+import { Settings, ShieldCheck, ClipboardCheck, Globe } from 'lucide-react';
 
 export const metadata: Metadata = { title: 'Paramètres' };
 
 export default function AdminParametresPage() {
-  const stripeConfigured = !!process.env.STRIPE_SECRET_KEY;
   const siteUrl = getSiteUrl();
 
   return (
@@ -33,19 +32,12 @@ export default function AdminParametresPage() {
 
         <div className="rounded-2xl border border-ink-100 bg-white p-5 sm:p-6">
           <div className="flex items-center gap-3">
-            <CreditCard className="h-5 w-5 text-canal-600" />
-            <h2 className="font-bold text-ink-900">Paiement Stripe</h2>
+            <ClipboardCheck className="h-5 w-5 text-canal-600" />
+            <h2 className="font-bold text-ink-900">Traitement des demandes</h2>
           </div>
           <p className="mt-2 text-sm text-ink-500">
-            {stripeConfigured ? (
-              <span className="font-semibold text-canal-600">Stripe est configuré.</span>
-            ) : (
-              <span className="font-semibold text-brick-500">Stripe n'est pas configuré.</span>
-            )}{' '}
-            Les frais de visite sont réglés via Stripe Checkout (carte bancaire / iDEAL). Ajoutez
-            vos clés Stripe dans{' '}
-            <code className="rounded bg-sand-200 px-1 py-0.5 text-xs">.env.local</code> pour
-            activer le paiement en ligne.
+            Les demandes de visite et de réservation sont enregistrées sans paiement. L’équipe
+            les examine dans l’espace administrateur et organise manuellement les étapes suivantes.
           </p>
         </div>
 
@@ -59,8 +51,7 @@ export default function AdminParametresPage() {
             <code className="rounded bg-sand-200 px-1 py-0.5 text-xs">{siteUrl}</code>
           </p>
           <p className="mt-1 text-xs text-ink-400">
-            Cette valeur est utilisée pour le SEO, les redirections Stripe et les liens dans les
-            confirmations. Modifiez{' '}
+            Cette valeur est utilisée pour le SEO et les liens de confirmation. Modifiez{' '}
             <code className="rounded bg-sand-200 px-1 py-0.5 text-xs">NEXT_PUBLIC_SITE_URL</code>{' '}
             dans <code>.env.local</code>.
           </p>

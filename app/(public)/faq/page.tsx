@@ -4,7 +4,7 @@ import { FadeIn } from '@/components/ui/fade-in';
 
 export const metadata: Metadata = {
   title: 'FAQ',
-  description: 'Questions fréquentes sur les visites, réservations, garanties et remboursements chez Real Estate NL.',
+  description: 'Questions fréquentes sur les demandes de visite et de réservation chez Real Estate NL.',
 };
 
 const CATEGORIES = [
@@ -14,12 +14,12 @@ const CATEGORIES = [
       {
         question: 'Comment réserver une visite ?',
         answer:
-          'Depuis la fiche d’un logement, cliquez sur « Réserver une visite », choisissez une date et un créneau horaire, puis versez les frais fixes de 100 € sur le RIB affiché. Envoyez ensuite le justificatif à contacts@realestatenl.agency.',
+          'Depuis la fiche d’un logement, cliquez sur « Réserver une visite », choisissez une date et un créneau, puis envoyez votre demande. Notre équipe vous contacte ensuite pour confirmer le rendez-vous.',
       },
       {
-        question: 'Les frais de visite sont-ils remboursables ?',
+        question: 'Dois-je payer pour envoyer une demande ?',
         answer:
-          'Les frais de visite couvrent l’organisation du rendez-vous et ne sont pas remboursés en cas d’annulation de votre part. Contactez notre équipe en cas d’empêchement pour envisager un report.',
+          'Non. Aucun paiement ni justificatif bancaire n’est demandé sur le site pour transmettre une demande de visite.',
       },
       {
         question: 'Puis-je changer la date de ma visite ?',
@@ -34,42 +34,12 @@ const CATEGORIES = [
       {
         question: 'Que se passe-t-il après l’envoi de ma demande de réservation ?',
         answer:
-          'Notre équipe examine votre dossier (profession, revenus, durée souhaitée) puis vous informe de la décision. En cas d’acceptation, vous recevez les instructions pour verser la garantie de réservation.',
+          'Notre équipe examine votre dossier (profession, revenus, durée souhaitée), vous informe de sa décision et organise manuellement les formalités suivantes.',
       },
       {
         question: 'Quels documents dois-je fournir ?',
         answer:
           'Selon le logement, une pièce d’identité, un justificatif de revenus et une lettre de recommandation ou de garant peuvent être demandés lors de la finalisation de votre dossier.',
-      },
-    ],
-  },
-  {
-    title: 'Garantie',
-    items: [
-      {
-        question: 'Comment verser la garantie de réservation ?',
-        answer:
-          'Une fois votre dossier accepté, les coordonnées bancaires et le montant à verser s’affichent dans votre espace client. Effectuez le virement en indiquant impérativement la référence fournie.',
-      },
-      {
-        question: 'Comment savoir si mon virement a bien été reçu ?',
-        answer:
-          'Déclarez votre virement depuis votre espace client (« J’ai effectué le virement »). Notre équipe vérifie ensuite manuellement la réception et met à jour le statut de votre dossier.',
-      },
-    ],
-  },
-  {
-    title: 'Remboursement',
-    items: [
-      {
-        question: 'Puis-je récupérer ma garantie si je renonce au logement ?',
-        answer:
-          'Oui, vous pouvez demander le remboursement depuis votre espace client. Votre demande est ensuite examinée et traitée manuellement par notre équipe administrative.',
-      },
-      {
-        question: 'Sous quel délai suis-je remboursé ?',
-        answer:
-          'Le traitement d’une demande de remboursement prend généralement quelques jours ouvrés une fois la demande approuvée par notre équipe.',
       },
     ],
   },
@@ -94,7 +64,7 @@ export default function FaqPage() {
           Questions fréquentes
         </h1>
         <p className="mt-3 max-w-xl text-ink-500">
-          Tout ce qu’il faut savoir sur les visites, la réservation, la garantie et le remboursement.
+          Tout ce qu’il faut savoir pour demander une visite ou réserver un logement.
         </p>
       </FadeIn>
 

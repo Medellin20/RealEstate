@@ -10,7 +10,7 @@ import { Select } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Badge, StatusDot } from '@/components/ui/badge';
 import { EmptyState } from '@/components/ui/empty-state';
-import { PROPERTY_STATUS_LABELS } from '@/lib/utils/constants';
+import { DUTCH_CITIES, PROPERTY_STATUS_LABELS } from '@/lib/utils/constants';
 import { formatPrice } from '@/lib/utils/format';
 
 export const metadata: Metadata = { title: 'Appartements' };
@@ -19,11 +19,12 @@ export const dynamic = 'force-dynamic';
 export default async function AdminPropertiesPage({
   searchParams,
 }: {
-  searchParams: { search?: string; status?: string; page?: string };
+  searchParams: { search?: string; status?: string; city?: string; page?: string };
 }) {
   const { properties, total, page, pageSize } = await getAllPropertiesAdmin({
     search: searchParams.search,
     status: searchParams.status,
+    city: searchParams.city,
     page: searchParams.page ? Number(searchParams.page) : 1,
   });
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
@@ -55,6 +56,12 @@ export default async function AdminPropertiesPage({
           <option value="reserved">Réservé</option>
           <option value="rented">Loué</option>
           <option value="unavailable">Indisponible</option>
+        </Select>
+        <Select name="city" defaultValue={searchParams.city} className="sm:w-52">
+          <option value="">Toutes les villes</option>
+          {DUTCH_CITIES.map((city) => (
+            <option key={city} value={city}>{city}</option>
+          ))}
         </Select>
         <Button type="submit" variant="outline">Filtrer</Button>
       </form>

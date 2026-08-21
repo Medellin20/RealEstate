@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { DUTCH_CITIES } from '@/lib/utils/constants';
 
 export const propertySchema = z.object({
   title: z.string().trim().min(5, 'Le titre doit contenir au moins 5 caractères.'),
@@ -11,7 +12,9 @@ export const propertySchema = z.object({
   propertyType: z.enum(['appartement', 'studio', 'maison', 'chambre', 'loft', 'duplex']),
 
   address: z.string().trim().optional().or(z.literal('')),
-  city: z.string().trim().min(2, 'Merci d’indiquer la ville.'),
+  city: z.enum(DUTCH_CITIES, {
+    errorMap: () => ({ message: 'Merci de sélectionner une ville des Pays-Bas.' }),
+  }),
   postalCode: z.string().trim().optional().or(z.literal('')),
   neighborhood: z.string().trim().optional().or(z.literal('')),
   latitude: z.coerce.number().min(-90).max(90).optional(),

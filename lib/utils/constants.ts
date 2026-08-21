@@ -2,10 +2,24 @@ export const DUTCH_CITIES = [
   'Amsterdam',
   'Rotterdam',
   'Utrecht',
-  'Eindhoven',
   'The Hague',
+  'Eindhoven',
   'Groningen',
+  'Almere',
+  'Tilburg',
+  'Breda',
+  'Nijmegen',
+  'Apeldoorn',
+  'Haarlem',
+  'Arnhem',
+  'Amersfoort',
+  'Enschede',
+  'Leiden',
+  'Dordrecht',
+  'Maastricht',
 ] as const;
+
+export type DutchCity = (typeof DUTCH_CITIES)[number];
 
 export const PROPERTY_TYPES = [
   { value: 'appartement', label: 'Appartement' },
@@ -26,8 +40,6 @@ export const PROPERTY_STATUS_LABELS: Record<string, { label: string; colorClass:
 
 export const VIEWING_STATUS_LABELS: Record<string, string> = {
   pending: 'En attente',
-  payment_pending: 'Paiement en attente',
-  paid: 'Payée',
   confirmed: 'Confirmée',
   cancelled: 'Annulée',
   completed: 'Terminée',
@@ -38,8 +50,6 @@ export const RESERVATION_STATUS_LABELS: Record<string, string> = {
   under_review: 'En cours d’examen',
   accepted: 'Acceptée',
   rejected: 'Refusée',
-  awaiting_guarantee: 'Garantie attendue',
-  guarantee_paid: 'Garantie versée',
   confirmed: 'Confirmée',
   cancelled: 'Annulée',
 };

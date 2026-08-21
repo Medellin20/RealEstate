@@ -2,24 +2,14 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Mail, CalendarClock, ShieldCheck, Search } from 'lucide-react';
 import { getClientDossierByEmail } from '@/lib/data/dossier';
-import { getBankSettings } from '@/lib/data/bank';
 import { StatusTimeline } from '@/components/shared/status-timeline';
-import { BankTransferInstructions } from '@/components/shared/bank-transfer-instructions';
-import { DeclareTransferForm } from '@/components/forms/declare-transfer-form';
-import { RefundRequestButton } from '@/components/forms/refund-request-button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
-import { generateGuaranteeReference } from '@/lib/utils/reference';
 import { getReservationTimelineSteps, getViewingTimelineSteps } from '@/lib/utils/timeline';
-import { formatDate, formatPrice } from '@/lib/utils/format';
-import {
-  RESERVATION_STATUS_LABELS,
-  VIEWING_STATUS_LABELS,
-  GUARANTEE_STATUS_LABELS,
-  REFUND_STATUS_LABELS,
-} from '@/lib/utils/constants';
+import { formatDate } from '@/lib/utils/format';
+import { RESERVATION_STATUS_LABELS, VIEWING_STATUS_LABELS } from '@/lib/utils/constants';
 
 export const metadata: Metadata = { title: 'Mon compte' };
 
@@ -35,8 +25,6 @@ export default async function MonComptePage({ searchParams }: { searchParams: { 
   if (!dossier) {
     return <EmailLookupScreen notFoundEmail={email} />;
   }
-
-  const bankSettings = await getBankSettings();
 
   return (
     <div className="container-app py-10 sm:py-14">
@@ -66,15 +54,7 @@ export default async function MonComptePage({ searchParams }: { searchParams: { 
           />
         ) : (
           <div className="space-y-6">
-            {dossier.reservations.map((reservation: any) => {
-              const guarantee = reservation.guarantee_payments?.[0];
-              const refunds = reservation.refund_requests ?? [];
-              const guaranteeReference = generateGuaranteeReference(reservation.reference);
-              const canRequestRefund =
-                guarantee &&
-                ['payment_received', 'payment_declared', 'reservation_confirmed'].includes(guarantee.status);
-
-              return (
+            {dossier.reservations.map((reservation: any) => (
                 <div key={reservation.id} className="rounded-2xl border border-ink-100 bg-white p-6 shadow-soft">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
@@ -101,67 +81,10 @@ export default async function MonComptePage({ searchParams }: { searchParams: { 
                     </div>
 
                     <div className="lg:col-span-3">
-                      {['awaiting_guarantee', 'guarantee_paid', 'confirmed'].includes(reservation.status) &&
-                        guarantee &&
-                        bankSettings && (
-                          <div className="space-y-4">
-                            {guarantee.status === 'awaiting_payment' && (
-                              <>
-                                <BankTransferInstructions
-                                  bankSettings={bankSettings}
-                                  reference={guaranteeReference}
-                                  amount={guarantee.amount}
-                                />
-                                <details className="group rounded-2xl border border-ink-100 bg-white">
-                                  <summary className="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-ink-700">
-                                    J’ai effectué le virement →
-                                  </summary>
-                                  <div className="border-t border-ink-100 p-5">
-                                    <DeclareTransferForm guaranteePaymentId={guarantee.id} />
-                                  </div>
-                                </details>
-                              </>
-                            )}
-
-                            {guarantee.status !== 'awaiting_payment' && (
-                              <div className="rounded-xl border border-ink-100 bg-sand-100/50 p-4 text-sm">
-                                <div className="flex items-center justify-between">
-                                  <span className="text-ink-500">Statut de la garantie</span>
-                                  <span className="font-semibold text-ink-800">
-                                    {GUARANTEE_STATUS_LABELS[guarantee.status]}
-                                  </span>
-                                </div>
-                                <div className="mt-1.5 flex items-center justify-between">
-                                  <span className="text-ink-500">Montant</span>
-                                  <span className="font-semibold text-ink-800">{formatPrice(guarantee.amount)}</span>
-                                </div>
-                              </div>
-                            )}
-
-                            {canRequestRefund && refunds.length === 0 && (
-                              <RefundRequestButton guaranteePaymentId={guarantee.id} />
-                            )}
-
-                            {refunds.length > 0 && (
-                              <div className="rounded-xl border border-brick-100 bg-brick-50/50 p-4 text-sm">
-                                <div className="flex items-center justify-between">
-                                  <span className="text-ink-600">Demande de remboursement</span>
-                                  <span className="font-semibold text-brick-600">
-                                    {REFUND_STATUS_LABELS[refunds[0].status]}
-                                  </span>
-                                </div>
-                                <p className="mt-1 text-xs text-ink-400">
-                                  Référence : {refunds[0].reference}
-                                </p>
-                              </div>
-                            )}
-                          </div>
-                        )}
-
                       {reservation.status === 'submitted' && (
                         <p className="text-sm text-ink-400">
-                          Votre dossier est en attente d’examen par notre équipe. Vous recevrez les
-                          instructions de garantie dès qu’il sera accepté.
+                          Votre demande est en attente d’examen. Notre équipe vous contactera pour
+                          organiser manuellement la suite.
                         </p>
                       )}
 
@@ -173,8 +96,7 @@ export default async function MonComptePage({ searchParams }: { searchParams: { 
                     </div>
                   </div>
                 </div>
-              );
-            })}
+            ))}
           </div>
         )}
       </section>

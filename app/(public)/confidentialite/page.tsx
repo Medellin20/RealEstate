@@ -5,13 +5,12 @@ export const metadata: Metadata = { title: 'Politique de confidentialité' };
 
 export default function ConfidentialitePage() {
   return (
-    <LegalPage title="Politique de confidentialité" updatedAt="9 août 2026">
+    <LegalPage title="Politique de confidentialité" updatedAt="21 août 2026">
       <h2>Données collectées</h2>
       <p>
         Dans le cadre de vos démarches (demande de visite, réservation, contact), nous collectons :
         nom, prénom, e-mail, téléphone, et, le cas échéant, profession et revenus mensuels
-        approximatifs, ainsi que les justificatifs de paiement que vous choisissez de nous
-        transmettre.
+        approximatifs et les informations complémentaires que vous choisissez de nous transmettre.
       </p>
 
       <h2>Finalités du traitement</h2>
@@ -30,8 +29,8 @@ export default function ConfidentialitePage() {
       <h2>Sécurité</h2>
       <p>
         Vos données sont stockées sur une infrastructure Supabase sécurisée, protégée par des
-        politiques de sécurité au niveau des lignes (Row Level Security). Les informations bancaires
-        et documents de garantie ne sont accessibles qu’à notre équipe administrative.
+        politiques de sécurité au niveau des lignes (Row Level Security). L’accès aux dossiers est
+        réservé à notre équipe administrative.
       </p>
 
       <h2>Vos droits</h2>

@@ -14,7 +14,7 @@ import { Select } from '@/components/ui/select';
 import { Label, FieldError } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
-import { PROPERTY_TYPES, DUTCH_CITIES } from '@/lib/utils/constants';
+import { PROPERTY_TYPES, DUTCH_CITIES, type DutchCity } from '@/lib/utils/constants';
 import { slugify } from '@/lib/utils/format';
 import type { Amenity, Property } from '@/types/database';
 
@@ -35,7 +35,7 @@ function propertyToFormValues(property: Property, amenityIds: string[]): Propert
     description: property.description,
     propertyType: property.property_type,
     address: property.address ?? '',
-    city: property.city,
+    city: DUTCH_CITIES.includes(property.city as DutchCity) ? (property.city as DutchCity) : 'Amsterdam',
     postalCode: property.postal_code ?? '',
     neighborhood: property.neighborhood ?? '',
     latitude: property.latitude ?? undefined,
@@ -256,7 +256,7 @@ export function PropertyForm({
 
       {/* TARIFS */}
       <FormSection title="Tarifs">
-        <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 sm:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2">
           <div>
             <Label htmlFor="monthlyPrice">Prix mensuel (€)</Label>
             <Input id="monthlyPrice" type="number" step="1" {...register('monthlyPrice')} />
@@ -265,14 +265,6 @@ export function PropertyForm({
           <div>
             <Label htmlFor="serviceCharges">Charges (€)</Label>
             <Input id="serviceCharges" type="number" step="1" {...register('serviceCharges')} />
-          </div>
-          <div>
-            <Label htmlFor="depositAmount">Caution / garantie (€)</Label>
-            <Input id="depositAmount" type="number" step="1" {...register('depositAmount')} />
-          </div>
-          <div>
-            <Label htmlFor="viewingFee">Frais de visite (€)</Label>
-            <Input id="viewingFee" type="number" step="1" {...register('viewingFee')} />
           </div>
         </div>
       </FormSection>

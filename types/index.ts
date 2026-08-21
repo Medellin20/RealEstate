@@ -26,7 +26,4 @@ export interface DashboardStats {
   viewingRequestsTotal: number;
   viewingsToday: number;
   reservationsPending: number;
-  paymentsPending: number;
-  guaranteesReceived: number;
-  refundRequestsPending: number;
 }

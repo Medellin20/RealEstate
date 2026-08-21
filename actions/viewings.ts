@@ -7,13 +7,12 @@ import { upsertClient } from '@/lib/data/clients';
 import { recordStatusChange } from '@/lib/data/history';
 import { viewingRequestSchema, type ViewingRequestInput } from '@/lib/validations/viewing';
 import { generateReference } from '@/lib/utils/reference';
-import { VIEWING_FEE } from '@/lib/payments/bank-transfer';
 import { sendAdminAlert } from '@/lib/notifications/email';
 import type { ActionResult } from '@/types';
 
 /**
  * Crée une demande de visite : upsert du client, insertion de la demande,
- * puis redirection vers la page affichant le RIB pour régler les 100 €.
+ * puis redirection vers la confirmation. La suite est traitée manuellement.
  */
 export async function createViewingRequest(
   input: ViewingRequestInput,
@@ -48,8 +47,7 @@ export async function createViewingRequest(
   });
 
   const reference = generateReference('VIS');
-  const feeAmount = VIEWING_FEE;
-  const initialStatus = 'payment_pending';
+  const initialStatus = 'pending';
 
   const { data: viewing, error: insertError } = await supabase
     .from('viewing_requests')
@@ -60,7 +58,7 @@ export async function createViewingRequest(
       requested_date: parsed.data.requestedDate,
       requested_time_slot: parsed.data.requestedTimeSlot,
       status: initialStatus,
-      fee_amount: feeAmount,
+      fee_amount: 0,
     })
     .select('*')
     .single();
@@ -85,7 +83,6 @@ export async function createViewingRequest(
     Téléphone: parsed.data.phone,
     Date: parsed.data.requestedDate,
     Créneau: parsed.data.requestedTimeSlot,
-    Montant: `${feeAmount} €`,
   });
 
   revalidatePath('/admin/visites');

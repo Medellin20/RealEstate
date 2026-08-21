@@ -10,7 +10,7 @@ export const revalidate = 30;
 export const metadata: Metadata = {
   title: 'Appartements à louer aux Pays-Bas',
   description:
-    'Parcourez notre catalogue d’appartements à louer aux Pays-Bas : Amsterdam, Rotterdam, Utrecht, Eindhoven, La Haye, Groningue. Filtrez par ville, budget et nombre de chambres.',
+    'Parcourez nos appartements à louer, organisés par ville aux Pays-Bas. Filtrez par ville, budget et nombre de chambres.',
 };
 
 interface PageProps {
@@ -50,7 +50,7 @@ export default async function AppartementsPage({ searchParams }: PageProps) {
         <p className="mt-2 max-w-2xl text-ink-500">
           {filters.city
             ? `Découvrez nos logements disponibles à ${filters.city}.`
-            : 'Découvrez l’ensemble de nos logements disponibles, vérifiés par notre équipe.'}
+            : 'Découvrez nos logements disponibles, regroupés par ville aux Pays-Bas.'}
         </p>
       </div>
 

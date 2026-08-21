@@ -6,7 +6,7 @@ import { StatusSelect } from '@/components/admin/status-select';
 import { Badge } from '@/components/ui/badge';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Select } from '@/components/ui/select';
-import { formatDate, formatDateTime, formatPrice } from '@/lib/utils/format';
+import { formatDate, formatDateTime } from '@/lib/utils/format';
 import { VIEWING_STATUS_LABELS } from '@/lib/utils/constants';
 import type { ViewingStatus } from '@/types/database';
 
@@ -69,10 +69,6 @@ export default async function AdminViewingsPage({ searchParams }: { searchParams
                 <p>
                   <span className="text-ink-400">Créneau : </span>
                   {formatDate(viewing.requested_date)} · {viewing.requested_time_slot}
-                </p>
-                <p>
-                  <span className="text-ink-400">Frais : </span>
-                  {formatPrice(viewing.fee_amount)}
                 </p>
               </div>
 

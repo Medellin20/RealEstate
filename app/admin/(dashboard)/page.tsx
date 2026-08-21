@@ -7,9 +7,6 @@ import {
   Home,
   CalendarClock,
   FileText,
-  CreditCard,
-  ShieldCheck,
-  RotateCcw,
   PlusCircle,
   BellRing,
 } from 'lucide-react';
@@ -47,9 +44,6 @@ export default async function AdminDashboardPage() {
         <StatCard icon={CalendarClock} label="Demandes de visite" value={stats.viewingRequestsTotal} tone="info" />
         <StatCard icon={CalendarClock} label="Visites aujourd’hui" value={stats.viewingsToday} tone="positive" />
         <StatCard icon={FileText} label="Réservations en attente" value={stats.reservationsPending} tone="warning" />
-        <StatCard icon={CreditCard} label="Paiements en attente" value={stats.paymentsPending} tone="warning" />
-        <StatCard icon={ShieldCheck} label="Garanties reçues" value={stats.guaranteesReceived} tone="positive" />
-        <StatCard icon={RotateCcw} label="Demandes de remboursement" value={stats.refundRequestsPending} tone="info" />
       </div>
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/70 p-5 sm:p-6">

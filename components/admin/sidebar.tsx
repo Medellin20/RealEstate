@@ -8,10 +8,7 @@ import {
   Building2,
   PlusCircle,
   CalendarClock,
-  ShieldCheck,
-  RotateCcw,
   Users,
-  Landmark,
   Settings,
   LogOut,
   Menu,
@@ -28,10 +25,7 @@ const NAV_ITEMS = [
   { href: '/admin/appartements/nouveau', label: 'Ajouter un appartement', icon: PlusCircle },
   { href: '/admin/visites', label: 'Visites', icon: CalendarClock },
   { href: '/admin/reservations', label: 'Réservations', icon: FileText },
-  { href: '/admin/garanties', label: 'Garanties', icon: ShieldCheck },
-  { href: '/admin/remboursements', label: 'Remboursements', icon: RotateCcw },
   { href: '/admin/clients', label: 'Clients', icon: Users },
-  { href: '/admin/configuration-bancaire', label: 'Configuration bancaire', icon: Landmark },
   { href: '/admin/parametres', label: 'Paramètres', icon: Settings },
 ];
 

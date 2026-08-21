@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
-import { ArrowLeft, ArrowRight, CalendarClock, CreditCard, User } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CalendarClock, FileCheck2, User } from 'lucide-react';
 import { viewingRequestSchema, type ViewingRequestInput } from '@/lib/validations/viewing';
 import { createViewingRequest } from '@/actions/viewings';
 import { Input } from '@/components/ui/input';
@@ -13,21 +13,18 @@ import { Select } from '@/components/ui/select';
 import { Label, FieldError } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { TIME_SLOTS } from '@/lib/utils/constants';
-import { formatPrice } from '@/lib/utils/format';
 import { cn } from '@/lib/utils/cn';
 
-const STEPS = ['Date & créneau', 'Vos coordonnées', 'Paiement'] as const;
+const STEPS = ['Date & créneau', 'Vos coordonnées', 'Confirmation'] as const;
 
 export function ViewingRequestForm({
   propertyId,
   propertySlug,
   propertyTitle,
-  viewingFee,
 }: {
   propertyId: string;
   propertySlug: string;
   propertyTitle: string;
-  viewingFee: number;
 }) {
   const [step, setStep] = React.useState(0);
   const [isPending, startTransition] = React.useTransition();
@@ -176,8 +173,8 @@ export function ViewingRequestForm({
               className="space-y-4"
             >
               <div className="flex items-center gap-2 text-ink-700">
-                <CreditCard className="h-5 w-5 text-canal-600" />
-                <h3 className="font-bold">Récapitulatif & paiement</h3>
+                <FileCheck2 className="h-5 w-5 text-canal-600" />
+                <h3 className="font-bold">Récapitulatif de votre demande</h3>
               </div>
 
               <div className="space-y-2 rounded-xl border border-ink-100 bg-sand-100/60 p-4 text-sm">
@@ -189,15 +186,9 @@ export function ViewingRequestForm({
                 <Row label="Téléphone" value={values.phone || '—'} />
               </div>
 
-              <div className="flex items-center justify-between rounded-xl bg-ink-700 px-4 py-3.5 text-white">
-                <span className="text-sm font-medium">Frais de visite</span>
-                <span className="text-lg font-extrabold">{formatPrice(viewingFee)}</span>
-              </div>
-
-              <p className="text-xs leading-relaxed text-ink-400">
-                Le bouton ci-dessous affichera le RIB de l’entreprise afin que vous puissiez
-                effectuer le virement. Envoyez ensuite la capture du paiement à
-                contacts@realestatenl.agency.
+              <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
+                Aucun paiement n’est demandé en ligne. Notre équipe vous contactera pour confirmer
+                le créneau et organiser manuellement la suite.
               </p>
             </motion.div>
           )}
@@ -221,7 +212,7 @@ export function ViewingRequestForm({
             </Button>
           ) : (
             <Button type="submit" isLoading={isPending} className="w-full sm:w-auto">
-              Afficher le RIB
+              Envoyer la demande de visite
             </Button>
           )}
         </div>

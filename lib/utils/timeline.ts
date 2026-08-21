@@ -5,15 +5,13 @@ export function getReservationTimelineSteps(status: ReservationStatus): Timeline
   const order: ReservationStatus[] = [
     'submitted',
     'under_review',
-    'awaiting_guarantee',
-    'guarantee_paid',
+    'accepted',
     'confirmed',
   ];
   const labels = [
     'Demande envoyée',
     'Dossier en cours d’examen',
-    'Garantie demandée',
-    'Garantie reçue',
+    'Demande acceptée',
     'Logement réservé',
   ];
 
@@ -25,8 +23,7 @@ export function getReservationTimelineSteps(status: ReservationStatus): Timeline
     }));
   }
 
-  // 'accepted' se comporte comme une étape intermédiaire entre under_review et awaiting_guarantee
-  const effectiveStatus = status === 'accepted' ? 'under_review' : status;
+  const effectiveStatus = ['awaiting_guarantee', 'guarantee_paid'].includes(status) ? 'accepted' : status;
   const currentIndex = order.indexOf(effectiveStatus);
 
   return labels.map((label, i) => ({
@@ -36,14 +33,15 @@ export function getReservationTimelineSteps(status: ReservationStatus): Timeline
 }
 
 export function getViewingTimelineSteps(status: ViewingStatus): TimelineStep[] {
-  const order: ViewingStatus[] = ['pending', 'payment_pending', 'paid', 'confirmed', 'completed'];
-  const labels = ['Demande envoyée', 'Paiement des frais', 'Paiement confirmé', 'Visite confirmée', 'Visite effectuée'];
+  const order: ViewingStatus[] = ['pending', 'confirmed', 'completed'];
+  const labels = ['Demande envoyée', 'Visite confirmée', 'Visite effectuée'];
 
   if (status === 'cancelled') {
     return labels.map((label, i) => ({ label, state: i === 0 ? 'failed' : 'upcoming' }));
   }
 
-  const currentIndex = order.indexOf(status);
+  const effectiveStatus = ['payment_pending', 'paid'].includes(status) ? 'pending' : status;
+  const currentIndex = order.indexOf(effectiveStatus);
   return labels.map((label, i) => ({
     label,
     state: i < currentIndex ? 'done' : i === currentIndex ? 'current' : 'upcoming',

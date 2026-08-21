@@ -5,35 +5,25 @@ export const metadata: Metadata = { title: 'Conditions générales' };
 
 export default function ConditionsGeneralesPage() {
   return (
-    <LegalPage title="Conditions générales d’utilisation et de vente" updatedAt="9 août 2026">
+    <LegalPage title="Conditions générales d’utilisation" updatedAt="21 août 2026">
       <h2>Objet</h2>
       <p>
         Les présentes conditions générales régissent l’utilisation du site Real Estate NL et les
         services de mise en relation pour la location d’appartements aux Pays-Bas.
       </p>
 
-      <h2>Frais de visite</h2>
+      <h2>Demandes de visite</h2>
       <p>
-        Toute demande de visite d’un logement peut être soumise à des frais de visite, dont le
-        montant est indiqué sur la fiche du logement concerné avant tout paiement. Ces frais
-        couvrent l’organisation du rendez-vous et ne sont pas remboursables, sauf annulation à
-        l’initiative de Real Estate NL.
+        L’envoi d’une demande de visite depuis le site ne nécessite aucun paiement. Le créneau
+        demandé reste soumis à confirmation par Real Estate NL, qui contacte le client pour
+        organiser le rendez-vous.
       </p>
 
-      <h2>Garantie de réservation</h2>
+      <h2>Demandes de réservation</h2>
       <p>
-        La réservation d’un logement peut être conditionnée au versement d’une garantie par virement
-        bancaire, dont le montant et les coordonnées sont communiqués individuellement à chaque
-        client. Cette garantie sécurise la réservation du logement dans l’attente de la signature du
-        contrat de location.
-      </p>
-
-      <h2>Remboursement</h2>
-      <p>
-        En cas de renonciation à la location après versement de la garantie, le client peut formuler
-        une demande de remboursement depuis son espace client. Cette demande est examinée et traitée
-        manuellement par notre équipe ; le remboursement effectif est réalisé par virement bancaire
-        selon les délais habituels de traitement.
+        L’envoi d’une demande de réservation ne vaut pas acceptation définitive et ne nécessite
+        aucun paiement sur le site. Real Estate NL examine le dossier, communique sa décision et
+        organise directement avec le client les éventuelles formalités ultérieures.
       </p>
 
       <h2>Responsabilité</h2>

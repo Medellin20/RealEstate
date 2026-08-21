@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Search, CalendarClock, FileCheck2, ShieldCheck, KeyRound, Building2, PenTool } from 'lucide-react';
+import { Search, CalendarClock, FileCheck2, KeyRound, Building2, PenTool } from 'lucide-react';
 import { FadeIn } from '@/components/ui/fade-in';
 import { SectionHeading } from '@/components/ui/section-heading';
 
@@ -25,7 +25,7 @@ const STEPS = [
     icon: CalendarClock,
     title: 'Réservez une visite',
     description:
-      'Sélectionnez une date et un créneau horaire, renseignez vos coordonnées, puis versez les 100 € sur le RIB affiché.',
+      'Sélectionnez une date et un créneau horaire, renseignez vos coordonnées, puis envoyez votre demande.',
   },
   {
     icon: PenTool,
@@ -40,15 +40,9 @@ const STEPS = [
       'Une fois votre dossier examiné et accepté par notre équipe, votre demande de réservation est validée.',
   },
   {
-    icon: ShieldCheck,
-    title: 'Versez la garantie si nécessaire',
-    description:
-      'Réglez la garantie de réservation par virement bancaire selon les coordonnées fournies, puis déclarez votre virement.',
-  },
-  {
     icon: KeyRound,
     title: 'Emménagez',
-    description: 'Votre dossier validé et votre garantie reçue, il ne vous reste plus qu’à récupérer les clés.',
+    description: 'Votre dossier validé, l’agence organise manuellement les formalités et la remise des clés.',
   },
 ];
 

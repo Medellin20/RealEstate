@@ -27,12 +27,12 @@ const STEPS = [
   {
     icon: CalendarCheck,
     title: 'Réservez une visite',
-    description: 'Choisissez une date et un créneau, puis réglez les 100 € de visite par virement.',
+    description: 'Choisissez une date et un créneau, puis envoyez gratuitement votre demande à l’agence.',
   },
   {
     icon: ShieldCheck,
-    title: 'Sécurisez votre dossier',
-    description: 'Versez 50 % du loyer ainsi qu’une caution équivalente à un mois de loyer.',
+    title: 'Envoyez votre réservation',
+    description: 'Transmettez votre projet de location ; notre équipe examine ensuite votre dossier.',
   },
   {
     icon: KeyRound,

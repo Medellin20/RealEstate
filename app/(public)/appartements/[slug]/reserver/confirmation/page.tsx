@@ -1,15 +1,12 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Clock, Home, Mail } from 'lucide-react';
+import { CheckCircle2, Home } from 'lucide-react';
 import { getReservationByReference } from '@/lib/data/dossier';
-import { DEMO_BANK_SETTINGS, getBankSettings, isDemoBankSettings } from '@/lib/data/bank';
 import { Button } from '@/components/ui/button';
-import { BankTransferInstructions } from '@/components/shared/bank-transfer-instructions';
 import { RESERVATION_STATUS_LABELS } from '@/lib/utils/constants';
-import { formatDate, formatPrice } from '@/lib/utils/format';
-import { getReservationPaymentAmount, PROFESSIONAL_EMAIL } from '@/lib/payments/bank-transfer';
+import { formatDate } from '@/lib/utils/format';
 
-export const metadata = { title: 'Paiement de la réservation' };
+export const metadata = { title: 'Demande de réservation envoyée' };
 
 export default async function ReservationConfirmationPage({
   searchParams,
@@ -19,24 +16,21 @@ export default async function ReservationConfirmationPage({
   if (!searchParams.ref) notFound();
   const reservation = await getReservationByReference(searchParams.ref);
   if (!reservation) notFound();
-  const bankSettings = await getBankSettings();
-  const displayedBankSettings = bankSettings ?? DEMO_BANK_SETTINGS;
 
   const property = (reservation as any).properties;
-  const monthlyPrice = Number(property?.monthly_price) || 0;
-  const paymentAmount = getReservationPaymentAmount(monthlyPrice);
 
   return (
     <div className="container-app flex min-h-[70vh] items-center justify-center py-6 sm:py-14">
       <div className="w-full max-w-2xl rounded-2xl border border-ink-100 bg-white p-4 text-center shadow-card sm:p-8">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-canal-50 text-canal-600">
-          <Clock className="h-7 w-7" />
+          <CheckCircle2 className="h-7 w-7" />
         </div>
 
-        <h1 className="mt-5 text-xl font-extrabold text-ink-900">Paiement de la réservation en attente</h1>
+        <h1 className="mt-5 text-xl font-extrabold text-ink-900">Votre demande de réservation est envoyée</h1>
 
         <p className="mt-2 text-sm text-ink-500">
-          Le logement sera confirmé uniquement après réception et vérification de votre justificatif de virement.
+          Notre équipe va examiner votre dossier et vous contactera pour organiser manuellement la suite.
+          Aucun paiement ni justificatif bancaire n’est demandé sur le site.
         </p>
 
         <p className="mt-2 text-sm text-ink-500">
@@ -48,29 +42,6 @@ export default async function ReservationConfirmationPage({
           <Row label="Entrée souhaitée" value={formatDate(reservation.desired_move_in_date)} />
           <Row label="Durée" value={`${reservation.duration_months} mois`} />
           <Row label="Statut" value={RESERVATION_STATUS_LABELS[reservation.status] ?? reservation.status} />
-          <Row label="50 % du loyer" value={formatPrice(monthlyPrice / 2)} />
-          <Row label="Caution (1 mois)" value={formatPrice(monthlyPrice)} />
-          <Row label="Total à verser" value={formatPrice(paymentAmount)} />
-        </div>
-
-        <div className="mt-5 text-left">
-          <BankTransferInstructions
-            bankSettings={displayedBankSettings}
-            reference={reservation.reference}
-            amount={paymentAmount}
-            isExample={isDemoBankSettings(displayedBankSettings)}
-          />
-        </div>
-
-        <div className="mt-5 flex items-start gap-3 rounded-xl border border-canal-100 bg-canal-50/60 p-4 text-left">
-          <Mail className="mt-0.5 h-5 w-5 shrink-0 text-canal-600" />
-          <p className="text-sm leading-relaxed text-canal-800">
-            Après le virement, envoyez la capture ou le justificatif à{' '}
-            <a className="font-bold underline" href={`mailto:${PROFESSIONAL_EMAIL}?subject=Justificatif réservation ${reservation.reference}`}>
-              {PROFESSIONAL_EMAIL}
-            </a>{' '}
-            en indiquant la référence <strong>{reservation.reference}</strong>.
-          </p>
         </div>
 
         <div className="mt-8 flex flex-col gap-2.5 sm:flex-row">

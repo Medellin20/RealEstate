@@ -17,9 +17,6 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     { count: viewingRequestsTotal },
     { count: viewingsToday },
     { count: reservationsPending },
-    { count: paymentsPending },
-    { count: guaranteesReceived },
-    { count: refundRequestsPending },
   ] = await Promise.all([
     supabase.from('properties').select('*', { count: 'exact', head: true }),
     supabase.from('properties').select('*', { count: 'exact', head: true }).eq('status', 'available'),
@@ -35,15 +32,6 @@ export async function getDashboardStats(): Promise<DashboardStats> {
       .from('reservations')
       .select('*', { count: 'exact', head: true })
       .in('status', ['submitted', 'under_review']),
-    supabase
-      .from('viewing_requests')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'payment_pending'),
-    supabase
-      .from('guarantee_payments')
-      .select('*', { count: 'exact', head: true })
-      .in('status', ['payment_received', 'reservation_confirmed']),
-    supabase.from('refund_requests').select('*', { count: 'exact', head: true }).eq('status', 'requested'),
   ]);
 
   return {
@@ -54,9 +42,6 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     viewingRequestsTotal: viewingRequestsTotal ?? 0,
     viewingsToday: viewingsToday ?? 0,
     reservationsPending: reservationsPending ?? 0,
-    paymentsPending: paymentsPending ?? 0,
-    guaranteesReceived: guaranteesReceived ?? 0,
-    refundRequestsPending: refundRequestsPending ?? 0,
   };
 }
 
@@ -72,15 +57,13 @@ export async function getRecentAdminLogs(limit = 8) {
 
 export async function getAdminAlerts() {
   const supabase = createAdminClient();
-  const [{ data: reservations }, { data: viewings }, { data: refunds }] = await Promise.all([
+  const [{ data: reservations }, { data: viewings }] = await Promise.all([
     supabase.from('reservations').select('id, reference, created_at').in('status', ['submitted', 'under_review']).order('created_at', { ascending: false }).limit(5),
-    supabase.from('viewing_requests').select('id, reference, created_at').eq('status', 'payment_pending').order('created_at', { ascending: false }).limit(5),
-    supabase.from('refund_requests').select('id, reference, created_at').eq('status', 'requested').order('created_at', { ascending: false }).limit(5),
+    supabase.from('viewing_requests').select('id, reference, created_at').eq('status', 'pending').order('created_at', { ascending: false }).limit(5),
   ]);
 
   return [
     ...(reservations ?? []).map((item) => ({ ...item, label: `Réservation ${item.reference} à examiner`, href: '/admin/reservations', tone: 'warning' as const })),
-    ...(viewings ?? []).map((item) => ({ ...item, label: `Paiement de visite ${item.reference} à vérifier`, href: '/admin/visites', tone: 'info' as const })),
-    ...(refunds ?? []).map((item) => ({ ...item, label: `Remboursement ${item.reference} demandé`, href: '/admin/remboursements', tone: 'danger' as const })),
+    ...(viewings ?? []).map((item) => ({ ...item, label: `Visite ${item.reference} à organiser`, href: '/admin/visites', tone: 'info' as const })),
   ].sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, 10);
 }
