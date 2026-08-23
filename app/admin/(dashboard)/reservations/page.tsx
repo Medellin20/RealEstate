@@ -6,7 +6,7 @@ import { updateReservationStatus } from '@/actions/admin-reservations';
 import { StatusSelect } from '@/components/admin/status-select';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Select } from '@/components/ui/select';
+import { AutoSubmitSelect } from '@/components/admin/auto-submit-select';
 import { EmptyState } from '@/components/ui/empty-state';
 import { formatDate, formatDateTime, formatPrice } from '@/lib/utils/format';
 import { RESERVATION_STATUS_LABELS } from '@/lib/utils/constants';
@@ -39,12 +39,12 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
             </Button>
           </a>
           <form action="/admin/reservations" method="get">
-            <Select name="status" defaultValue={searchParams.status} className="sm:w-56">
+            <AutoSubmitSelect name="status" defaultValue={searchParams.status} className="sm:w-56">
               <option value="">Tous les statuts</option>
               {STATUS_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
-            </Select>
+            </AutoSubmitSelect>
           </form>
         </div>
       </div>

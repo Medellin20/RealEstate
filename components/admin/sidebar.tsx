@@ -15,6 +15,9 @@ import {
   X,
   Home,
   FileText,
+  Landmark,
+  RefreshCcw,
+  ShieldCheck,
 } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 import { logoutAdmin } from '@/actions/admin-auth';
@@ -25,7 +28,10 @@ const NAV_ITEMS = [
   { href: '/admin/appartements/nouveau', label: 'Ajouter un appartement', icon: PlusCircle },
   { href: '/admin/visites', label: 'Visites', icon: CalendarClock },
   { href: '/admin/reservations', label: 'Réservations', icon: FileText },
+  { href: '/admin/garanties', label: 'Garanties', icon: ShieldCheck },
+  { href: '/admin/remboursements', label: 'Remboursements', icon: RefreshCcw },
   { href: '/admin/clients', label: 'Clients', icon: Users },
+  { href: '/admin/configuration-bancaire', label: 'Coordonnées bancaires', icon: Landmark },
   { href: '/admin/parametres', label: 'Paramètres', icon: Settings },
 ];
 

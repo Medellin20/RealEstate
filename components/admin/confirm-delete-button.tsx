@@ -27,13 +27,15 @@ export function ConfirmDeleteButton({
 
   function handleConfirm() {
     startTransition(async () => {
-      const result = await action();
-      if (result.success) {
-        toast.success(result.message);
-        setOpen(false);
-        router.refresh();
-      } else {
-        toast.error(result.message);
+      try {
+        const result = await action();
+        if (result.success) {
+          toast.success(result.message);
+          setOpen(false);
+          router.refresh();
+        } else toast.error(result.message);
+      } catch {
+        toast.error('Connexion impossible. Merci de réessayer.');
       }
     });
   }

@@ -20,12 +20,16 @@ export function StatusSelect<T extends string>({
 
   function handleChange(newStatus: T) {
     startTransition(async () => {
-      const result = await onUpdate(newStatus);
-      if (result.success) {
-        toast.success(result.message);
-        router.refresh();
-      } else {
-        toast.error(result.message);
+      try {
+        const result = await onUpdate(newStatus);
+        if (result.success) {
+          toast.success(result.message);
+          router.refresh();
+        } else {
+          toast.error(result.message);
+        }
+      } catch {
+        toast.error('Connexion impossible. Merci de réessayer.');
       }
     });
   }

@@ -3,7 +3,7 @@ import { getAllGuaranteesAdmin } from '@/lib/data/admin-lists';
 import { updateGuaranteeStatus } from '@/actions/admin-guarantees';
 import { StatusSelect } from '@/components/admin/status-select';
 import { Badge } from '@/components/ui/badge';
-import { Select } from '@/components/ui/select';
+import { AutoSubmitSelect } from '@/components/admin/auto-submit-select';
 import { EmptyState } from '@/components/ui/empty-state';
 import { formatDate, formatDateTime, formatPrice } from '@/lib/utils/format';
 import { GUARANTEE_STATUS_LABELS } from '@/lib/utils/constants';
@@ -28,12 +28,12 @@ export default async function AdminGuaranteesPage({ searchParams }: { searchPara
           <p className="mt-1 text-sm text-ink-500">{guarantees.length} dossier(s) de garantie.</p>
         </div>
         <form action="/admin/garanties" method="get">
-          <Select name="status" defaultValue={searchParams.status} className="sm:w-56">
+          <AutoSubmitSelect name="status" defaultValue={searchParams.status} className="sm:w-56">
             <option value="">Tous les statuts</option>
             {STATUS_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
-          </Select>
+          </AutoSubmitSelect>
         </form>
       </div>
 

@@ -5,7 +5,7 @@ import { updateViewingStatus } from '@/actions/admin-viewings';
 import { StatusSelect } from '@/components/admin/status-select';
 import { Badge } from '@/components/ui/badge';
 import { EmptyState } from '@/components/ui/empty-state';
-import { Select } from '@/components/ui/select';
+import { AutoSubmitSelect } from '@/components/admin/auto-submit-select';
 import { formatDate, formatDateTime } from '@/lib/utils/format';
 import { VIEWING_STATUS_LABELS } from '@/lib/utils/constants';
 import type { ViewingStatus } from '@/types/database';
@@ -29,14 +29,14 @@ export default async function AdminViewingsPage({ searchParams }: { searchParams
           <p className="mt-1 text-sm text-ink-500">{viewings.length} demande(s).</p>
         </div>
         <form action="/admin/visites" method="get">
-          <Select name="status" defaultValue={searchParams.status} className="sm:w-56">
+          <AutoSubmitSelect name="status" defaultValue={searchParams.status} className="sm:w-56">
             <option value="">Tous les statuts</option>
             {STATUS_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}
               </option>
             ))}
-          </Select>
+          </AutoSubmitSelect>
         </form>
       </div>
 

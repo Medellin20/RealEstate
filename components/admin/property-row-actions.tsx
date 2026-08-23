@@ -25,24 +25,28 @@ export function PropertyRowActions({
 
   function handleTogglePublish() {
     startTransition(async () => {
-      const result = await togglePropertyPublish(id, !isPublished);
-      if (result.success) {
-        toast.success(result.message);
-        router.refresh();
-      } else {
-        toast.error(result.message);
+      try {
+        const result = await togglePropertyPublish(id, !isPublished);
+        if (result.success) {
+          toast.success(result.message);
+          router.refresh();
+        } else toast.error(result.message);
+      } catch {
+        toast.error('Connexion impossible. Merci de réessayer.');
       }
     });
   }
 
   function handleStatusChange(newStatus: PropertyStatus) {
     startTransition(async () => {
-      const result = await updatePropertyStatus(id, newStatus);
-      if (result.success) {
-        toast.success(result.message);
-        router.refresh();
-      } else {
-        toast.error(result.message);
+      try {
+        const result = await updatePropertyStatus(id, newStatus);
+        if (result.success) {
+          toast.success(result.message);
+          router.refresh();
+        } else toast.error(result.message);
+      } catch {
+        toast.error('Connexion impossible. Merci de réessayer.');
       }
     });
   }
