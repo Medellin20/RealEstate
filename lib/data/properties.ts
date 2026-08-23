@@ -31,6 +31,9 @@ export async function getPublishedProperties(filters: PropertyFilters = {}) {
     .eq('is_published', true)
     .neq('status', 'draft');
 
+  // La ville reste le premier critère de classement, y compris entre deux pages.
+  query = query.order('city', { ascending: true });
+
   if (filters.city) query = query.eq('city', filters.city);
   if (filters.minPrice) query = query.gte('monthly_price', filters.minPrice);
   if (filters.maxPrice) query = query.lte('monthly_price', filters.maxPrice);
@@ -106,6 +109,21 @@ export async function getSimilarProperties(property: Property, limit = 3) {
 /** Liste des villes disponibles avec biens publiés (pour les filtres). */
 export async function getAvailableCities(): Promise<string[]> {
   const supabase = createClient();
+  let query = supabase
+    .from('properties')
+    .select('city')
+    .eq('is_published', true)
+    .neq('status', 'draft');
+
+  const { data, error } = await query;
+
+  if (error || !data) return [];
+  return Array.from(new Set(data.map((r) => r.city))).sort();
+}
+
+/** Villes des Pays-Bas ayant au moins un logement publié, avec leur nombre d'annonces. */
+export async function getAvailableCityCounts(): Promise<{ city: string; count: number }[]> {
+  const supabase = createClient();
   const { data, error } = await supabase
     .from('properties')
     .select('city')
@@ -113,7 +131,10 @@ export async function getAvailableCities(): Promise<string[]> {
     .neq('status', 'draft');
 
   if (error || !data) return [];
-  return Array.from(new Set(data.map((r) => r.city))).sort();
+  const counts = new Map<string, number>();
+  for (const row of data) counts.set(row.city, (counts.get(row.city) ?? 0) + 1);
+  return Array.from(counts, ([city, count]) => ({ city, count }))
+    .sort((a, b) => a.city.localeCompare(b.city, 'fr'));
 }
 
 /** Biens mis en avant pour la page d'accueil. */

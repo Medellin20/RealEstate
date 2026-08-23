@@ -45,6 +45,10 @@ export default async function ViewingConfirmationPage({
           Aucun paiement ni justificatif bancaire n’est demandé sur le site.
         </p>
 
+        <p className="mt-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-bold leading-relaxed text-red-700">
+          Si vous ne recevez pas une confirmation par mail ou par WhatsApp en moins de 24 h, sachez que votre dossier a été rejeté.
+        </p>
+
         <div className="mt-8 flex flex-col gap-2.5 sm:flex-row">
           <Link href="/mon-compte" className="flex-1">
             <Button variant="outline" className="w-full">Suivre mon dossier</Button>

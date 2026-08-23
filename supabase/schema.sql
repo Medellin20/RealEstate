@@ -165,6 +165,7 @@ create table viewing_requests (
 
   requested_date date not null,
   requested_time_slot text not null,  -- ex: '14:00 - 14:30'
+  occupants_count integer not null default 1,
 
   status viewing_status not null default 'pending',
   fee_amount numeric(10, 2) not null default 0,
@@ -198,6 +199,8 @@ create table reservations (
   occupants_count integer not null default 1,
   profession text,
   monthly_income numeric(10, 2),
+  employment_contract text,
+  origin_city text,
   message text,
 
   status reservation_status not null default 'submitted',

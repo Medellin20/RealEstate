@@ -40,7 +40,6 @@ export function ReservationForm({
     defaultValues: {
       propertyId,
       durationMonths: 12,
-      occupantsCount: 1,
     },
   });
 
@@ -50,7 +49,7 @@ export function ReservationForm({
   async function goNext() {
     const fieldsByStep: (keyof ReservationInput)[][] = [
       ['firstName', 'lastName', 'email', 'phone'],
-      ['desiredMoveInDate', 'durationMonths', 'occupantsCount', 'profession', 'monthlyIncome'],
+      ['desiredMoveInDate', 'durationMonths', 'employmentContract', 'monthlyIncome', 'originCity'],
     ];
     const valid = await trigger(fieldsByStep[step]);
     if (valid) setStep((s) => Math.min(s + 1, STEPS.length - 1));
@@ -143,7 +142,7 @@ export function ReservationForm({
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
-                  <Label htmlFor="desiredMoveInDate">Date d’entrée souhaitée</Label>
+                  <Label htmlFor="desiredMoveInDate">Date de réservation</Label>
                   <Input id="desiredMoveInDate" type="date" min={minDate} {...register('desiredMoveInDate')} />
                   <FieldError message={errors.desiredMoveInDate?.message} />
                 </div>
@@ -155,26 +154,25 @@ export function ReservationForm({
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
-                  <Label htmlFor="occupantsCount">Nombre d’occupants</Label>
-                  <Select id="occupantsCount" {...register('occupantsCount')}>
-                    {[1, 2, 3, 4, 5, 6].map((n) => (
-                      <option key={n} value={n}>
-                        {n}
-                      </option>
-                    ))}
-                  </Select>
-                  <FieldError message={errors.occupantsCount?.message} />
-                </div>
-                <div>
                   <Label htmlFor="monthlyIncome">Revenu mensuel approximatif (€)</Label>
                   <Input id="monthlyIncome" type="number" min={0} step="50" {...register('monthlyIncome')} />
                   <FieldError message={errors.monthlyIncome?.message} />
                 </div>
+                <div>
+                  <Label htmlFor="employmentContract">Contrat de travail</Label>
+                  <Select id="employmentContract" {...register('employmentContract')}>
+                    <option value="">Sélectionnez votre contrat</option>
+                    <option value="CDI">CDI</option><option value="CDD">CDD</option>
+                    <option value="Indépendant">Indépendant</option><option value="Intérim">Intérim</option>
+                    <option value="Étudiant">Etudiant</option><option value="Autre">Autre</option>
+                  </Select>
+                  <FieldError message={errors.employmentContract?.message} />
+                </div>
               </div>
               <div>
-                <Label htmlFor="profession">Profession</Label>
-                <Input id="profession" {...register('profession')} />
-                <FieldError message={errors.profession?.message} />
+                <Label htmlFor="originCity">Ville d’origine</Label>
+                <Input id="originCity" {...register('originCity')} />
+                <FieldError message={errors.originCity?.message} />
               </div>
               <div>
                 <Label htmlFor="message">Message complémentaire (facultatif)</Label>
@@ -201,10 +199,11 @@ export function ReservationForm({
                 <Row label="Logement" value={propertyTitle} />
                 <Row label="Nom" value={`${values.firstName || ''} ${values.lastName || ''}`.trim() || '—'} />
                 <Row label="E-mail" value={values.email || '—'} />
-                <Row label="Entrée souhaitée" value={values.desiredMoveInDate || '—'} />
+                <Row label="Date de réservation" value={values.desiredMoveInDate || '—'} />
                 <Row label="Durée" value={values.durationMonths ? `${values.durationMonths} mois` : '—'} />
-                <Row label="Occupants" value={String(values.occupantsCount || '—')} />
-                <Row label="Profession" value={values.profession || '—'} />
+                <Row label="Contrat de travail" value={values.employmentContract || '—'} />
+                <Row label="Revenu mensuel" value={values.monthlyIncome != null ? `${values.monthlyIncome} €` : '—'} />
+                <Row label="Ville d’origine" value={values.originCity || '—'} />
               </div>
               <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
                 Cette étape transmet uniquement votre demande de réservation. Aucun paiement ni

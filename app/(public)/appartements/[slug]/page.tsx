@@ -9,8 +9,7 @@ import {
   ArrowUpDown,
   PawPrint,
   Sofa,
-  CalendarClock,
-  ShieldCheck,
+  MessageCircle,
 } from 'lucide-react';
 import { getPropertyBySlug, getSimilarProperties } from '@/lib/data/properties';
 import { PropertyGallery } from '@/components/properties/property-gallery';
@@ -207,16 +206,10 @@ export default async function PropertyDetailPage({ params }: PageProps) {
 
               {isBookable ? (
                 <div className="mt-5 space-y-2.5">
-                  <Link href={`/appartements/${property.slug}/visite`} className="block">
+                  <Link href={`/appartements/${property.slug}/reagir`} className="block">
                     <Button className="w-full" size="lg">
-                      <CalendarClock className="h-4.5 w-4.5" />
-                      Réserver une visite
-                    </Button>
-                  </Link>
-                  <Link href={`/appartements/${property.slug}/reserver`} className="block">
-                    <Button variant="secondary" className="w-full" size="lg">
-                      <ShieldCheck className="h-4.5 w-4.5" />
-                      Réserver ce logement
+                      <MessageCircle className="h-4.5 w-4.5" />
+                      Réagir
                     </Button>
                   </Link>
                 </div>

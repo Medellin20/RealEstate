@@ -11,14 +11,6 @@ export function PropertyGallery({ images, title }: { images: PropertyImage[]; ti
   const [active, setActive] = React.useState(0);
   const [fullscreen, setFullscreen] = React.useState(false);
 
-  if (images.length === 0) {
-    return (
-      <div className="flex aspect-[16/10] w-full items-center justify-center rounded-2xl bg-ink-100 text-ink-300">
-        Aucune photo disponible
-      </div>
-    );
-  }
-
   function next() {
     setActive((i) => (i + 1) % images.length);
   }
@@ -41,6 +33,14 @@ export function PropertyGallery({ images, title }: { images: PropertyImage[]; ti
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullscreen]);
+
+  if (images.length === 0) {
+    return (
+      <div className="flex aspect-[16/10] w-full items-center justify-center rounded-2xl bg-ink-100 text-ink-300">
+        Aucune photo disponible
+      </div>
+    );
+  }
 
   return (
     <div>

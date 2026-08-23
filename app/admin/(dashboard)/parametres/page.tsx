@@ -21,8 +21,8 @@ export default function AdminParametresPage() {
             <h2 className="font-bold text-ink-900">Authentification administrateur</h2>
           </div>
           <p className="mt-2 text-sm text-ink-500">
-            L'accès administrateur est protégé par un mot de passe défini dans la variable
-            d'environnement <code className="rounded bg-sand-200 px-1 py-0.5 text-xs">ADMIN_PASSWORD</code>.
+            L’accès administrateur est protégé par un mot de passe défini dans la variable
+            d’environnement <code className="rounded bg-sand-200 px-1 py-0.5 text-xs">ADMIN_PASSWORD</code>.
             Le cookie de session est signé avec{' '}
             <code className="rounded bg-sand-200 px-1 py-0.5 text-xs">ADMIN_SESSION_SECRET</code>{' '}
             et expire après 8 heures. Les tentatives de connexion sont limitées à 5 par fenêtre de

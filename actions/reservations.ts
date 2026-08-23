@@ -41,7 +41,7 @@ export async function createReservation(input: ReservationInput, propertySlug: s
     lastName: parsed.data.lastName,
     email: parsed.data.email,
     phone: parsed.data.phone,
-    profession: parsed.data.profession,
+    profession: parsed.data.employmentContract,
     monthlyIncome: parsed.data.monthlyIncome,
   });
 
@@ -55,9 +55,11 @@ export async function createReservation(input: ReservationInput, propertySlug: s
       client_id: client.id,
       desired_move_in_date: parsed.data.desiredMoveInDate,
       duration_months: parsed.data.durationMonths,
-      occupants_count: parsed.data.occupantsCount,
-      profession: parsed.data.profession,
+      occupants_count: 1,
+      profession: parsed.data.employmentContract,
       monthly_income: parsed.data.monthlyIncome,
+      employment_contract: parsed.data.employmentContract,
+      origin_city: parsed.data.originCity,
       message: parsed.data.message || null,
       status: 'submitted',
     })
@@ -81,8 +83,11 @@ export async function createReservation(input: ReservationInput, propertySlug: s
     Client: `${parsed.data.firstName} ${parsed.data.lastName}`,
     Email: parsed.data.email,
     Téléphone: parsed.data.phone,
-    'Date d’entrée': parsed.data.desiredMoveInDate,
+    'Date de réservation': parsed.data.desiredMoveInDate,
     Durée: `${parsed.data.durationMonths} mois`,
+    'Contrat de travail': parsed.data.employmentContract,
+    'Revenu mensuel': `${parsed.data.monthlyIncome} €`,
+    'Ville d’origine': parsed.data.originCity,
   });
 
   revalidatePath('/admin/reservations');

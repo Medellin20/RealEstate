@@ -6,7 +6,7 @@ import { SlidersHorizontal, X } from 'lucide-react';
 import { Select } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Drawer } from '@/components/ui/drawer';
-import { DUTCH_CITIES, PROPERTY_TYPES } from '@/lib/utils/constants';
+import { PROPERTY_TYPES } from '@/lib/utils/constants';
 import { useMediaQuery } from '@/hooks/use-media-query';
 
 interface FilterState {
@@ -31,7 +31,7 @@ function readFilters(params: URLSearchParams): FilterState {
   };
 }
 
-export function PropertyFilters({ resultCount }: { resultCount: number }) {
+export function PropertyFilters({ resultCount, cities }: { resultCount: number; cities: string[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -91,7 +91,7 @@ export function PropertyFilters({ resultCount }: { resultCount: number }) {
         <label className="mb-1.5 block text-xs font-semibold text-ink-500">Ville</label>
         <Select value={filters.city} onChange={(e) => update('city', e.target.value)}>
           <option value="">Toutes les villes</option>
-          {DUTCH_CITIES.map((c) => (
+          {cities.map((c) => (
             <option key={c} value={c}>
               {c}
             </option>

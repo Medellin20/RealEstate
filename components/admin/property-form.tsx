@@ -225,10 +225,8 @@ export function PropertyForm({
           <div>
             <Label htmlFor="city">Ville</Label>
             <Select id="city" {...register('city')}>
-              {DUTCH_CITIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
+              {DUTCH_CITIES.map((city) => (
+                <option key={city} value={city}>{city}</option>
               ))}
             </Select>
             <FieldError message={errors.city?.message} />

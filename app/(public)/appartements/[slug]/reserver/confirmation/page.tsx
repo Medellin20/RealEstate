@@ -33,13 +33,17 @@ export default async function ReservationConfirmationPage({
           Aucun paiement ni justificatif bancaire n’est demandé sur le site.
         </p>
 
+        <p className="mt-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-bold leading-relaxed text-red-700">
+          Si vous ne recevez pas une confirmation par mail ou par WhatsApp en moins de 24 h, sachez que votre dossier a été rejeté.
+        </p>
+
         <p className="mt-2 text-sm text-ink-500">
           Numéro de réservation : <span className="font-semibold text-ink-700">{reservation.reference}</span>
         </p>
 
         <div className="mt-6 space-y-2 rounded-xl bg-sand-100/60 p-4 text-left text-sm">
           <Row label="Logement" value={property?.title ?? '—'} />
-          <Row label="Entrée souhaitée" value={formatDate(reservation.desired_move_in_date)} />
+          <Row label="Date de réservation" value={formatDate(reservation.desired_move_in_date)} />
           <Row label="Durée" value={`${reservation.duration_months} mois`} />
           <Row label="Statut" value={RESERVATION_STATUS_LABELS[reservation.status] ?? reservation.status} />
         </div>

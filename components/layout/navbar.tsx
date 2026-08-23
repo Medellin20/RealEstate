@@ -98,26 +98,7 @@ export function Navbar() {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-1 xl:flex">
-          {NAV_LINKS.map((link) => {
-            const isActive = isActivePath(pathname, link.href);
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                aria-current={isActive ? 'page' : undefined}
-                className={cn(
-                  'rounded-lg px-3.5 py-2 text-sm font-medium transition-colors',
-                  isActive ? 'text-ink-900' : 'text-ink-500 hover:text-ink-900'
-                )}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </div>
-
-        <div className="hidden items-center gap-2 xl:flex">
+        <div className="hidden items-center gap-2 md:flex">
           <LanguageTranslator id="desktop-language-translator" />
           <Link
             href="/mon-compte"
@@ -132,10 +113,33 @@ export function Navbar() {
               Trouver un logement
             </Button>
           </Link>
+          <div ref={tabletMenuRef} className="relative">
+            <button
+              type="button"
+              onClick={() => setTabletOpen((open) => !open)}
+              aria-expanded={tabletOpen}
+              aria-controls="main-dropdown-menu"
+              className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-ink-200 bg-white px-3.5 py-2 text-sm font-semibold text-ink-700 hover:bg-sand-100"
+            >
+              <Menu className="h-4.5 w-4.5" /> Menu
+            </button>
+            <AnimatePresence>
+              {tabletOpen && (
+                <motion.div id="main-dropdown-menu" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="absolute right-0 top-full mt-2 w-64 rounded-2xl border border-ink-100 bg-white p-2 shadow-lifted">
+                  {NAV_LINKS.map((link) => (
+                    <Link key={link.href} href={link.href} className={cn('flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium hover:bg-sand-100', isActivePath(pathname, link.href) ? 'bg-sand-100 text-ink-900' : 'text-ink-600')}>
+                      <link.icon className="h-4.5 w-4.5 text-canal-600" /> {link.label}
+                    </Link>
+                  ))}
+                  <Link href="/faq" className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-ink-600 hover:bg-sand-100"><CircleHelp className="h-4.5 w-4.5 text-canal-600" /> Questions fréquentes</Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
         {/* Navigation tablette : accès directs essentiels et menu secondaire compact. */}
-        <div className="hidden flex-1 items-center justify-end gap-1 md:flex xl:hidden">
+        <div className="hidden">
           {TABLET_LINKS.map((link) => {
             const isActive = isActivePath(pathname, link.href);
             return (
@@ -162,7 +166,7 @@ export function Navbar() {
           >
             <User className="h-5 w-5" />
           </Link>
-          <div ref={tabletMenuRef} className="relative">
+          <div className="relative">
             <button
               type="button"
               onClick={() => setTabletOpen((open) => !open)}

@@ -118,6 +118,7 @@ export interface ViewingRequest {
   client_id: string;
   requested_date: string;
   requested_time_slot: string;
+  occupants_count: number;
   status: ViewingStatus;
   fee_amount: number;
   stripe_checkout_session_id: string | null;
@@ -138,6 +139,8 @@ export interface Reservation {
   occupants_count: number;
   profession: string | null;
   monthly_income: number | null;
+  employment_contract: string | null;
+  origin_city: string | null;
   message: string | null;
   status: ReservationStatus;
   admin_notes: string | null;

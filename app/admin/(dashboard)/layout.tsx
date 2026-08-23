@@ -1,5 +1,9 @@
 import { AdminSidebar } from '@/components/admin/sidebar';
 
+// Toutes les pages administrateur lisent des données privées Supabase et
+// doivent être rendues à la requête, jamais prégénérées pendant le build.
+export const dynamic = 'force-dynamic';
+
 export default function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen bg-sand-100">

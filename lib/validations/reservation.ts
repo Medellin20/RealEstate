@@ -12,9 +12,9 @@ export const reservationSchema = z.object({
     .int()
     .min(1, 'La durée minimale est de 1 mois.')
     .max(60, 'Merci de contacter l’agence pour une durée supérieure à 5 ans.'),
-  occupantsCount: z.coerce.number().int().min(1).max(10),
-  profession: z.string().trim().min(2, 'Merci d’indiquer votre profession.'),
+  employmentContract: z.string().trim().min(1, 'Merci d’indiquer votre contrat de travail.'),
   monthlyIncome: z.coerce.number().min(0, 'Le revenu doit être un nombre positif.'),
+  originCity: z.string().trim().min(2, 'Merci d’indiquer votre ville d’origine.'),
   message: z.string().trim().max(2000).optional().or(z.literal('')),
 });
 

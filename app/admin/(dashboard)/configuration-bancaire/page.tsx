@@ -37,8 +37,8 @@ export default async function AdminBankSettingsPage() {
           Configuration bancaire
         </h1>
         <p className="mt-1 text-sm text-ink-500">
-          Ces coordonnées sont affichées au client lorsqu'il doit effectuer un virement de garantie.
-          Elles sont stockées dans Supabase et ne sont jamais codées en dur dans l'application.
+          Ces coordonnées sont affichées au client lorsqu’il doit effectuer un virement de garantie.
+          Elles sont stockées dans Supabase et ne sont jamais codées en dur dans l’application.
         </p>
         <p className="mt-1 text-xs text-ink-400">
           Dernière modification : {formatDateTime(settings.updated_at)}

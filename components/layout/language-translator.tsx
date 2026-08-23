@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Globe2 } from 'lucide-react';
+import { ChevronDown, Globe2 } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 
 declare global {
@@ -66,11 +66,13 @@ export function LanguageTranslator({ id, className }: { id: string; className?: 
 
   return (
     <div
-      className={cn('language-translator inline-flex h-9 items-center gap-1.5 rounded-full bg-sand-100 px-2 text-ink-600 transition-colors hover:bg-sand-200', className)}
+      className={cn('language-translator relative inline-flex h-8 cursor-pointer items-center gap-1 rounded-full bg-sand-100 px-2 text-xs font-semibold text-ink-600 transition-colors hover:bg-sand-200', className)}
       aria-label="Choisir la langue du site"
     >
-      <Globe2 className="h-4 w-4 shrink-0 text-canal-600" aria-hidden="true" />
-      <div id={id} />
+      <Globe2 className="h-3 w-3 shrink-0 text-canal-600" aria-hidden="true" />
+      <span>Traduire</span>
+      <ChevronDown className="h-3 w-3 shrink-0" aria-hidden="true" />
+      <div id={id} className="absolute inset-0 opacity-0" />
     </div>
   );
 }
