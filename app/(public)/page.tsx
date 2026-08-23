@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
-import { ArrowRight, ShieldCheck, KeyRound, CalendarCheck, Building2, Quote, Star } from 'lucide-react';
+import { ArrowRight, ShieldCheck, KeyRound, CalendarCheck, Building2, Quote, Star, MapPin } from 'lucide-react';
 import { HeroSearchBar } from '@/components/properties/hero-search-bar';
-import { PropertyCard } from '@/components/properties/property-card';
 import { FadeIn } from '@/components/ui/fade-in';
 import { SectionHeading } from '@/components/ui/section-heading';
 import { Button } from '@/components/ui/button';
-import { getFeaturedProperties } from '@/lib/data/properties';
+import { getCityPropertySummaries } from '@/lib/data/properties';
+import { formatPrice } from '@/lib/utils/format';
 import { DUTCH_CITIES } from '@/lib/utils/constants';
 import { DUTCH_TESTIMONIALS } from '@/lib/data/testimonials';
 
@@ -49,7 +49,7 @@ const TRUST_POINTS = [
 ];
 
 export default async function HomePage() {
-  const featured = await getFeaturedProperties(6);
+  const citySummaries = await getCityPropertySummaries();
 
   return (
     <>
@@ -111,15 +111,15 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* LOGEMENTS DISPONIBLES */}
+      {/* APPARTEMENTS CLASSÉS PAR VILLE */}
       <section className="py-16 sm:py-20">
         <div className="container-app">
           <FadeIn>
             <div className="flex flex-wrap items-end justify-between gap-4">
               <SectionHeading
-                eyebrow="Sélection"
-                title="Logements disponibles"
-                description="Un aperçu de nos annonces les plus récentes, vérifiées par notre équipe."
+                eyebrow="Pays-Bas"
+                title="Villes populaires"
+                description="Choisissez une ville pour voir tous les appartements disponibles."
               />
               <Link href="/appartements">
                 <Button variant="outline">
@@ -130,10 +130,27 @@ export default async function HomePage() {
             </div>
           </FadeIn>
 
-          <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((property, i) => (
-              <FadeIn key={property.id} delay={Math.min(i, 5) * 0.06}>
-                <PropertyCard property={property} />
+          <div className="mt-9 max-w-3xl divide-y divide-ink-100">
+            {citySummaries.map((summary, index) => (
+              <FadeIn key={summary.city} delay={Math.min(index, 6) * 0.04}>
+                <Link
+                  href={`/appartements?city=${encodeURIComponent(summary.city)}`}
+                  className="group flex items-center gap-4 py-4 sm:gap-6 sm:py-5"
+                >
+                  <div className="relative h-24 w-28 shrink-0 overflow-hidden rounded-xl bg-sand-200 sm:h-28 sm:w-44">
+                    {summary.imageUrl ? (
+                      <Image src={summary.imageUrl} alt={`Appartement à ${summary.city}`} fill sizes="(max-width: 640px) 112px, 176px" className="object-cover transition-transform duration-300 group-hover:scale-105" />
+                    ) : (
+                      <span className="flex h-full items-center justify-center text-canal-500"><MapPin className="h-7 w-7" /></span>
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="truncate text-xl font-extrabold text-canal-700 sm:text-2xl">{summary.city}</h3>
+                    <p className="mt-1 text-sm text-ink-600 sm:text-base">{summary.count} appartement{summary.count > 1 ? 's' : ''}</p>
+                    <p className="mt-0.5 text-sm text-ink-500 sm:text-base">Moy. {formatPrice(summary.averagePrice)} / mois</p>
+                  </div>
+                  <ArrowRight className="h-7 w-7 shrink-0 text-canal-500 transition-transform group-hover:translate-x-1 sm:h-8 sm:w-8" />
+                </Link>
               </FadeIn>
             ))}
           </div>

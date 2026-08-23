@@ -137,6 +137,46 @@ export async function getAvailableCityCounts(): Promise<{ city: string; count: n
     .sort((a, b) => a.city.localeCompare(b.city, 'fr'));
 }
 
+export interface CityPropertySummary {
+  city: string;
+  count: number;
+  averagePrice: number;
+  imageUrl: string | null;
+}
+
+/** Données de la liste des villes affichée sur la page d'accueil. */
+export async function getCityPropertySummaries(): Promise<CityPropertySummary[]> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('properties')
+    .select('city, monthly_price, property_images(url, is_primary, sort_order)')
+    .eq('is_published', true)
+    .neq('status', 'draft')
+    .order('city', { ascending: true });
+
+  if (error || !data) return [];
+
+  const summaries = new Map<string, { count: number; total: number; imageUrl: string | null }>();
+  for (const property of data as any[]) {
+    const current = summaries.get(property.city) ?? { count: 0, total: 0, imageUrl: null };
+    const images = [...(property.property_images ?? [])].sort(
+      (a: any, b: any) => Number(b.is_primary) - Number(a.is_primary) || a.sort_order - b.sort_order
+    );
+    summaries.set(property.city, {
+      count: current.count + 1,
+      total: current.total + Number(property.monthly_price),
+      imageUrl: current.imageUrl ?? images[0]?.url ?? null,
+    });
+  }
+
+  return Array.from(summaries, ([city, summary]) => ({
+    city,
+    count: summary.count,
+    averagePrice: Math.round(summary.total / summary.count),
+    imageUrl: summary.imageUrl,
+  })).sort((a, b) => a.city.localeCompare(b.city, 'fr'));
+}
+
 /** Biens mis en avant pour la page d'accueil. */
 export async function getFeaturedProperties(limit = 6) {
   const supabase = createClient();
