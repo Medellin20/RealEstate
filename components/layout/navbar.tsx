@@ -192,12 +192,6 @@ export function Navbar() {
                   <User className="h-4.5 w-4.5" />
                   Mon compte
                 </Link>
-                <Link href="/appartements" className="mt-2 block border-t border-ink-100 pt-3">
-                  <Button className="w-full" size="md">
-                    <Search className="h-4 w-4" />
-                    Trouver un logement
-                  </Button>
-                </Link>
               </div>
             </motion.div>
         )}

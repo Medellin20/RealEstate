@@ -23,12 +23,14 @@ const GOOGLE_TRANSLATE_SCRIPT = 'https://translate.google.com/translate_a/elemen
 export function LanguageTranslator({ id, className }: { id: string; className?: string }) {
   const initialized = React.useRef(false);
 
-  React.useEffect(() => {
-    const hasLanguagePreference = document.cookie.split(';').some((cookie) => cookie.trim().startsWith('googtrans='));
-    if (!hasLanguagePreference) {
-      document.cookie = 'googtrans=/fr/nl; path=/; SameSite=Lax';
-    }
+  function changeLanguage(event: React.ChangeEvent<HTMLSelectElement>) {
+    const language = event.target.value;
+    if (!language) return;
+    document.cookie = `googtrans=/fr/${language}; path=/; SameSite=Lax`;
+    window.location.reload();
+  }
 
+  React.useEffect(() => {
     const initialize = () => {
       if (initialized.current || !window.google?.translate || !document.getElementById(id)) return;
 
@@ -94,7 +96,24 @@ export function LanguageTranslator({ id, className }: { id: string; className?: 
       <Globe2 className="h-3 w-3 shrink-0 text-canal-600" aria-hidden="true" />
       <span>Traduire</span>
       <ChevronDown className="h-3 w-3 shrink-0" aria-hidden="true" />
-      <div id={id} className="absolute inset-0 opacity-0" />
+      <select
+        defaultValue=""
+        onChange={changeLanguage}
+        className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+        aria-label="Choisir la langue du site"
+      >
+        <option value="" disabled>Traduire</option>
+        <option value="fr">Français</option>
+        <option value="nl">Nederlands</option>
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="it">Italiano</option>
+        <option value="de">Deutsch</option>
+        <option value="pt">Português</option>
+        <option value="ar">العربية</option>
+        <option value="pl">Polski</option>
+      </select>
+      <div id={id} className="sr-only" aria-hidden="true" />
     </div>
   );
 }
