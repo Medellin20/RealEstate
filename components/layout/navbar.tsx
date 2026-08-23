@@ -131,13 +131,17 @@ export function Navbar() {
           </div>
         </div>
 
-        <button
-          onClick={() => setMobileOpen((open) => !open)}
-          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl text-ink-700 hover:bg-sand-100 md:hidden"
-          aria-label="Ouvrir le menu"
-        >
-          {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        <div className="flex items-center gap-1.5 md:hidden">
+          <LanguageTranslator id="mobile-language-translator" />
+          <button
+            onClick={() => setMobileOpen((open) => !open)}
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl text-ink-700 hover:bg-sand-100"
+            aria-label={mobileOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+            aria-expanded={mobileOpen}
+          >
+            {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </nav>
 
       <AnimatePresence>
@@ -152,7 +156,6 @@ export function Navbar() {
               className="absolute inset-x-0 top-full z-50 max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-ink-100 bg-white shadow-lifted md:hidden"
             >
               <div className="container-app py-3">
-                <LanguageTranslator id="mobile-language-translator" className="mb-2 w-fit" />
                 {NAV_LINKS.map((link, i) => (
                   <motion.div
                     key={link.href}

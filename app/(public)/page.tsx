@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
-import { ArrowRight, ShieldCheck, KeyRound, CalendarCheck, Building2 } from 'lucide-react';
+import { ArrowRight, ShieldCheck, KeyRound, CalendarCheck, Building2, Quote, Star } from 'lucide-react';
 import { HeroSearchBar } from '@/components/properties/hero-search-bar';
 import { PropertyCard } from '@/components/properties/property-card';
 import { FadeIn } from '@/components/ui/fade-in';
@@ -9,6 +9,7 @@ import { SectionHeading } from '@/components/ui/section-heading';
 import { Button } from '@/components/ui/button';
 import { getFeaturedProperties } from '@/lib/data/properties';
 import { DUTCH_CITIES } from '@/lib/utils/constants';
+import { DUTCH_TESTIMONIALS } from '@/lib/data/testimonials';
 
 export const revalidate = 60;
 
@@ -179,6 +180,41 @@ export default async function HomePage() {
               </Button>
             </Link>
           </FadeIn>
+        </div>
+      </section>
+
+      {/* TÉMOIGNAGES CLIENTS */}
+      <section className="border-y border-ink-100 bg-sand-100/60 py-16 sm:py-20">
+        <div className="container-app">
+          <FadeIn>
+            <SectionHeading
+              eyebrow="Témoignages"
+              title="Ce que nos clients disent de RealEstate"
+              description="Des retours de clients accompagnés dans leur recherche de logement aux Pays-Bas. Faites défiler pour consulter les 50 témoignages."
+            />
+          </FadeIn>
+
+          <div className="mt-9 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-5 [scrollbar-width:thin]">
+            {DUTCH_TESTIMONIALS.map((testimonial, index) => (
+              <article
+                key={index}
+                className="flex min-h-64 w-[85vw] max-w-sm shrink-0 snap-start flex-col rounded-2xl border border-ink-100 bg-white p-6 shadow-soft sm:w-80"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <Quote className="h-7 w-7 text-canal-500" aria-hidden="true" />
+                  <div className="flex gap-0.5 text-amber-400" aria-label="5 étoiles sur 5">
+                    {[1, 2, 3, 4, 5].map((star) => <Star key={star} className="h-3.5 w-3.5 fill-current" />)}
+                  </div>
+                </div>
+                <blockquote className="mt-5 flex-1 text-sm leading-relaxed text-ink-600" lang="nl">
+                  “{testimonial}”
+                </blockquote>
+                <p className="mt-5 border-t border-ink-100 pt-4 text-xs font-semibold uppercase tracking-wide text-ink-400">
+                  Klant van RealEstate · Avis {index + 1}
+                </p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 

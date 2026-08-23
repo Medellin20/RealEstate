@@ -41,6 +41,28 @@ export function LanguageTranslator({ id, className }: { id: string; className?: 
         id
       );
       initialized.current = true;
+
+      // Google injecte le <select> après l'initialisation. On mémorise
+      // explicitement le choix avec un cookie valable sur tout le site.
+      const container = document.getElementById(id);
+      const bindLanguageSelect = () => {
+        const select = container?.querySelector<HTMLSelectElement>('.goog-te-combo');
+        if (!select || select.dataset.languageBound === 'true') return Boolean(select);
+        select.dataset.languageBound = 'true';
+        select.setAttribute('aria-label', 'Choisir la langue du site');
+        select.addEventListener('change', () => {
+          const language = select.value || 'fr';
+          document.cookie = `googtrans=/fr/${language}; path=/; SameSite=Lax`;
+        });
+        return true;
+      };
+
+      if (!bindLanguageSelect() && container) {
+        const observer = new MutationObserver(() => {
+          if (bindLanguageSelect()) observer.disconnect();
+        });
+        observer.observe(container, { childList: true, subtree: true });
+      }
     };
 
     window.addEventListener('real-estate-translate-ready', initialize);
