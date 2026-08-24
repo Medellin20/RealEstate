@@ -157,23 +157,6 @@ insert into properties (
 );
 
 -- -----------------------------------------------------------------------------
--- IMAGES DE DÉMONSTRATION
--- Utilise des photos libres de droit (Unsplash) le temps que de vraies
--- photos soient uploadées via Supabase Storage depuis l'admin.
--- -----------------------------------------------------------------------------
-
-insert into property_images (property_id, storage_path, url, alt_text, is_primary, sort_order)
-select p.id, 'seed/' || p.slug || '-1.jpg', img.url, p.title, img.is_primary, img.sort_order
-from properties p
-join lateral (
-  values
-    ('https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&q=80', true, 0),
-    ('https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&q=80', false, 1),
-    ('https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=80', false, 2),
-    ('https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?w=1200&q=80', false, 3)
-) as img(url, is_primary, sort_order) on true;
-
--- -----------------------------------------------------------------------------
 -- ÉQUIPEMENTS PAR LOGEMENT (échantillon représentatif)
 -- -----------------------------------------------------------------------------
 

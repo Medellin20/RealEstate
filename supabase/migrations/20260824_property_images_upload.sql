@@ -1,5 +1,7 @@
 -- À exécuter dans Supabase : SQL Editor > New query.
 -- Prépare la table et le bucket utilisés par l'upload des photos de logements.
+-- Les anciennes images de démonstration sont supprimées. Les photos uploadées
+-- depuis l'administration sont conservées car leur chemin ne commence pas par seed/.
 
 create table if not exists public.property_images (
   id uuid primary key default gen_random_uuid(),
@@ -11,6 +13,9 @@ create table if not exists public.property_images (
   sort_order integer not null default 0,
   created_at timestamptz not null default now()
 );
+
+delete from public.property_images
+where storage_path like 'seed/%';
 
 create index if not exists property_images_property_idx
   on public.property_images (property_id, sort_order);
