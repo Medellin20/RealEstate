@@ -20,8 +20,12 @@ const STATUS_OPTIONS = Object.entries(RESERVATION_STATUS_LABELS).map(([value, la
   label,
 }));
 
-export default async function AdminReservationsPage({ searchParams }: { searchParams: { status?: string } }) {
-  const reservations = await getAllReservationsAdmin({ status: searchParams.status });
+const PENDING_STATUS_OPTIONS = STATUS_OPTIONS.filter(({ value }) =>
+  ['submitted', 'under_review'].includes(value)
+);
+
+export default async function AdminReservationsPage({ searchParams }: { searchParams: { status?: string; scope?: string } }) {
+  const reservations = await getAllReservationsAdmin({ status: searchParams.status, scope: searchParams.scope });
   const statusHistory = await getReservationStatusHistory(reservations.map((reservation) => reservation.id));
 
   return (
@@ -29,7 +33,9 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-ink-900">Réservations</h1>
-          <p className="mt-1 text-sm text-ink-500">{reservations.length} réservation(s).</p>
+          <p className="mt-1 text-sm text-ink-500">
+            {reservations.length} réservation(s){searchParams.scope === 'pending' ? ' en attente' : ''}.
+          </p>
         </div>
         <div className="grid w-full grid-cols-1 gap-2 sm:flex sm:w-auto sm:items-center">
           <a href="/api/admin/export/reservations" download className="w-full sm:w-auto">
@@ -40,11 +46,12 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
           </a>
           <form action="/admin/reservations" method="get" className="w-full sm:w-auto">
             <AutoSubmitSelect name="status" defaultValue={searchParams.status} className="sm:w-56">
-              <option value="">Tous les statuts</option>
-              {STATUS_OPTIONS.map((opt) => (
+              <option value="">{searchParams.scope === 'pending' ? 'Toutes les réservations en attente' : 'Tous les statuts'}</option>
+              {(searchParams.scope === 'pending' ? PENDING_STATUS_OPTIONS : STATUS_OPTIONS).map((opt) => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
             </AutoSubmitSelect>
+            {searchParams.scope === 'pending' && <input type="hidden" name="scope" value="pending" />}
           </form>
         </div>
       </div>

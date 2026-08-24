@@ -18,25 +18,33 @@ const STATUS_OPTIONS = Object.entries(VIEWING_STATUS_LABELS).map(([value, label]
   label,
 }));
 
-export default async function AdminViewingsPage({ searchParams }: { searchParams: { status?: string } }) {
-  const viewings = await getAllViewingsAdmin({ status: searchParams.status });
+export default async function AdminViewingsPage({ searchParams }: { searchParams: { status?: string; date?: string } }) {
+  const today = new Date().toISOString().slice(0, 10);
+  const viewings = await getAllViewingsAdmin({
+    status: searchParams.status,
+    date: searchParams.date === 'today' ? today : undefined,
+  });
 
   return (
     <div>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-ink-900">Demandes de visite</h1>
-          <p className="mt-1 text-sm text-ink-500">{viewings.length} demande(s).</p>
+          <p className="mt-1 text-sm text-ink-500">
+            {viewings.length} demande(s){searchParams.date === 'today' ? ' prévue(s) aujourd’hui' : ''}.
+          </p>
         </div>
         <form action="/admin/visites" method="get" className="w-full sm:w-auto">
           <AutoSubmitSelect name="status" defaultValue={searchParams.status} className="sm:w-56">
-            <option value="">Tous les statuts</option>
+            {searchParams.date === 'today' && <option value="">Toutes les visites d’aujourd’hui</option>}
+            {searchParams.date !== 'today' && <option value="">Tous les statuts</option>}
             {STATUS_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}
               </option>
             ))}
           </AutoSubmitSelect>
+          {searchParams.date === 'today' && <input type="hidden" name="date" value="today" />}
         </form>
       </div>
 
