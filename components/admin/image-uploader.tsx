@@ -12,6 +12,8 @@ import {
 } from '@/actions/admin-images';
 import type { PropertyImage } from '@/types/database';
 import { cn } from '@/lib/utils/cn';
+import { Button } from '@/components/ui/button';
+import { Modal } from '@/components/ui/modal';
 
 export function ImageUploader({ propertyId, initialImages }: { propertyId: string; initialImages: PropertyImage[] }) {
   const [images, setImages] = React.useState<PropertyImage[]>(
@@ -19,6 +21,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
   );
   const [isUploading, setIsUploading] = React.useState(false);
   const [pendingCount, setPendingCount] = React.useState(0);
+  const [imageToDelete, setImageToDelete] = React.useState<PropertyImage | null>(null);
   const [isPending, startTransition] = React.useTransition();
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -30,36 +33,63 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
     const formData = new FormData();
     Array.from(fileList).forEach((file) => formData.append('images', file));
 
-    const result = await uploadPropertyImages(propertyId, formData);
-    setIsUploading(false);
-    setPendingCount(0);
-
-    if (result.success && result.data) {
-      setImages((prev) => [...prev, ...result.data!].sort((a, b) => a.sort_order - b.sort_order));
-      toast.success(result.message);
-    } else {
-      toast.error(result.message);
+    try {
+      const result = await uploadPropertyImages(propertyId, formData);
+      if (result.success && result.data) {
+        setImages((prev) => [...prev, ...result.data!].sort((a, b) => a.sort_order - b.sort_order));
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+      }
+    } catch {
+      toast.error('Connexion impossible. Aucune photo n’a été ajoutée.');
+    } finally {
+      setIsUploading(false);
+      setPendingCount(0);
+      if (inputRef.current) inputRef.current.value = '';
     }
-
-    if (inputRef.current) inputRef.current.value = '';
   }
 
-  function handleDelete(imageId: string) {
+  function handleDelete() {
+    if (!imageToDelete) return;
+    const imageId = imageToDelete.id;
+    const previousImages = images;
+    setImageToDelete(null);
+
     startTransition(async () => {
-      const wasPrimary = images.find((i) => i.id === imageId)?.is_primary;
-      const remaining = images.filter((i) => i.id !== imageId);
+      const wasPrimary = previousImages.find((i) => i.id === imageId)?.is_primary;
+      const remaining = previousImages.filter((i) => i.id !== imageId);
       setImages(wasPrimary && remaining[0] ? remaining.map((img, i) => (i === 0 ? { ...img, is_primary: true } : img)) : remaining);
 
-      const result = await deletePropertyImage(imageId);
-      if (!result.success) toast.error(result.message);
+      try {
+        const result = await deletePropertyImage(imageId);
+        if (result.success) {
+          toast.success(result.message);
+        } else {
+          setImages(previousImages);
+          toast.error(result.message);
+        }
+      } catch {
+        setImages(previousImages);
+        toast.error('Connexion impossible. La photo n’a pas été supprimée.');
+      }
     });
   }
 
   function handleSetPrimary(imageId: string) {
+    const previousImages = images;
     setImages((prev) => prev.map((img) => ({ ...img, is_primary: img.id === imageId })));
     startTransition(async () => {
-      const result = await setPrimaryPropertyImage(propertyId, imageId);
-      if (!result.success) toast.error(result.message);
+      try {
+        const result = await setPrimaryPropertyImage(propertyId, imageId);
+        if (!result.success) {
+          setImages(previousImages);
+          toast.error(result.message);
+        }
+      } catch {
+        setImages(previousImages);
+        toast.error('Connexion impossible. L’image principale n’a pas été modifiée.');
+      }
     });
   }
 
@@ -67,11 +97,20 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
     const newIndex = index + direction;
     if (newIndex < 0 || newIndex >= images.length) return;
     const next = [...images];
+    const previousImages = images;
     [next[index], next[newIndex]] = [next[newIndex], next[index]];
     setImages(next);
     startTransition(async () => {
-      const result = await reorderPropertyImages(propertyId, next.map((i) => i.id));
-      if (!result.success) toast.error(result.message);
+      try {
+        const result = await reorderPropertyImages(propertyId, next.map((i) => i.id));
+        if (!result.success) {
+          setImages(previousImages);
+          toast.error(result.message);
+        }
+      } catch {
+        setImages(previousImages);
+        toast.error('Connexion impossible. L’ordre des photos n’a pas été modifié.');
+      }
     });
   }
 
@@ -130,11 +169,12 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
                 </span>
               )}
 
-              <div className="absolute inset-0 flex items-center justify-center gap-1 bg-ink-950/0 opacity-0 transition-all group-hover:bg-ink-950/50 group-hover:opacity-100">
+              <div className="absolute inset-x-0 bottom-0 flex min-h-11 items-center justify-center gap-1 bg-ink-950/55 px-1.5 py-1.5 opacity-100 transition-all md:inset-0 md:bg-ink-950/0 md:opacity-0 md:group-hover:bg-ink-950/50 md:group-hover:opacity-100 md:group-focus-within:bg-ink-950/50 md:group-focus-within:opacity-100">
                 {!image.is_primary && (
                   <button
                     type="button"
                     onClick={() => handleSetPrimary(image.id)}
+                    disabled={isPending}
                     title="Définir comme image principale"
                     className="rounded-full bg-white/90 p-1.5 text-ink-700 hover:bg-white"
                   >
@@ -144,7 +184,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
                 <button
                   type="button"
                   onClick={() => move(index, -1)}
-                  disabled={index === 0}
+                  disabled={isPending || index === 0}
                   title="Déplacer vers la gauche"
                   className="rounded-full bg-white/90 p-1.5 text-ink-700 hover:bg-white disabled:opacity-40"
                 >
@@ -153,7 +193,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
                 <button
                   type="button"
                   onClick={() => move(index, 1)}
-                  disabled={index === images.length - 1}
+                  disabled={isPending || index === images.length - 1}
                   title="Déplacer vers la droite"
                   className="rounded-full bg-white/90 p-1.5 text-ink-700 hover:bg-white disabled:opacity-40"
                 >
@@ -161,7 +201,8 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleDelete(image.id)}
+                  onClick={() => setImageToDelete(image)}
+                  disabled={isPending}
                   title="Supprimer"
                   className="rounded-full bg-white/90 p-1.5 text-brick-500 hover:bg-white"
                 >
@@ -172,6 +213,25 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
           ))}
         </div>
       )}
+
+      <Modal
+        open={imageToDelete !== null}
+        onClose={() => setImageToDelete(null)}
+        title="Supprimer cette photo ?"
+      >
+        <p className="text-sm text-ink-500">
+          La photo sera retirée du logement et supprimée définitivement du stockage.
+        </p>
+        <div className="mt-6 flex gap-2.5">
+          <Button variant="outline" className="flex-1" onClick={() => setImageToDelete(null)}>
+            Annuler
+          </Button>
+          <Button variant="destructive" className="flex-1" onClick={handleDelete}>
+            <Trash2 className="h-4 w-4" />
+            Supprimer
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }

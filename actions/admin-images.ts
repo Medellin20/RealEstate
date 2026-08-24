@@ -114,8 +114,14 @@ export async function deletePropertyImage(imageId: string): Promise<ActionResult
     return { success: false, message: 'Image introuvable.' };
   }
 
-  await supabase.storage.from('property-images').remove([image.storage_path]);
-  await supabase.from('property_images').delete().eq('id', imageId);
+  const { error: deleteError } = await supabase.from('property_images').delete().eq('id', imageId);
+  if (deleteError) {
+    return { success: false, message: 'Impossible de supprimer la photo de la base de données.' };
+  }
+
+  // La ligne est supprimée en premier : une panne Storage ne laisse ainsi
+  // jamais une photo cassée visible sur le site.
+  const { error: storageError } = await supabase.storage.from('property-images').remove([image.storage_path]);
 
   // Si l'image supprimée était la principale, promouvoir la suivante.
   if (image.is_primary) {
@@ -128,7 +134,14 @@ export async function deletePropertyImage(imageId: string): Promise<ActionResult
       .maybeSingle();
 
     if (nextImage) {
-      await supabase.from('property_images').update({ is_primary: true }).eq('id', nextImage.id);
+      const { error: primaryError } = await supabase
+        .from('property_images')
+        .update({ is_primary: true })
+        .eq('id', nextImage.id);
+
+      if (primaryError) {
+        console.error('Promotion de l’image principale impossible:', primaryError.message);
+      }
     }
   }
 
@@ -137,7 +150,15 @@ export async function deletePropertyImage(imageId: string): Promise<ActionResult
   if (slug) revalidatePath(`/appartements/${slug}`);
   revalidatePath('/appartements');
 
-  return { success: true, message: 'Image supprimée.' };
+  if (storageError) {
+    console.error('Nettoyage Storage impossible:', storageError.message);
+    return {
+      success: true,
+      message: 'Photo retirée du logement. Le fichier résiduel devra être nettoyé dans Supabase Storage.',
+    };
+  }
+
+  return { success: true, message: 'Photo supprimée.' };
 }
 
 export async function setPrimaryPropertyImage(propertyId: string, imageId: string): Promise<ActionResult> {
