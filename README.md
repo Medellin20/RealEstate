@@ -71,7 +71,7 @@ Dans le **SQL Editor** de votre projet Supabase, exécutez dans l'ordre :
 
 1. `supabase/schema.sql` — tables, enums, triggers, buckets Storage
 2. `supabase/rls_policies.sql` — politiques Row Level Security
-3. `supabase/seed.sql` — données de démonstration (12 appartements + équipements, sans photos standards)
+3. `supabase/seed.sql` — catalogue d’équipements uniquement, sans appartement ni photo standard
 
 ### 4. Configurer Supabase Storage
 
