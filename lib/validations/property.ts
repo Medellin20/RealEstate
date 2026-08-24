@@ -1,6 +1,4 @@
 import { z } from 'zod';
-import { DUTCH_CITIES } from '@/lib/utils/constants';
-
 export const propertySchema = z.object({
   title: z.string().trim().min(5, 'Le titre doit contenir au moins 5 caractères.'),
   slug: z
@@ -12,9 +10,7 @@ export const propertySchema = z.object({
   propertyType: z.enum(['appartement', 'studio', 'maison', 'chambre', 'loft', 'duplex']),
 
   address: z.string().trim().optional().or(z.literal('')),
-  city: z.enum(DUTCH_CITIES, {
-    errorMap: () => ({ message: 'Merci de sélectionner une ville des Pays-Bas.' }),
-  }),
+  city: z.string().trim().min(2, 'Merci d’indiquer la ville de l’appartement.'),
   postalCode: z.string().trim().optional().or(z.literal('')),
   neighborhood: z.string().trim().optional().or(z.literal('')),
   latitude: z.coerce.number().min(-90).max(90).optional(),
@@ -30,11 +26,20 @@ export const propertySchema = z.object({
   bathrooms: z.coerce.number().int().min(0),
   rooms: z.coerce.number().int().min(0).optional(),
   floor: z.coerce.number().int().optional(),
+  floorsCount: z.coerce.number().int().min(1).optional(),
+  volumeM3: z.coerce.number().positive().optional(),
+  contractType: z.string().trim().min(2),
+  interiorType: z.string().trim().min(2),
+  maintenanceCondition: z.string().trim().min(2),
+  constructionType: z.string().trim().min(2),
+  constructionYear: z.coerce.number().int().min(1000).max(2200).optional(),
+  energyLabel: z.string().trim().optional().or(z.literal('')),
 
   hasElevator: z.boolean().default(false),
   hasBalcony: z.boolean().default(false),
   hasTerrace: z.boolean().default(false),
   hasParking: z.boolean().default(false),
+  hasGarage: z.boolean().default(false),
   hasGarden: z.boolean().default(false),
   isFurnished: z.boolean().default(false),
   petsAllowed: z.boolean().default(false),

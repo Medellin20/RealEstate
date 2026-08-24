@@ -13,7 +13,6 @@ import {
 } from 'lucide-react';
 import { getPropertyBySlug, getSimilarProperties } from '@/lib/data/properties';
 import { PropertyGallery } from '@/components/properties/property-gallery';
-import { PropertyLocation } from '@/components/properties/property-location';
 import { AmenityIcon } from '@/components/properties/amenity-icon';
 import { FavoriteButton } from '@/components/properties/favorite-button';
 import { ShareButton } from '@/components/properties/share-button';
@@ -138,8 +137,13 @@ export default async function PropertyDetailPage({ params }: PageProps) {
             <div className="mt-10">
               <h2 className="text-lg font-bold text-ink-900">Détails du logement</h2>
               <dl className="mt-4 grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
+                <DetailRow label="Prix au m²" value={formatPrice(property.monthly_price / property.surface_m2)} />
+                <DetailRow label="Offert depuis" value={formatDate(property.created_at)} />
                 <DetailRow label="Charges mensuelles" value={formatPrice(property.service_charges)} />
                 <DetailRow label="Caution" value={formatPrice(property.deposit_amount)} />
+                <DetailRow label="Type de contrat" value={property.contract_type} />
+                <DetailRow label="Intérieur" value={property.interior_type} />
+                <DetailRow label="État d’entretien" value={property.maintenance_condition} />
                 <DetailRow
                   label="Ameublement"
                   value={property.is_furnished ? 'Meublé' : 'Non meublé'}
@@ -156,6 +160,13 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                   label="Durée minimale de location"
                   value={`${property.minimum_stay_months ?? 12} mois`}
                 />
+                <DetailRow label="Volume" value={property.volume_m3 ? `${property.volume_m3} m³` : '—'} />
+                <DetailRow label="Nombre d’étages" value={property.floors_count ? String(property.floors_count) : '—'} />
+                <DetailRow label="Type de construction" value={property.construction_type} />
+                <DetailRow label="Année de construction" value={property.construction_year ? String(property.construction_year) : '—'} />
+                <DetailRow label="Étiquette énergétique" value={property.energy_label || '—'} />
+                <DetailRow label="Parking" value={property.has_parking ? 'Oui' : 'Non'} />
+                <DetailRow label="Garage" value={property.has_garage ? 'Oui' : 'Non'} />
               </dl>
             </div>
 
@@ -176,17 +187,6 @@ export default async function PropertyDetailPage({ params }: PageProps) {
               </div>
             )}
 
-            <div className="mt-10">
-              <h2 className="text-lg font-bold text-ink-900">Localisation</h2>
-              <div className="mt-4">
-                <PropertyLocation
-                  city={property.city}
-                  neighborhood={property.neighborhood}
-                  latitude={property.latitude}
-                  longitude={property.longitude}
-                />
-              </div>
-            </div>
           </FadeIn>
         </div>
 

@@ -14,7 +14,7 @@ import { Select } from '@/components/ui/select';
 import { Label, FieldError } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
-import { PROPERTY_TYPES, DUTCH_CITIES, type DutchCity } from '@/lib/utils/constants';
+import { PROPERTY_TYPES } from '@/lib/utils/constants';
 import { slugify } from '@/lib/utils/format';
 import type { Amenity, Property } from '@/types/database';
 
@@ -23,6 +23,7 @@ const BOOLEAN_FIELDS: { key: keyof PropertyInput; label: string }[] = [
   { key: 'hasBalcony', label: 'Balcon' },
   { key: 'hasTerrace', label: 'Terrasse' },
   { key: 'hasParking', label: 'Parking' },
+  { key: 'hasGarage', label: 'Garage' },
   { key: 'hasGarden', label: 'Jardin' },
   { key: 'isFurnished', label: 'Meublé' },
   { key: 'petsAllowed', label: 'Animaux autorisés' },
@@ -35,7 +36,7 @@ function propertyToFormValues(property: Property, amenityIds: string[]): Propert
     description: property.description,
     propertyType: property.property_type,
     address: property.address ?? '',
-    city: DUTCH_CITIES.includes(property.city as DutchCity) ? (property.city as DutchCity) : 'Amsterdam',
+    city: property.city,
     postalCode: property.postal_code ?? '',
     neighborhood: property.neighborhood ?? '',
     latitude: property.latitude ?? undefined,
@@ -49,10 +50,19 @@ function propertyToFormValues(property: Property, amenityIds: string[]): Propert
     bathrooms: property.bathrooms,
     rooms: property.rooms ?? undefined,
     floor: property.floor ?? undefined,
+    floorsCount: property.floors_count ?? undefined,
+    volumeM3: property.volume_m3 ?? undefined,
+    contractType: property.contract_type,
+    interiorType: property.interior_type,
+    maintenanceCondition: property.maintenance_condition,
+    constructionType: property.construction_type,
+    constructionYear: property.construction_year ?? undefined,
+    energyLabel: property.energy_label ?? '',
     hasElevator: property.has_elevator,
     hasBalcony: property.has_balcony,
     hasTerrace: property.has_terrace,
     hasParking: property.has_parking,
+    hasGarage: property.has_garage,
     hasGarden: property.has_garden,
     isFurnished: property.is_furnished,
     petsAllowed: property.pets_allowed,
@@ -99,7 +109,7 @@ export function PropertyForm({
             slug: '',
             description: '',
             propertyType: 'appartement',
-            city: 'Amsterdam',
+            city: '',
             monthlyPrice: 0,
             serviceCharges: 0,
             depositAmount: 0,
@@ -107,10 +117,15 @@ export function PropertyForm({
             surfaceM2: 0,
             bedrooms: 1,
             bathrooms: 1,
+            contractType: 'Période indéterminée',
+            interiorType: 'Non meublé',
+            maintenanceCondition: 'Bien',
+            constructionType: 'Bâtiment existant',
             hasElevator: false,
             hasBalcony: false,
             hasTerrace: false,
             hasParking: false,
+            hasGarage: false,
             hasGarden: false,
             isFurnished: false,
             petsAllowed: false,
@@ -224,11 +239,7 @@ export function PropertyForm({
           </div>
           <div>
             <Label htmlFor="city">Ville</Label>
-            <Select id="city" {...register('city')}>
-              {DUTCH_CITIES.map((city) => (
-                <option key={city} value={city}>{city}</option>
-              ))}
-            </Select>
+            <Input id="city" placeholder="Ex : Amsterdam" {...register('city')} />
             <FieldError message={errors.city?.message} />
           </div>
           <div>
@@ -238,16 +249,6 @@ export function PropertyForm({
           <div>
             <Label htmlFor="neighborhood">Quartier</Label>
             <Input id="neighborhood" {...register('neighborhood')} />
-          </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div>
-              <Label htmlFor="latitude">Latitude</Label>
-              <Input id="latitude" type="number" step="0.000001" {...register('latitude')} />
-            </div>
-            <div>
-              <Label htmlFor="longitude">Longitude</Label>
-              <Input id="longitude" type="number" step="0.000001" {...register('longitude')} />
-            </div>
           </div>
         </div>
       </FormSection>
@@ -263,6 +264,10 @@ export function PropertyForm({
           <div>
             <Label htmlFor="serviceCharges">Charges (€)</Label>
             <Input id="serviceCharges" type="number" step="1" {...register('serviceCharges')} />
+          </div>
+          <div>
+            <Label htmlFor="depositAmount">Dépôt (€)</Label>
+            <Input id="depositAmount" type="number" step="1" {...register('depositAmount')} />
           </div>
         </div>
       </FormSection>
@@ -292,6 +297,14 @@ export function PropertyForm({
             <Input id="floor" type="number" {...register('floor')} />
           </div>
           <div>
+            <Label htmlFor="floorsCount">Nombre d’étages</Label>
+            <Input id="floorsCount" type="number" min="1" {...register('floorsCount')} />
+          </div>
+          <div>
+            <Label htmlFor="volumeM3">Volume (m³)</Label>
+            <Input id="volumeM3" type="number" step="0.5" {...register('volumeM3')} />
+          </div>
+          <div>
             <Label htmlFor="availableFrom">Disponible à partir du</Label>
             <Input id="availableFrom" type="date" {...register('availableFrom')} />
           </div>
@@ -308,6 +321,61 @@ export function PropertyForm({
               {field.label}
             </label>
           ))}
+        </div>
+      </FormSection>
+
+      <FormSection title="Location et état du logement">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div>
+            <Label htmlFor="contractType">Type de contrat</Label>
+            <Select id="contractType" {...register('contractType')}>
+              <option value="Période indéterminée">Période indéterminée</option>
+              <option value="Durée déterminée">Durée déterminée</option>
+              <option value="Location temporaire">Location temporaire</option>
+            </Select>
+          </div>
+          <div>
+            <Label htmlFor="interiorType">Intérieur</Label>
+            <Select id="interiorType" {...register('interiorType')}>
+              <option value="Non meublé">Non meublé</option>
+              <option value="Semi-meublé">Semi-meublé</option>
+              <option value="Meublé">Meublé</option>
+            </Select>
+          </div>
+          <div>
+            <Label htmlFor="maintenanceCondition">État d’entretien</Label>
+            <Select id="maintenanceCondition" {...register('maintenanceCondition')}>
+              <option value="Excellent">Excellent</option>
+              <option value="Bien">Bien</option>
+              <option value="À rafraîchir">À rafraîchir</option>
+              <option value="À rénover">À rénover</option>
+            </Select>
+          </div>
+        </div>
+      </FormSection>
+
+      <FormSection title="Construction et énergie">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div>
+            <Label htmlFor="constructionType">Type de construction</Label>
+            <Select id="constructionType" {...register('constructionType')}>
+              <option value="Bâtiment existant">Bâtiment existant</option>
+              <option value="Construction neuve">Construction neuve</option>
+            </Select>
+          </div>
+          <div>
+            <Label htmlFor="constructionYear">Année de construction</Label>
+            <Input id="constructionYear" type="number" min="1000" max="2200" {...register('constructionYear')} />
+          </div>
+          <div>
+            <Label htmlFor="energyLabel">Étiquette énergétique</Label>
+            <Select id="energyLabel" {...register('energyLabel')}>
+              <option value="">Non renseignée</option>
+              {['A++++', 'A+++', 'A++', 'A+', 'A', 'B', 'C', 'D', 'E', 'F', 'G'].map((label) => (
+                <option key={label} value={label}>{label}</option>
+              ))}
+            </Select>
+          </div>
         </div>
       </FormSection>
 
