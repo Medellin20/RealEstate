@@ -66,19 +66,19 @@ export function AdminSidebar() {
   return (
     <>
       {/* Sidebar desktop */}
-      <aside className="hidden w-64 shrink-0 flex-col border-r border-white/10 bg-ink-950 lg:flex">
+      <aside className="hidden h-screen w-64 shrink-0 flex-col border-r border-white/10 bg-ink-950 lg:sticky lg:top-0 lg:flex">
         <SidebarHeader />
         <NavLinks pathname={pathname} />
         <LogoutSection />
       </aside>
 
       {/* Topbar mobile */}
-      <div className="flex items-center justify-between border-b border-ink-100 bg-white px-4 py-3 lg:hidden">
-        <Link href="/admin" className="flex items-center gap-2">
+      <div className="sticky top-0 z-40 flex w-full items-center justify-between border-b border-ink-100 bg-white/95 px-4 py-3 backdrop-blur lg:hidden">
+        <Link href="/admin" className="flex min-w-0 items-center gap-2">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-ink-700 text-white">
             <Home className="h-4 w-4" />
           </span>
-          <span className="font-extrabold text-ink-900">Real Estate NL</span>
+          <span className="truncate font-extrabold text-ink-900">Real Estate NL</span>
         </Link>
         <button
           onClick={() => setMobileOpen(true)}
@@ -92,7 +92,7 @@ export function AdminSidebar() {
       {mobileOpen && (
         <div className="fixed inset-0 z-50 flex lg:hidden">
           <div className="absolute inset-0 bg-ink-950/60" onClick={() => setMobileOpen(false)} />
-          <div className="relative flex w-72 flex-col bg-ink-950">
+          <div className="relative flex h-full w-[min(18rem,calc(100vw-2rem))] flex-col bg-ink-950 shadow-2xl">
             <div className="flex items-center justify-between px-5 py-4">
               <SidebarHeader compact />
               <button

@@ -28,7 +28,7 @@ export default async function AdminViewingsPage({ searchParams }: { searchParams
           <h1 className="text-2xl font-extrabold text-ink-900">Demandes de visite</h1>
           <p className="mt-1 text-sm text-ink-500">{viewings.length} demande(s).</p>
         </div>
-        <form action="/admin/visites" method="get">
+        <form action="/admin/visites" method="get" className="w-full sm:w-auto">
           <AutoSubmitSelect name="status" defaultValue={searchParams.status} className="sm:w-56">
             <option value="">Tous les statuts</option>
             {STATUS_OPTIONS.map((opt) => (
@@ -47,7 +47,7 @@ export default async function AdminViewingsPage({ searchParams }: { searchParams
           {viewings.map((viewing: any) => (
             <div key={viewing.id} className="rounded-2xl border border-ink-100 bg-white p-4 sm:p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
-                <div>
+                <div className="min-w-0">
                   <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">{viewing.reference}</p>
                   <Link href={`/admin/appartements/${viewing.property_id}`} className="font-bold text-ink-900 hover:text-canal-600">
                     {viewing.properties?.title}
@@ -58,7 +58,7 @@ export default async function AdminViewingsPage({ searchParams }: { searchParams
               </div>
 
               <div className="mt-3 grid grid-cols-1 gap-2 text-sm text-ink-600 sm:grid-cols-2 lg:grid-cols-4">
-                <p>
+                <p className="break-words">
                   <span className="text-ink-400">Client : </span>
                   {viewing.clients?.first_name} {viewing.clients?.last_name}
                 </p>
@@ -72,7 +72,7 @@ export default async function AdminViewingsPage({ searchParams }: { searchParams
                 </p>
               </div>
 
-              <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-ink-100 pt-3">
+              <div className="mt-3 flex flex-col gap-3 border-t border-ink-100 pt-3 sm:flex-row sm:items-center sm:justify-between">
                 <span className="text-xs text-ink-400">Reçue le {formatDateTime(viewing.created_at)}</span>
                 <StatusSelect
                   value={viewing.status as ViewingStatus}

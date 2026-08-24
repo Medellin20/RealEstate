@@ -36,8 +36,8 @@ export default async function AdminPropertiesPage({
           <h1 className="text-2xl font-extrabold text-ink-900">Appartements</h1>
           <p className="mt-1 text-sm text-ink-500">{total} logement(s) au total.</p>
         </div>
-        <Link href="/admin/appartements/nouveau">
-          <Button>
+        <Link href="/admin/appartements/nouveau" className="w-full sm:w-auto">
+          <Button className="w-full sm:w-auto">
             <PlusCircle className="h-4 w-4" />
             Ajouter un appartement
           </Button>
@@ -63,7 +63,7 @@ export default async function AdminPropertiesPage({
             <option key={city} value={city}>{city}</option>
           ))}
         </Select>
-        <Button type="submit" variant="outline">Filtrer</Button>
+        <Button type="submit" variant="outline" className="w-full sm:w-auto">Filtrer</Button>
       </form>
 
       {properties.length === 0 ? (
@@ -130,7 +130,7 @@ export default async function AdminPropertiesPage({
               const statusMeta = PROPERTY_STATUS_LABELS[property.status];
               return (
                 <div key={property.id} className="rounded-2xl border border-ink-100 bg-white p-4">
-                  <div className="flex items-center gap-3">
+                  <div className="flex min-w-0 items-start gap-3">
                     <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-lg bg-ink-100">
                       {primaryImage && <Image src={primaryImage.url} alt="" fill sizes="80px" className="object-cover" />}
                     </div>
@@ -139,7 +139,7 @@ export default async function AdminPropertiesPage({
                       <p className="text-xs text-ink-400">{property.city}</p>
                       <p className="mt-0.5 text-sm font-medium text-ink-700">{formatPrice(property.monthly_price)}</p>
                     </div>
-                    <Badge variant={property.is_published ? 'available' : 'default'}>
+                    <Badge className="shrink-0" variant={property.is_published ? 'available' : 'default'}>
                       {property.is_published ? 'Publié' : 'Brouillon'}
                     </Badge>
                   </div>

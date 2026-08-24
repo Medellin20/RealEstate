@@ -19,12 +19,12 @@ export default async function AdminClientsPage({ searchParams }: { searchParams:
         <p className="mt-1 text-sm text-ink-500">{clients.length} client(s) enregistré(s).</p>
       </div>
 
-      <form className="mb-5 flex gap-3" action="/admin/clients" method="get">
+      <form className="mb-5 flex flex-col gap-3 sm:flex-row" action="/admin/clients" method="get">
         <div className="relative flex-1">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-300" />
           <Input name="search" placeholder="Rechercher par nom ou e-mail..." defaultValue={searchParams.search} className="pl-10" />
         </div>
-        <Button type="submit" variant="outline">Rechercher</Button>
+        <Button type="submit" variant="outline" className="w-full sm:w-auto">Rechercher</Button>
       </form>
 
       {clients.length === 0 ? (
@@ -62,7 +62,7 @@ export default async function AdminClientsPage({ searchParams }: { searchParams:
             {clients.map((client: any) => (
               <div key={client.id} className="rounded-2xl border border-ink-100 bg-white p-4">
                 <p className="font-semibold text-ink-900">{client.first_name} {client.last_name}</p>
-                <p className="mt-0.5 text-sm text-ink-500">{client.email}</p>
+                <p className="mt-0.5 break-all text-sm text-ink-500">{client.email}</p>
                 {client.phone && <p className="text-sm text-ink-500">{client.phone}</p>}
                 {client.profession && <p className="mt-1 text-xs text-ink-400">Profession : {client.profession}</p>}
                 <p className="mt-1 text-xs text-ink-400">Inscrit le {formatDateTime(client.created_at)}</p>

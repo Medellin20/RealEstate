@@ -27,7 +27,7 @@ export default async function AdminRefundsPage({ searchParams }: { searchParams:
           <h1 className="text-2xl font-extrabold text-ink-900">Demandes de remboursement</h1>
           <p className="mt-1 text-sm text-ink-500">{refunds.length} demande(s).</p>
         </div>
-        <form action="/admin/remboursements" method="get">
+        <form action="/admin/remboursements" method="get" className="w-full sm:w-auto">
           <AutoSubmitSelect name="status" defaultValue={searchParams.status} className="sm:w-56">
             <option value="">Tous les statuts</option>
             {STATUS_OPTIONS.map((opt) => (
@@ -44,7 +44,7 @@ export default async function AdminRefundsPage({ searchParams }: { searchParams:
           {refunds.map((refund: any) => (
             <div key={refund.id} className="rounded-2xl border border-ink-100 bg-white p-4 sm:p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
-                <div>
+                <div className="min-w-0">
                   <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">{refund.reference}</p>
                   <p className="font-bold text-ink-900">{refund.reservations?.properties?.title ?? '—'}</p>
                   <p className="mt-0.5 text-sm text-ink-500">Réservation : {refund.reservations?.reference ?? '—'}</p>
@@ -53,7 +53,7 @@ export default async function AdminRefundsPage({ searchParams }: { searchParams:
               </div>
 
               <div className="mt-3 grid grid-cols-1 gap-2 text-sm text-ink-600 sm:grid-cols-2">
-                <p><span className="text-ink-400">Client : </span>{refund.clients?.first_name} {refund.clients?.last_name} ({refund.clients?.email})</p>
+                <p className="break-words"><span className="text-ink-400">Client : </span>{refund.clients?.first_name} {refund.clients?.last_name} ({refund.clients?.email})</p>
                 <p><span className="text-ink-400">Montant : </span>{formatPrice(refund.amount)}</p>
               </div>
 
@@ -63,7 +63,7 @@ export default async function AdminRefundsPage({ searchParams }: { searchParams:
                 </p>
               )}
 
-              <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-ink-100 pt-3">
+              <div className="mt-3 flex flex-col gap-3 border-t border-ink-100 pt-3 sm:flex-row sm:items-center sm:justify-between">
                 <span className="text-xs text-ink-400">Demandée le {formatDateTime(refund.requested_at)}</span>
                 <StatusSelect
                   value={refund.status as RefundStatus}

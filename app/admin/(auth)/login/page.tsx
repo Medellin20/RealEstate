@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: 'Connexion administrateur' };
 
 export default function AdminLoginPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
+    <div className="flex min-h-screen items-center justify-center px-4 py-8 sm:py-12">
       <div className="w-full max-w-sm">
         <Link href="/" className="mb-8 flex items-center justify-center gap-2">
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10">
@@ -16,7 +16,7 @@ export default function AdminLoginPage() {
           <span className="text-lg font-extrabold text-white">Real Estate NL</span>
         </Link>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 shadow-lifted backdrop-blur-sm">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-lifted backdrop-blur-sm sm:p-8">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white">
             <Lock className="h-5 w-5" />
           </div>

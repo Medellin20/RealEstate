@@ -27,7 +27,7 @@ export default async function AdminGuaranteesPage({ searchParams }: { searchPara
           <h1 className="text-2xl font-extrabold text-ink-900">Garanties</h1>
           <p className="mt-1 text-sm text-ink-500">{guarantees.length} dossier(s) de garantie.</p>
         </div>
-        <form action="/admin/garanties" method="get">
+        <form action="/admin/garanties" method="get" className="w-full sm:w-auto">
           <AutoSubmitSelect name="status" defaultValue={searchParams.status} className="sm:w-56">
             <option value="">Tous les statuts</option>
             {STATUS_OPTIONS.map((opt) => (
@@ -44,7 +44,7 @@ export default async function AdminGuaranteesPage({ searchParams }: { searchPara
           {guarantees.map((guarantee: any) => (
             <div key={guarantee.id} className="rounded-2xl border border-ink-100 bg-white p-4 sm:p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
-                <div>
+                <div className="min-w-0">
                   <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">{guarantee.reference}</p>
                   <p className="font-bold text-ink-900">{guarantee.reservations?.properties?.title ?? '—'}</p>
                   <p className="mt-0.5 text-sm text-ink-500">
@@ -56,7 +56,7 @@ export default async function AdminGuaranteesPage({ searchParams }: { searchPara
 
               <div className="mt-3 grid grid-cols-1 gap-2 text-sm text-ink-600 sm:grid-cols-2 lg:grid-cols-4">
                 <p><span className="text-ink-400">Client : </span>{guarantee.clients?.first_name} {guarantee.clients?.last_name}</p>
-                <p><span className="text-ink-400">E-mail : </span>{guarantee.clients?.email}</p>
+                <p className="break-all"><span className="text-ink-400">E-mail : </span>{guarantee.clients?.email}</p>
                 <p><span className="text-ink-400">Montant : </span>{formatPrice(guarantee.amount)}</p>
                 {guarantee.declared_transfer_date && (
                   <p><span className="text-ink-400">Virement déclaré le : </span>{formatDate(guarantee.declared_transfer_date)}</p>
@@ -71,7 +71,7 @@ export default async function AdminGuaranteesPage({ searchParams }: { searchPara
                 </div>
               )}
 
-              <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-ink-100 pt-3">
+              <div className="mt-3 flex flex-col gap-3 border-t border-ink-100 pt-3 sm:flex-row sm:items-center sm:justify-between">
                 <span className="text-xs text-ink-400">Créée le {formatDateTime(guarantee.created_at)}</span>
                 <StatusSelect
                   value={guarantee.status as GuaranteeStatus}

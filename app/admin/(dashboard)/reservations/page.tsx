@@ -31,14 +31,14 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
           <h1 className="text-2xl font-extrabold text-ink-900">Réservations</h1>
           <p className="mt-1 text-sm text-ink-500">{reservations.length} réservation(s).</p>
         </div>
-        <div className="flex items-center gap-2">
-          <a href="/api/admin/export/reservations" download>
-            <Button variant="outline" size="sm">
+        <div className="grid w-full grid-cols-1 gap-2 sm:flex sm:w-auto sm:items-center">
+          <a href="/api/admin/export/reservations" download className="w-full sm:w-auto">
+            <Button variant="outline" size="sm" className="w-full sm:w-auto">
               <Download className="h-3.5 w-3.5" />
               Export CSV
             </Button>
           </a>
-          <form action="/admin/reservations" method="get">
+          <form action="/admin/reservations" method="get" className="w-full sm:w-auto">
             <AutoSubmitSelect name="status" defaultValue={searchParams.status} className="sm:w-56">
               <option value="">Tous les statuts</option>
               {STATUS_OPTIONS.map((opt) => (
@@ -56,7 +56,7 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
           {reservations.map((reservation: any) => (
             <div key={reservation.id} className="rounded-2xl border border-ink-100 bg-white p-4 sm:p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
-                <div>
+                <div className="min-w-0">
                   <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">{reservation.reference}</p>
                   <Link href={`/admin/appartements/${reservation.property_id}`} className="font-bold text-ink-900 hover:text-canal-600">
                     {reservation.properties?.title}
@@ -68,7 +68,7 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
 
               <div className="mt-3 grid grid-cols-1 gap-2 text-sm text-ink-600 sm:grid-cols-2 lg:grid-cols-4">
                 <p><span className="text-ink-400">Client : </span>{reservation.clients?.first_name} {reservation.clients?.last_name}</p>
-                <p><span className="text-ink-400">E-mail : </span>{reservation.clients?.email}</p>
+                <p className="break-all"><span className="text-ink-400">E-mail : </span>{reservation.clients?.email}</p>
                 <p><span className="text-ink-400">Entrée : </span>{formatDate(reservation.desired_move_in_date)}</p>
                 <p><span className="text-ink-400">Durée : </span>{reservation.duration_months} mois · {reservation.occupants_count} occupant(s)</p>
               </div>
@@ -105,7 +105,7 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
                 </div>
               </details>
 
-              <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-ink-100 pt-3">
+              <div className="mt-3 flex flex-col gap-3 border-t border-ink-100 pt-3 sm:flex-row sm:items-center sm:justify-between">
                 <span className="text-xs text-ink-400">Reçue le {formatDateTime(reservation.created_at)}</span>
                 <StatusSelect
                   value={reservation.status as ReservationStatus}

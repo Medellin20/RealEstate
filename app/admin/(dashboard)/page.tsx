@@ -28,15 +28,15 @@ export default async function AdminDashboardPage() {
           <h1 className="text-2xl font-extrabold text-ink-900">Tableau de bord</h1>
           <p className="mt-1 text-sm text-ink-500">Vue d’ensemble de l’activité de l’agence.</p>
         </div>
-        <Link href="/admin/appartements/nouveau">
-          <Button>
+        <Link href="/admin/appartements/nouveau" className="w-full sm:w-auto">
+          <Button className="w-full sm:w-auto">
             <PlusCircle className="h-4 w-4" />
             Ajouter un appartement
           </Button>
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+      <div className="grid grid-cols-1 gap-4 min-[380px]:grid-cols-2 sm:grid-cols-3 xl:grid-cols-5">
         <StatCard icon={Building2} label="Total appartements" value={stats.totalProperties} />
         <StatCard icon={Home} label="Disponibles" value={stats.availableProperties} tone="positive" />
         <StatCard icon={Clock} label="Réservés" value={stats.reservedProperties} tone="warning" />
@@ -58,8 +58,8 @@ export default async function AdminDashboardPage() {
           <ul className="mt-4 space-y-2">
             {alerts.map((alert) => (
               <li key={`${alert.href}-${alert.id}`}>
-                <Link href={alert.href} className="flex items-center justify-between gap-4 rounded-xl bg-white px-4 py-3 text-sm shadow-sm transition hover:shadow-card">
-                  <span className="font-medium text-ink-700">{alert.label}</span>
+                <Link href={alert.href} className="flex flex-col gap-1 rounded-xl bg-white px-4 py-3 text-sm shadow-sm transition hover:shadow-card sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                  <span className="min-w-0 font-medium text-ink-700">{alert.label}</span>
                   <time className="shrink-0 text-xs text-ink-400">{formatDateTime(alert.created_at)}</time>
                 </Link>
               </li>
@@ -75,8 +75,8 @@ export default async function AdminDashboardPage() {
         ) : (
           <ul className="mt-4 divide-y divide-ink-100">
             {logs.map((log) => (
-              <li key={log.id} className="flex items-center justify-between gap-4 py-3 text-sm">
-                <span className="text-ink-700">{log.action}</span>
+              <li key={log.id} className="flex flex-col gap-1 py-3 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                <span className="min-w-0 text-ink-700">{log.action}</span>
                 <span className="shrink-0 text-xs text-ink-400">{formatDateTime(log.created_at)}</span>
               </li>
             ))}
