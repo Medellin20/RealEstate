@@ -15,7 +15,8 @@ create table if not exists public.property_images (
 );
 
 delete from public.property_images
-where storage_path like 'seed/%';
+where storage_path like 'seed/%'
+   or url like 'https://images.unsplash.com/%';
 
 create index if not exists property_images_property_idx
   on public.property_images (property_id, sort_order);

@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { ShieldCheck, MapPinned, Users, Clock } from 'lucide-react';
 import { FadeIn } from '@/components/ui/fade-in';
 import { SectionHeading } from '@/components/ui/section-heading';
@@ -36,13 +35,6 @@ export default function AProposPage() {
   return (
     <div>
       <section className="relative overflow-hidden bg-ink-950 py-20 sm:py-28">
-        <Image
-          src="https://images.unsplash.com/photo-1541417904950-b855846fe074?w=1800&q=80"
-          alt="Canal et façades typiques d’Amsterdam"
-          fill
-          className="object-cover opacity-35"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/70 to-ink-950/40" />
         <div className="container-app relative">
           <FadeIn>
             <span className="text-eyebrow uppercase text-sand-300">Notre agence</span>
@@ -58,7 +50,7 @@ export default function AProposPage() {
       </section>
 
       <section className="py-16 sm:py-20">
-        <div className="container-app grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-center">
+        <div className="container-app max-w-3xl">
           <FadeIn>
             <SectionHeading
               eyebrow="Notre mission"
@@ -75,17 +67,6 @@ export default function AProposPage() {
               du pays — Amsterdam, Rotterdam, Utrecht, Eindhoven, La Haye et Groningue — pour
               proposer une sélection de logements adaptés à chaque profil de locataire.
             </p>
-          </FadeIn>
-
-          <FadeIn delay={0.1}>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-3xl">
-              <Image
-                src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&q=80"
-                alt="Intérieur moderne d’un appartement aux Pays-Bas"
-                fill
-                className="object-cover"
-              />
-            </div>
           </FadeIn>
         </div>
       </section>

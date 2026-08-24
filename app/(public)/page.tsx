@@ -55,17 +55,6 @@ export default async function HomePage() {
     <>
       {/* HERO */}
       <section className="relative overflow-hidden bg-ink-950">
-        <div className="absolute inset-0">
-          <Image
-            src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1800&q=80"
-            alt="Façades de canal typiques aux Pays-Bas"
-            fill
-            priority
-            className="object-cover opacity-40"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/70 to-ink-950/30" />
-        </div>
-
         <div className="container-app relative pb-16 pt-20 sm:pb-24 sm:pt-28 lg:pt-32">
           <FadeIn>
             <span className="text-eyebrow inline-block rounded-full bg-white/10 px-3 py-1.5 uppercase text-sand-200">
