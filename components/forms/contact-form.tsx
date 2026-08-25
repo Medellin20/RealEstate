@@ -53,7 +53,7 @@ export function ContactForm() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <Label htmlFor="phone">Téléphone (facultatif)</Label>
-          <Input id="phone" type="tel" {...register('phone')} />
+          <Input id="phone" type="tel" placeholder="+31 6 12 34 56 78" {...register('phone')} />
           <FieldError message={errors.phone?.message} />
         </div>
         <div>

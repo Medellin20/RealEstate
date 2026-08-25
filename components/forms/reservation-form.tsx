@@ -121,7 +121,7 @@ export function ReservationForm({
               </div>
               <div>
                 <Label htmlFor="phone">Téléphone</Label>
-                <Input id="phone" type="tel" placeholder="+33 6 12 34 56 78" {...register('phone')} />
+                <Input id="phone" type="tel" placeholder="+31 6 12 34 56 78" {...register('phone')} />
                 <FieldError message={errors.phone?.message} />
               </div>
             </motion.div>

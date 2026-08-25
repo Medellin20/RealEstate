@@ -137,7 +137,6 @@ export default async function PropertyDetailPage({ params }: PageProps) {
             <div className="mt-10">
               <h2 className="text-lg font-bold text-ink-900">Détails du logement</h2>
               <dl className="mt-4 grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
-                <DetailRow label="Prix au m²" value={formatPrice(property.monthly_price / property.surface_m2)} />
                 <DetailRow label="Offert depuis" value={formatDate(property.created_at)} />
                 <DetailRow label="Caution" value={formatPrice(property.deposit_amount)} />
                 <DetailRow label="Type de contrat" value={property.contract_type} />
