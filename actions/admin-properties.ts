@@ -63,6 +63,7 @@ async function syncAmenities(propertyId: string, amenityIds: string[]) {
 }
 
 function revalidatePublicPaths(slug?: string) {
+  revalidatePath('/admin');
   revalidatePath('/appartements');
   revalidatePath('/');
   revalidatePath('/admin/appartements');

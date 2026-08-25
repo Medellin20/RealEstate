@@ -39,6 +39,7 @@ export async function updateReservationStatus(
   await logAdminAction({ action: 'reservation.status_change', entityType: 'reservation', entityId: id, details: { status } });
 
   revalidatePath('/admin/reservations');
+  revalidatePath('/admin');
   revalidatePath('/mon-compte');
 
   return { success: true, message: 'Statut de la réservation mis à jour.' };

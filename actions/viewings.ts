@@ -88,6 +88,7 @@ export async function createViewingRequest(
   });
 
   revalidatePath('/admin/visites');
+  revalidatePath('/admin');
 
   redirect(`/appartements/${propertySlug}/visite/confirmation?ref=${reference}`);
 }

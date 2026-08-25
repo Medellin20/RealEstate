@@ -33,6 +33,7 @@ export async function updateViewingStatus(
   await logAdminAction({ action: 'viewing.status_change', entityType: 'viewing_request', entityId: id, details: { status } });
 
   revalidatePath('/admin/visites');
+  revalidatePath('/admin');
   revalidatePath('/mon-compte');
 
   return { success: true, message: 'Statut de la visite mis à jour.' };

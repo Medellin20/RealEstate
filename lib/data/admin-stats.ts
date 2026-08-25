@@ -1,8 +1,10 @@
 import 'server-only';
+import { unstable_noStore as noStore } from 'next/cache';
 import { createAdminClient } from '@/lib/supabase/admin';
 import type { DashboardStats } from '@/types';
 
 export async function getDashboardStats(): Promise<DashboardStats> {
+  noStore();
   const supabase = createAdminClient();
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);

@@ -91,6 +91,7 @@ export async function createReservation(input: ReservationInput, propertySlug: s
   });
 
   revalidatePath('/admin/reservations');
+  revalidatePath('/admin');
 
   redirect(
     `/appartements/${propertySlug}/reserver/confirmation?ref=${reference}&email=${encodeURIComponent(

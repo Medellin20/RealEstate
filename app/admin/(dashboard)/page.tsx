@@ -14,6 +14,7 @@ import { getAdminAlerts, getDashboardStats, getRecentAdminLogs } from '@/lib/dat
 import { StatCard } from '@/components/admin/stat-card';
 import { Button } from '@/components/ui/button';
 import { formatDateTime } from '@/lib/utils/format';
+import { DashboardAutoRefresh } from '@/components/admin/dashboard-auto-refresh';
 
 export const metadata: Metadata = { title: 'Dashboard admin' };
 export const dynamic = 'force-dynamic';
@@ -23,6 +24,7 @@ export default async function AdminDashboardPage() {
 
   return (
     <div>
+      <DashboardAutoRefresh />
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-ink-900">Tableau de bord</h1>
