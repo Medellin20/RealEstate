@@ -139,7 +139,6 @@ export default async function PropertyDetailPage({ params }: PageProps) {
               <dl className="mt-4 grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
                 <DetailRow label="Prix au m²" value={formatPrice(property.monthly_price / property.surface_m2)} />
                 <DetailRow label="Offert depuis" value={formatDate(property.created_at)} />
-                <DetailRow label="Charges mensuelles" value={formatPrice(property.service_charges)} />
                 <DetailRow label="Caution" value={formatPrice(property.deposit_amount)} />
                 <DetailRow label="Type de contrat" value={property.contract_type} />
                 <DetailRow label="Intérieur" value={property.interior_type} />
@@ -200,10 +199,6 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                 </span>
                 <span className="text-ink-400">/ mois</span>
               </div>
-              <p className="mt-1 text-xs text-ink-400">
-                + {formatPrice(property.service_charges)} de charges mensuelles
-              </p>
-
               {isBookable ? (
                 <div className="mt-5 space-y-2.5">
                   <Link href={`/appartements/${property.slug}/reagir`} className="block">

@@ -254,10 +254,6 @@ export function PropertyForm({
             <FieldError message={errors.monthlyPrice?.message} />
           </div>
           <div>
-            <Label htmlFor="serviceCharges">Charges (€)</Label>
-            <Input id="serviceCharges" type="number" step="1" {...register('serviceCharges')} />
-          </div>
-          <div>
             <Label htmlFor="depositAmount">Dépôt (€)</Label>
             <Input id="depositAmount" type="number" step="1" {...register('depositAmount')} />
           </div>
