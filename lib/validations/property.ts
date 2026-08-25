@@ -6,7 +6,6 @@ export const propertySchema = z.object({
     .trim()
     .min(5, 'Le slug doit contenir au moins 5 caractères.')
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Le slug ne doit contenir que des minuscules, chiffres et tirets.'),
-  description: z.string().trim().min(20, 'La description doit contenir au moins 20 caractères.'),
   propertyType: z.enum(['appartement', 'studio', 'maison', 'chambre', 'loft', 'duplex']),
 
   address: z.string().trim().optional().or(z.literal('')),

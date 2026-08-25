@@ -9,7 +9,6 @@ import { Wand2, Save } from 'lucide-react';
 import { propertySchema, type PropertyInput } from '@/lib/validations/property';
 import { createProperty, updateProperty } from '@/actions/admin-properties';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Select } from '@/components/ui/select';
 import { Label, FieldError } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -33,7 +32,6 @@ function propertyToFormValues(property: Property, amenityIds: string[]): Propert
   return {
     title: property.title,
     slug: property.slug,
-    description: property.description,
     propertyType: property.property_type,
     address: property.address ?? '',
     city: property.city,
@@ -107,7 +105,6 @@ export function PropertyForm({
         : {
             title: '',
             slug: '',
-            description: '',
             propertyType: 'appartement',
             city: '',
             monthlyPrice: 0,
@@ -190,11 +187,6 @@ export function PropertyForm({
             </div>
             <Input id="slug" {...register('slug')} onChange={() => setSlugTouched(true)} />
             <FieldError message={errors.slug?.message} />
-          </div>
-          <div className="sm:col-span-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea id="description" rows={6} {...register('description')} />
-            <FieldError message={errors.description?.message} />
           </div>
           <div>
             <Label htmlFor="propertyType">Type de logement</Label>

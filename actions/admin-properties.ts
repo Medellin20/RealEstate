@@ -12,7 +12,6 @@ function toDbPayload(data: PropertyInput) {
   return {
     title: data.title,
     slug: data.slug,
-    description: data.description,
     property_type: data.propertyType,
     address: data.address || null,
     city: data.city,
