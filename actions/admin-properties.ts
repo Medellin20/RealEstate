@@ -70,22 +70,38 @@ function revalidatePublicPaths(slug?: string) {
   if (slug) revalidatePath(`/appartements/${slug}`);
 }
 
-/** Vérifie le slug pendant la saisie, avant que l'administrateur remplisse tout le formulaire. */
-export async function checkPropertySlugAvailability(
+/** Vérifie le titre et le slug pendant la saisie, avant de remplir tout le formulaire. */
+export async function checkPropertyAvailability(
+  title: string,
   slug: string,
   excludePropertyId?: string
-): Promise<{ available: boolean }> {
+): Promise<{ available: boolean; matchedBy?: 'title' | 'slug' }> {
+  const normalizedTitle = title.trim();
   const normalizedSlug = slug.trim();
 
-  if (!normalizedSlug) return { available: true };
+  if (!normalizedTitle && !normalizedSlug) return { available: true };
 
   const supabase = createAdminClient();
-  let query = supabase.from('properties').select('id').eq('slug', normalizedSlug);
+  let slugQuery = supabase.from('properties').select('id').eq('slug', normalizedSlug);
+  let titleQuery = supabase.from('properties').select('id, title').ilike('title', normalizedTitle);
 
-  if (excludePropertyId) query = query.neq('id', excludePropertyId);
+  if (excludePropertyId) {
+    slugQuery = slugQuery.neq('id', excludePropertyId);
+    titleQuery = titleQuery.neq('id', excludePropertyId);
+  }
 
-  const { data } = await query.maybeSingle();
-  return { available: !data };
+  const [{ data: slugMatch, error: slugError }, { data: titleMatches, error: titleError }] =
+    await Promise.all([slugQuery.maybeSingle(), titleQuery]);
+
+  if (slugError || titleError) throw slugError ?? titleError;
+  if (slugMatch) return { available: false, matchedBy: 'slug' };
+
+  const exactTitleMatch = titleMatches?.some(
+    (property) => property.title.trim().toLocaleLowerCase() === normalizedTitle.toLocaleLowerCase()
+  );
+  if (exactTitleMatch) return { available: false, matchedBy: 'title' };
+
+  return { available: true };
 }
 
 export async function createProperty(input: PropertyInput): Promise<ActionResult<{ id: string }>> {

@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { Wand2, Save } from 'lucide-react';
 import { propertySchema, type PropertyInput } from '@/lib/validations/property';
 import {
-  checkPropertySlugAvailability,
+  checkPropertyAvailability,
   createProperty,
   updateProperty,
 } from '@/actions/admin-properties';
@@ -95,6 +95,7 @@ export function PropertyForm({
   const [isPending, startTransition] = React.useTransition();
   const [slugTouched, setSlugTouched] = React.useState(mode === 'edit');
   const [slugExists, setSlugExists] = React.useState(false);
+  const [availabilityError, setAvailabilityError] = React.useState(false);
   const [isCheckingSlug, setIsCheckingSlug] = React.useState(false);
 
   const {
@@ -145,11 +146,13 @@ export function PropertyForm({
 
   const title = watch('title');
   const slug = watch('slug');
+  const debouncedTitle = useDebouncedValue(title, 200);
   const debouncedSlug = useDebouncedValue(slug, 200);
 
   React.useEffect(() => {
     if (!slugTouched && title) {
       setSlugExists(false);
+      setAvailabilityError(false);
       setValue('slug', slugify(title));
     }
   }, [title, slugTouched, setValue]);
@@ -157,8 +160,9 @@ export function PropertyForm({
   React.useEffect(() => {
     let isCurrent = true;
 
-    if (!debouncedSlug || debouncedSlug.length < 5) {
+    if (!debouncedTitle || debouncedTitle.trim().length < 5 || !debouncedSlug) {
       setSlugExists(false);
+      setAvailabilityError(false);
       setIsCheckingSlug(false);
       return () => {
         isCurrent = false;
@@ -166,12 +170,16 @@ export function PropertyForm({
     }
 
     setIsCheckingSlug(true);
-    checkPropertySlugAvailability(debouncedSlug, mode === 'edit' ? propertyId : undefined)
+    setAvailabilityError(false);
+    checkPropertyAvailability(debouncedTitle, debouncedSlug, mode === 'edit' ? propertyId : undefined)
       .then(({ available }) => {
         if (isCurrent) setSlugExists(!available);
       })
       .catch(() => {
-        if (isCurrent) setSlugExists(false);
+        if (isCurrent) {
+          setSlugExists(false);
+          setAvailabilityError(true);
+        }
       })
       .finally(() => {
         if (isCurrent) setIsCheckingSlug(false);
@@ -180,7 +188,7 @@ export function PropertyForm({
     return () => {
       isCurrent = false;
     };
-  }, [debouncedSlug, mode, propertyId]);
+  }, [debouncedTitle, debouncedSlug, mode, propertyId]);
 
   function onSubmit(data: PropertyInput) {
     if (slugExists) {
@@ -222,7 +230,12 @@ export function PropertyForm({
             <FieldError message={errors.title?.message} />
             {slugExists && (
               <p role="alert" className="mt-1.5 text-xs font-medium text-brick-500">
-                Cet appartement existe déjà : le slug « {debouncedSlug} » est déjà utilisé.
+                Cet appartement existe déjà : ce titre ou ce slug est déjà utilisé.
+              </p>
+            )}
+            {availabilityError && (
+              <p role="alert" className="mt-1.5 text-xs font-medium text-brick-500">
+                Impossible de vérifier si cet appartement existe déjà. Réessayez dans un instant.
               </p>
             )}
           </div>
@@ -235,6 +248,7 @@ export function PropertyForm({
                   setValue('slug', slugify(title || ''));
                   setSlugTouched(false);
                   setSlugExists(false);
+                  setAvailabilityError(false);
                   clearErrors('slug');
                 }}
                 className="mb-1.5 flex items-center gap-1 text-xs font-medium text-canal-600 hover:underline"
@@ -250,6 +264,7 @@ export function PropertyForm({
                 onChange: () => {
                   setSlugTouched(true);
                   setSlugExists(false);
+                  setAvailabilityError(false);
                   clearErrors('slug');
                 },
               })}
