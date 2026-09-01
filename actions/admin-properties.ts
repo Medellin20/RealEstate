@@ -70,6 +70,24 @@ function revalidatePublicPaths(slug?: string) {
   if (slug) revalidatePath(`/appartements/${slug}`);
 }
 
+/** Vérifie le slug pendant la saisie, avant que l'administrateur remplisse tout le formulaire. */
+export async function checkPropertySlugAvailability(
+  slug: string,
+  excludePropertyId?: string
+): Promise<{ available: boolean }> {
+  const normalizedSlug = slug.trim();
+
+  if (!normalizedSlug) return { available: true };
+
+  const supabase = createAdminClient();
+  let query = supabase.from('properties').select('id').eq('slug', normalizedSlug);
+
+  if (excludePropertyId) query = query.neq('id', excludePropertyId);
+
+  const { data } = await query.maybeSingle();
+  return { available: !data };
+}
+
 export async function createProperty(input: PropertyInput): Promise<ActionResult<{ id: string }>> {
   const parsed = propertySchema.safeParse(input);
   if (!parsed.success) {

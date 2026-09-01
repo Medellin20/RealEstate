@@ -7,7 +7,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { Wand2, Save } from 'lucide-react';
 import { propertySchema, type PropertyInput } from '@/lib/validations/property';
-import { createProperty, updateProperty } from '@/actions/admin-properties';
+import {
+  checkPropertySlugAvailability,
+  createProperty,
+  updateProperty,
+} from '@/actions/admin-properties';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { Label, FieldError } from '@/components/ui/label';
@@ -15,6 +19,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { PROPERTY_TYPES } from '@/lib/utils/constants';
 import { slugify } from '@/lib/utils/format';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { Amenity, Property } from '@/types/database';
 
 const BOOLEAN_FIELDS: { key: keyof PropertyInput; label: string }[] = [
@@ -89,6 +94,8 @@ export function PropertyForm({
   const router = useRouter();
   const [isPending, startTransition] = React.useTransition();
   const [slugTouched, setSlugTouched] = React.useState(mode === 'edit');
+  const [slugExists, setSlugExists] = React.useState(false);
+  const [isCheckingSlug, setIsCheckingSlug] = React.useState(false);
 
   const {
     register,
@@ -96,6 +103,8 @@ export function PropertyForm({
     control,
     watch,
     setValue,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<PropertyInput>({
     resolver: zodResolver(propertySchema),
@@ -135,14 +144,50 @@ export function PropertyForm({
   });
 
   const title = watch('title');
+  const slug = watch('slug');
+  const debouncedSlug = useDebouncedValue(slug, 200);
 
   React.useEffect(() => {
     if (!slugTouched && title) {
+      setSlugExists(false);
       setValue('slug', slugify(title));
     }
   }, [title, slugTouched, setValue]);
 
+  React.useEffect(() => {
+    let isCurrent = true;
+
+    if (!debouncedSlug || debouncedSlug.length < 5) {
+      setSlugExists(false);
+      setIsCheckingSlug(false);
+      return () => {
+        isCurrent = false;
+      };
+    }
+
+    setIsCheckingSlug(true);
+    checkPropertySlugAvailability(debouncedSlug, mode === 'edit' ? propertyId : undefined)
+      .then(({ available }) => {
+        if (isCurrent) setSlugExists(!available);
+      })
+      .catch(() => {
+        if (isCurrent) setSlugExists(false);
+      })
+      .finally(() => {
+        if (isCurrent) setIsCheckingSlug(false);
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [debouncedSlug, mode, propertyId]);
+
   function onSubmit(data: PropertyInput) {
+    if (slugExists) {
+      setError('slug', { type: 'validate', message: 'Ce slug est déjà utilisé.' });
+      return;
+    }
+
     startTransition(async () => {
       const result =
         mode === 'create' ? await createProperty(data) : await updateProperty(propertyId!, data);
@@ -155,6 +200,12 @@ export function PropertyForm({
           router.refresh();
         }
       } else {
+        if (result.fieldErrors) {
+          Object.entries(result.fieldErrors).forEach(([field, messages]) => {
+            const message = messages?.[0];
+            if (message) setError(field as keyof PropertyInput, { type: 'server', message });
+          });
+        }
         toast.error(result.message);
       }
     });
@@ -167,8 +218,13 @@ export function PropertyForm({
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2">
             <Label htmlFor="title">Titre</Label>
-            <Input id="title" {...register('title')} />
+            <Input id="title" error={slugExists ? 'duplicate' : errors.title?.message} {...register('title')} />
             <FieldError message={errors.title?.message} />
+            {slugExists && (
+              <p role="alert" className="mt-1.5 text-xs font-medium text-brick-500">
+                Cet appartement existe déjà : le slug « {debouncedSlug} » est déjà utilisé.
+              </p>
+            )}
           </div>
           <div className="sm:col-span-2">
             <div className="flex items-center justify-between">
@@ -178,6 +234,8 @@ export function PropertyForm({
                 onClick={() => {
                   setValue('slug', slugify(title || ''));
                   setSlugTouched(false);
+                  setSlugExists(false);
+                  clearErrors('slug');
                 }}
                 className="mb-1.5 flex items-center gap-1 text-xs font-medium text-canal-600 hover:underline"
               >
@@ -185,8 +243,19 @@ export function PropertyForm({
                 Générer depuis le titre
               </button>
             </div>
-            <Input id="slug" {...register('slug')} onChange={() => setSlugTouched(true)} />
-            <FieldError message={errors.slug?.message} />
+            <Input
+              id="slug"
+              error={slugExists ? 'duplicate' : errors.slug?.message}
+              {...register('slug', {
+                onChange: () => {
+                  setSlugTouched(true);
+                  setSlugExists(false);
+                  clearErrors('slug');
+                },
+              })}
+            />
+            <FieldError message={slugExists ? 'Ce slug est déjà utilisé.' : errors.slug?.message} />
+            {isCheckingSlug && <p className="mt-1.5 text-xs text-ink-400">Vérification du slug…</p>}
           </div>
           <div>
             <Label htmlFor="propertyType">Type de logement</Label>
