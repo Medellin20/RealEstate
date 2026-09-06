@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { PlusCircle, Search } from 'lucide-react';
+import { MapPin, PlusCircle, Search } from 'lucide-react';
 import { getAllPropertiesAdmin } from '@/lib/data/admin-properties';
 import { PropertyRowActions } from '@/components/admin/property-row-actions';
 import { Pagination } from '@/components/properties/pagination';
@@ -19,16 +19,18 @@ export const dynamic = 'force-dynamic';
 export default async function AdminPropertiesPage({
   searchParams,
 }: {
-  searchParams: { search?: string; status?: string; city?: string; page?: string };
+  searchParams: { search?: string; status?: string; city?: string; postalCode?: string; page?: string };
 }) {
   const requestedPage = Number(searchParams.page);
   const status = Object.hasOwn(PROPERTY_STATUS_LABELS, searchParams.status ?? '') ? searchParams.status : undefined;
   const city = DUTCH_CITIES.includes(searchParams.city as (typeof DUTCH_CITIES)[number]) ? searchParams.city : undefined;
-  const hasActiveFilters = Boolean(searchParams.search?.trim() || status || city);
+  const postalCode = searchParams.postalCode?.replace(/[^a-zA-Z0-9 ]/g, '').trim() || undefined;
+  const hasActiveFilters = Boolean(searchParams.search?.trim() || status || city || postalCode);
   const { properties, total, page, pageSize } = await getAllPropertiesAdmin({
     search: searchParams.search,
     status,
     city,
+    postalCode,
     page: Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1,
   });
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
@@ -48,10 +50,14 @@ export default async function AdminPropertiesPage({
         </Link>
       </div>
 
-      <form className="mb-5 flex flex-col gap-3 sm:flex-row" action="/admin/appartements" method="get">
+      <form className="mb-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap" action="/admin/appartements" method="get">
         <div className="relative flex-1">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-300" />
-          <Input name="search" placeholder="Rechercher un titre, une ville, un slug..." defaultValue={searchParams.search} className="pl-10" />
+          <Input name="search" placeholder="Titre, ville, quartier, adresse ou slug..." defaultValue={searchParams.search} className="pl-10" />
+        </div>
+        <div className="relative sm:w-48">
+          <MapPin className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-300" />
+          <Input name="postalCode" placeholder="Code postal" defaultValue={postalCode} className="pl-10" />
         </div>
         <AutoSubmitSelect name="status" defaultValue={status} className="sm:w-52">
           <option value="">Tous les statuts</option>
@@ -164,7 +170,7 @@ export default async function AdminPropertiesPage({
             currentPage={page}
             totalPages={totalPages}
             basePath="/admin/appartements"
-            searchParams={{ search: searchParams.search?.trim() || undefined, status, city }}
+            searchParams={{ search: searchParams.search?.trim() || undefined, status, city, postalCode }}
           />
         </>
       )}

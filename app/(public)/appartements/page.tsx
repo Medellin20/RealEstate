@@ -22,7 +22,6 @@ interface PageProps {
     maxPrice?: string;
     bedrooms?: string;
     type?: string;
-    furnished?: string;
     sort?: string;
     page?: string;
   };
@@ -58,7 +57,6 @@ export default async function AppartementsPage({ searchParams }: PageProps) {
     maxPrice: searchParams.maxPrice ? Number(searchParams.maxPrice) : undefined,
     bedrooms: searchParams.bedrooms ? Number(searchParams.bedrooms) : undefined,
     propertyType: searchParams.type,
-    furnished: (searchParams.furnished as Filters['furnished']) || undefined,
     sort: (searchParams.sort as Filters['sort']) || 'recent',
     page: searchParams.page ? Number(searchParams.page) : 1,
   };

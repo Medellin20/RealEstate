@@ -6,12 +6,14 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { logAdminAction } from '@/lib/data/history';
 import { propertySchema, type PropertyInput } from '@/lib/validations/property';
 import type { ActionResult } from '@/types';
-import type { PropertyStatus } from '@/types/database';
+import type { Property, PropertyStatus } from '@/types/database';
+import { generatePropertyDescription, generatePropertyDescriptionFromProperty } from '@/lib/utils/property-description';
 
-function toDbPayload(data: PropertyInput) {
+function toDbPayload(data: PropertyInput, description: string) {
   return {
     title: data.title,
     slug: data.slug,
+    description,
     property_type: data.propertyType,
     address: data.address || null,
     city: data.city,
@@ -49,6 +51,13 @@ function toDbPayload(data: PropertyInput) {
     is_published: data.isPublished,
     is_featured: data.isFeatured,
   };
+}
+
+async function getAmenityLabels(amenityIds: string[]) {
+  if (amenityIds.length === 0) return [];
+  const supabase = createAdminClient();
+  const { data } = await supabase.from('amenities').select('label_fr').in('id', amenityIds);
+  return data?.map((amenity) => amenity.label_fr) ?? [];
 }
 
 async function syncAmenities(propertyId: string, amenityIds: string[]) {
@@ -129,9 +138,10 @@ export async function createProperty(input: PropertyInput): Promise<ActionResult
     };
   }
 
+  const amenityLabels = await getAmenityLabels(parsed.data.amenityIds);
   const { data: property, error } = await supabase
     .from('properties')
-    .insert(toDbPayload(parsed.data))
+    .insert(toDbPayload(parsed.data, generatePropertyDescription(parsed.data, amenityLabels)))
     .select('id')
     .single();
 
@@ -173,7 +183,11 @@ export async function updateProperty(id: string, input: PropertyInput): Promise<
     };
   }
 
-  const { error } = await supabase.from('properties').update(toDbPayload(parsed.data)).eq('id', id);
+  const amenityLabels = await getAmenityLabels(parsed.data.amenityIds);
+  const { error } = await supabase
+    .from('properties')
+    .update(toDbPayload(parsed.data, generatePropertyDescription(parsed.data, amenityLabels)))
+    .eq('id', id);
 
   if (error) {
     return { success: false, message: 'Une erreur est survenue lors de la mise à jour du logement.' };
@@ -184,6 +198,39 @@ export async function updateProperty(id: string, input: PropertyInput): Promise<
   revalidatePublicPaths(parsed.data.slug);
 
   return { success: true, message: 'Appartement mis à jour avec succès.' };
+}
+
+/** Régénère les descriptions des appartements actuellement publics et disponibles. */
+export async function regenerateAvailablePropertyDescriptions(): Promise<ActionResult<{ updated: number }>> {
+  const supabase = createAdminClient();
+  const { data, error } = await supabase
+    .from('properties')
+    .select('*, property_amenities(amenities(label_fr))')
+    .eq('is_published', true)
+    .eq('status', 'available');
+
+  if (error) {
+    return { success: false, message: 'Impossible de récupérer les logements disponibles.' };
+  }
+
+  const results = await Promise.all((data ?? []).map(async (property: any) => {
+    const amenityLabels = (property.property_amenities ?? [])
+      .map((item: { amenities?: { label_fr?: string } | null }) => item.amenities?.label_fr)
+      .filter((label: unknown): label is string => typeof label === 'string');
+    const { error: updateError } = await supabase
+      .from('properties')
+      .update({ description: generatePropertyDescriptionFromProperty(property as Property, amenityLabels) })
+      .eq('id', property.id);
+    return updateError;
+  }));
+  const failures = results.filter(Boolean).length;
+
+  if (failures > 0) {
+    return { success: false, message: `${failures} description(s) n’ont pas pu être générée(s).` };
+  }
+
+  revalidatePublicPaths();
+  return { success: true, message: `${data?.length ?? 0} description(s) générée(s).`, data: { updated: data?.length ?? 0 } };
 }
 
 export async function deleteProperty(id: string): Promise<ActionResult> {

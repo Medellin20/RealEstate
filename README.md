@@ -143,7 +143,7 @@ supabase/               Scripts SQL (schema, RLS, seed)
 
 ### Côté public
 
-- **Catalogue** filtré par ville, prix, chambres, type, ameublement — tri + pagination — filtres conservés dans l'URL
+- **Catalogue** filtré par ville, prix, chambres et type — tri + pagination — filtres conservés dans l'URL
 - **Moteur de recherche** intégré dans le hero de la page d'accueil
 - **Fiche logement** avec galerie plein écran, équipements, carte OpenStreetMap, logements similaires, données structurées JSON-LD
 - **Demande de visite** multi-étapes (date → coordonnées → paiement Stripe Checkout ou confirmation)

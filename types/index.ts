@@ -6,7 +6,6 @@ export interface PropertyFilters {
   maxPrice?: number;
   bedrooms?: number;
   propertyType?: string;
-  furnished?: 'yes' | 'no' | 'any';
   sort?: 'price_asc' | 'price_desc' | 'recent' | 'surface';
   page?: number;
 }

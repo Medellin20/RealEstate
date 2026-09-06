@@ -1,7 +1,25 @@
 import 'server-only';
 import { createAdminClient } from '@/lib/supabase/admin';
 
-export async function getAllPropertiesAdmin(params: { search?: string; status?: string; city?: string; page?: number } = {}) {
+type AdminPropertiesParams = {
+  search?: string;
+  status?: string;
+  city?: string;
+  postalCode?: string;
+  page?: number;
+};
+
+const SEARCHABLE_COLUMNS = ['title', 'city', 'slug', 'address', 'neighborhood', 'postal_code'];
+
+function getSearchTerms(value: string) {
+  return [...new Set(value
+    .trim()
+    .split(/\s+/)
+    .map((term) => term.replace(/[^\p{L}\p{N}-]/gu, ''))
+    .filter((term) => term.length >= 2))];
+}
+
+export async function getAllPropertiesAdmin(params: AdminPropertiesParams = {}) {
   const supabase = createAdminClient();
   const pageSize = 12;
   const page = params.page && Number.isInteger(params.page) && params.page > 0 ? params.page : 1;
@@ -13,15 +31,18 @@ export async function getAllPropertiesAdmin(params: { search?: string; status?: 
     .select('*, property_images(id, url, is_primary)', { count: 'exact' })
     .order('created_at', { ascending: false });
 
-  const search = params.search?.trim();
-  if (search) {
-    query = query.or(`title.ilike.%${search}%,city.ilike.%${search}%,slug.ilike.%${search}%`);
+  for (const term of getSearchTerms(params.search ?? '')) {
+    query = query.or(SEARCHABLE_COLUMNS.map((column) => `${column}.ilike.*${term}*`).join(','));
   }
   if (params.status) {
     query = query.eq('status', params.status);
   }
   if (params.city) {
     query = query.eq('city', params.city);
+  }
+  const postalCode = params.postalCode?.replace(/[^a-zA-Z0-9 ]/g, '').trim();
+  if (postalCode) {
+    query = query.ilike('postal_code', `%${postalCode}%`);
   }
 
   const { data, error, count } = await query.range(from, to);

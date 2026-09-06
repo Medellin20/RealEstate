@@ -3,6 +3,7 @@ export const DUTCH_CITIES = [
   'Rotterdam',
   'Utrecht',
   'The Hague',
+  'Den Haag',
   'Eindhoven',
   'Groningen',
   'Almere',

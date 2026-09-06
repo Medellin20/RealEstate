@@ -15,7 +15,6 @@ interface FilterState {
   maxPrice: string;
   bedrooms: string;
   type: string;
-  furnished: string;
   sort: string;
 }
 
@@ -26,7 +25,6 @@ function readFilters(params: URLSearchParams): FilterState {
     maxPrice: params.get('maxPrice') ?? '',
     bedrooms: params.get('bedrooms') ?? '',
     type: params.get('type') ?? '',
-    furnished: params.get('furnished') ?? '',
     sort: params.get('sort') ?? 'recent',
   };
 }
@@ -50,7 +48,6 @@ export function PropertyFilters({ resultCount, cities }: { resultCount: number; 
     if (next.maxPrice) params.set('maxPrice', next.maxPrice);
     if (next.bedrooms) params.set('bedrooms', next.bedrooms);
     if (next.type) params.set('type', next.type);
-    if (next.furnished) params.set('furnished', next.furnished);
     if (next.sort && next.sort !== 'recent') params.set('sort', next.sort);
     router.push(`${pathname}${params.toString() ? `?${params}` : ''}`);
     setDrawerOpen(false);
@@ -69,7 +66,6 @@ export function PropertyFilters({ resultCount, cities }: { resultCount: number; 
       maxPrice: '',
       bedrooms: '',
       type: '',
-      furnished: '',
       sort: 'recent',
     };
     setFilters(cleared);
@@ -82,7 +78,6 @@ export function PropertyFilters({ resultCount, cities }: { resultCount: number; 
     filters.maxPrice,
     filters.bedrooms,
     filters.type,
-    filters.furnished,
   ].filter(Boolean).length;
 
   const filterFields = (
@@ -145,15 +140,6 @@ export function PropertyFilters({ resultCount, cities }: { resultCount: number; 
               {t.label}
             </option>
           ))}
-        </Select>
-      </div>
-
-      <div>
-        <label className="mb-1.5 block text-xs font-semibold text-ink-500">Ameublement</label>
-        <Select value={filters.furnished} onChange={(e) => update('furnished', e.target.value)}>
-          <option value="">Indifférent</option>
-          <option value="yes">Meublé</option>
-          <option value="no">Non meublé</option>
         </Select>
       </div>
 

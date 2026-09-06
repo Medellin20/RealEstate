@@ -39,8 +39,6 @@ export async function getPublishedProperties(filters: PropertyFilters = {}) {
   if (filters.maxPrice) query = query.lte('monthly_price', filters.maxPrice);
   if (filters.bedrooms) query = query.gte('bedrooms', filters.bedrooms);
   if (filters.propertyType) query = query.eq('property_type', filters.propertyType);
-  if (filters.furnished === 'yes') query = query.eq('is_furnished', true);
-  if (filters.furnished === 'no') query = query.eq('is_furnished', false);
 
   switch (filters.sort) {
     case 'price_asc':
