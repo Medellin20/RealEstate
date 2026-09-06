@@ -43,7 +43,6 @@ function toDbPayload(data: PropertyInput) {
     has_garage: data.hasGarage,
     has_garden: data.hasGarden,
     is_furnished: data.isFurnished,
-    pets_allowed: data.petsAllowed,
     available_from: data.availableFrom || null,
     minimum_stay_months: data.minimumStayMonths,
     status: data.status,

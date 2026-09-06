@@ -11,6 +11,7 @@ import { createReservation } from '@/actions/reservations';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Label, FieldError } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils/cn';
@@ -40,6 +41,8 @@ export function ReservationForm({
     defaultValues: {
       propertyId,
       durationMonths: 12,
+      occupantsCount: 1,
+      hasPets: false,
     },
   });
 
@@ -49,7 +52,7 @@ export function ReservationForm({
   async function goNext() {
     const fieldsByStep: (keyof ReservationInput)[][] = [
       ['firstName', 'lastName', 'email', 'phone'],
-      ['desiredMoveInDate', 'durationMonths', 'employmentContract', 'monthlyIncome', 'originCity'],
+      ['desiredMoveInDate', 'durationMonths', 'occupantsCount', 'hasPets', 'employmentContract', 'monthlyIncome', 'originCity'],
     ];
     const valid = await trigger(fieldsByStep[step]);
     if (valid) setStep((s) => Math.min(s + 1, STEPS.length - 1));
@@ -154,6 +157,21 @@ export function ReservationForm({
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
+                  <Label htmlFor="occupantsCount">Nombre d’occupants</Label>
+                  <Select id="occupantsCount" {...register('occupantsCount')}>
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number) => (
+                      <option key={number} value={number}>{number}</option>
+                    ))}
+                  </Select>
+                  <FieldError message={errors.occupantsCount?.message} />
+                </div>
+                <label className="flex cursor-pointer items-center gap-2.5 pt-7 text-sm text-ink-700">
+                  <Checkbox {...register('hasPets')} />
+                  Animaux de compagnie
+                </label>
+              </div>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div>
                   <Label htmlFor="monthlyIncome">Revenu mensuel approximatif (€)</Label>
                   <Input id="monthlyIncome" type="number" min={0} step="50" {...register('monthlyIncome')} />
                   <FieldError message={errors.monthlyIncome?.message} />
@@ -201,6 +219,8 @@ export function ReservationForm({
                 <Row label="E-mail" value={values.email || '—'} />
                 <Row label="Date de réservation" value={values.desiredMoveInDate || '—'} />
                 <Row label="Durée" value={values.durationMonths ? `${values.durationMonths} mois` : '—'} />
+                <Row label="Nombre d’occupants" value={String(values.occupantsCount || '—')} />
+                <Row label="Animaux de compagnie" value={values.hasPets ? 'Oui' : 'Non'} />
                 <Row label="Contrat de travail" value={values.employmentContract || '—'} />
                 <Row label="Revenu mensuel" value={values.monthlyIncome != null ? `${values.monthlyIncome} €` : '—'} />
                 <Row label="Ville d’origine" value={values.originCity || '—'} />

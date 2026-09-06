@@ -104,7 +104,6 @@ create table properties (
   has_garage boolean not null default false,
   has_garden boolean not null default false,
   is_furnished boolean not null default false,
-  pets_allowed boolean not null default false,
 
   -- Disponibilité
   available_from date,
@@ -174,7 +173,6 @@ create table viewing_requests (
 
   requested_date date not null,
   requested_time_slot text not null,  -- ex: '14:00 - 14:30'
-  occupants_count integer not null default 1,
 
   status viewing_status not null default 'pending',
   fee_amount numeric(10, 2) not null default 0,
@@ -206,6 +204,7 @@ create table reservations (
   desired_move_in_date date not null,
   duration_months integer not null default 12,
   occupants_count integer not null default 1,
+  has_pets boolean not null default false,
   profession text,
   monthly_income numeric(10, 2),
   employment_contract text,

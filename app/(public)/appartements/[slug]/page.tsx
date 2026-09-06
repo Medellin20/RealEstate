@@ -7,7 +7,6 @@ import {
   Ruler,
   Building,
   ArrowUpDown,
-  PawPrint,
   Sofa,
   MessageCircle,
 } from 'lucide-react';
@@ -147,10 +146,6 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                   value={property.is_furnished ? 'Meublé' : 'Non meublé'}
                 />
                 <DetailRow
-                  label="Animaux acceptés"
-                  value={property.pets_allowed ? 'Oui' : 'Non'}
-                />
-                <DetailRow
                   label="Disponible à partir du"
                   value={property.available_from ? formatDate(property.available_from) : 'Nous consulter'}
                 />
@@ -217,10 +212,6 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-1.5"><Sofa className="h-3.5 w-3.5" /> Meublé</span>
                   <span className="font-medium text-ink-700">{property.is_furnished ? 'Oui' : 'Non'}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-1.5"><PawPrint className="h-3.5 w-3.5" /> Animaux</span>
-                  <span className="font-medium text-ink-700">{property.pets_allowed ? 'Acceptés' : 'Non acceptés'}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-1.5"><ArrowUpDown className="h-3.5 w-3.5" /> Ascenseur</span>

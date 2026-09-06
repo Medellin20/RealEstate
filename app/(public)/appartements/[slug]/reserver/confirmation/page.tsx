@@ -45,6 +45,8 @@ export default async function ReservationConfirmationPage({
           <Row label="Logement" value={property?.title ?? '—'} />
           <Row label="Date de réservation" value={formatDate(reservation.desired_move_in_date)} />
           <Row label="Durée" value={`${reservation.duration_months} mois`} />
+          <Row label="Nombre d’occupants" value={String(reservation.occupants_count)} />
+          <Row label="Animaux de compagnie" value={reservation.has_pets ? 'Oui' : 'Non'} />
           <Row label="Statut" value={RESERVATION_STATUS_LABELS[reservation.status] ?? reservation.status} />
         </div>
 

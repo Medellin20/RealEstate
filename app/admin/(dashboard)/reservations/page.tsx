@@ -78,6 +78,7 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
                 <p className="break-all"><span className="text-ink-400">E-mail : </span>{reservation.clients?.email}</p>
                 <p><span className="text-ink-400">Entrée : </span>{formatDate(reservation.desired_move_in_date)}</p>
                 <p><span className="text-ink-400">Durée : </span>{reservation.duration_months} mois · {reservation.occupants_count} occupant(s)</p>
+                <p><span className="text-ink-400">Animaux de compagnie : </span>{reservation.has_pets ? 'Oui' : 'Non'}</p>
               </div>
 
               {reservation.message && (

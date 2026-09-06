@@ -86,7 +86,6 @@ export interface Property {
   has_garage: boolean;
   has_garden: boolean;
   is_furnished: boolean;
-  pets_allowed: boolean;
   available_from: string | null;
   minimum_stay_months: number | null;
   status: PropertyStatus;
@@ -127,7 +126,6 @@ export interface ViewingRequest {
   client_id: string;
   requested_date: string;
   requested_time_slot: string;
-  occupants_count: number;
   status: ViewingStatus;
   fee_amount: number;
   stripe_checkout_session_id: string | null;
@@ -146,6 +144,7 @@ export interface Reservation {
   desired_move_in_date: string;
   duration_months: number;
   occupants_count: number;
+  has_pets: boolean;
   profession: string | null;
   monthly_income: number | null;
   employment_contract: string | null;

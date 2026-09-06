@@ -41,7 +41,6 @@ export const propertySchema = z.object({
   hasGarage: z.boolean().default(false),
   hasGarden: z.boolean().default(false),
   isFurnished: z.boolean().default(false),
-  petsAllowed: z.boolean().default(false),
 
   availableFrom: z.string().optional().or(z.literal('')),
   minimumStayMonths: z.coerce.number().int().min(1).default(12),

@@ -30,7 +30,6 @@ const BOOLEAN_FIELDS: { key: keyof PropertyInput; label: string }[] = [
   { key: 'hasGarage', label: 'Garage' },
   { key: 'hasGarden', label: 'Jardin' },
   { key: 'isFurnished', label: 'Meublé' },
-  { key: 'petsAllowed', label: 'Animaux autorisés' },
 ];
 
 function propertyToFormValues(property: Property, amenityIds: string[]): PropertyInput {
@@ -68,7 +67,6 @@ function propertyToFormValues(property: Property, amenityIds: string[]): Propert
     hasGarage: property.has_garage,
     hasGarden: property.has_garden,
     isFurnished: property.is_furnished,
-    petsAllowed: property.pets_allowed,
     availableFrom: property.available_from ?? '',
     minimumStayMonths: property.minimum_stay_months ?? 12,
     status: property.status,
@@ -135,7 +133,6 @@ export function PropertyForm({
             hasGarage: false,
             hasGarden: false,
             isFurnished: false,
-            petsAllowed: false,
             minimumStayMonths: 12,
             status: 'draft',
             isPublished: false,
