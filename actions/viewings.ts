@@ -1,6 +1,5 @@
 'use server';
 
-import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { upsertClient } from '@/lib/data/clients';
@@ -17,7 +16,7 @@ import type { ActionResult } from '@/types';
 export async function createViewingRequest(
   input: ViewingRequestInput,
   propertySlug: string
-): Promise<ActionResult> {
+): Promise<ActionResult<{ reference: string }>> {
   const parsed = viewingRequestSchema.safeParse(input);
   if (!parsed.success) {
     return {
@@ -88,5 +87,9 @@ export async function createViewingRequest(
   revalidatePath('/admin/visites');
   revalidatePath('/admin');
 
-  redirect(`/appartements/${propertySlug}/visite/confirmation?ref=${reference}`);
+  return {
+    success: true,
+    message: 'Votre demande de visite a bien été envoyée.',
+    data: { reference },
+  };
 }

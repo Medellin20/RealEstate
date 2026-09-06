@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -28,6 +29,7 @@ export function ViewingRequestForm({
 }) {
   const [step, setStep] = React.useState(0);
   const [isPending, startTransition] = React.useTransition();
+  const router = useRouter();
 
   const {
     register,
@@ -55,10 +57,12 @@ export function ViewingRequestForm({
   function onSubmit(data: ViewingRequestInput) {
     startTransition(async () => {
       const result = await createViewingRequest(data, propertySlug);
-      // Si l'action n'a pas redirigé (ex: erreur de validation serveur), on informe l'utilisateur.
-      if (result && !result.success) {
-        toast.error(result.message);
+      if (!result.success || !result.data) {
+        toast.error(result.message || 'La demande de visite n’a pas pu être envoyée.');
+        return;
       }
+
+      router.push(`/appartements/${propertySlug}/visite/confirmation?ref=${encodeURIComponent(result.data.reference)}`);
     });
   }
 
