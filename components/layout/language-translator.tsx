@@ -19,6 +19,12 @@ declare global {
 }
 
 const GOOGLE_TRANSLATE_SCRIPT = 'https://translate.google.com/translate_a/element.js?cb=realEstateTranslateReady';
+const SOURCE_LANGUAGE = 'fr';
+const DEFAULT_LANGUAGE = 'nl';
+
+function setTranslationCookie(language: string) {
+  document.cookie = `googtrans=/${SOURCE_LANGUAGE}/${language}; path=/; SameSite=Lax`;
+}
 
 export function LanguageTranslator({ id, className }: { id: string; className?: string }) {
   const initialized = React.useRef(false);
@@ -26,17 +32,25 @@ export function LanguageTranslator({ id, className }: { id: string; className?: 
   function changeLanguage(event: React.ChangeEvent<HTMLSelectElement>) {
     const language = event.target.value;
     if (!language) return;
-    document.cookie = `googtrans=/fr/${language}; path=/; SameSite=Lax`;
+    setTranslationCookie(language);
     window.location.reload();
   }
 
   React.useEffect(() => {
+    // Le contenu source est rédigé en français. Au premier passage, on initialise
+    // Google Translate en néerlandais sans écraser le choix ultérieur du visiteur.
+    if (!document.cookie.split('; ').some((cookie) => cookie.startsWith('googtrans='))) {
+      setTranslationCookie(DEFAULT_LANGUAGE);
+      window.location.reload();
+      return;
+    }
+
     const initialize = () => {
       if (initialized.current || !window.google?.translate || !document.getElementById(id)) return;
 
       new window.google.translate.TranslateElement(
         {
-          pageLanguage: 'fr',
+          pageLanguage: SOURCE_LANGUAGE,
           includedLanguages: 'fr,nl,en,es,it,de,pt,ar,pl',
           autoDisplay: false,
         },
@@ -53,8 +67,8 @@ export function LanguageTranslator({ id, className }: { id: string; className?: 
         select.dataset.languageBound = 'true';
         select.setAttribute('aria-label', 'Choisir la langue du site');
         select.addEventListener('change', () => {
-          const language = select.value || 'fr';
-          document.cookie = `googtrans=/fr/${language}; path=/; SameSite=Lax`;
+          const language = select.value || SOURCE_LANGUAGE;
+          setTranslationCookie(language);
         });
         return true;
       };
