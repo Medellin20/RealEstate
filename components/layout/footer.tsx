@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Facebook, Home, Instagram, Linkedin, Mail, Phone } from 'lucide-react';
+import { Facebook, Home, Instagram, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
 
 const COLUMN_LINKS = [
   { href: '/', label: 'Accueil' },
@@ -100,14 +100,30 @@ export function Footer() {
             </li>
             <li>
               <a
-                href="tel:+31201234567"
+                href="https://wa.me/31649496257"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Contacter Real Estate NL sur WhatsApp"
                 className="flex items-center gap-2.5 text-sm text-sand-300 transition-colors hover:text-white"
               >
                 <Phone className="h-4 w-4 shrink-0" />
-                +31 20 123 4567
+                WhatsApp : +31 6 49496257
               </a>
             </li>
           </ul>
+        </div>
+      </div>
+
+      <div className="border-t border-white/10">
+        <div className="container-app grid gap-4 py-5 text-xs leading-relaxed text-sand-400 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start">
+          <div className="flex min-w-0 gap-2.5">
+            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-sand-300" />
+            <p>
+              <span className="font-semibold text-sand-200">NL Real Estate B.V.</span> · Makelaardij ·
+              opgericht in 2006 · Gustav Mahlerplein 64, Unit A, 1082 MA Amsterdam
+            </p>
+          </div>
+          <p className="sm:text-right">KvK 34253699 · Kluisnummer NL02139484</p>
         </div>
       </div>
 
