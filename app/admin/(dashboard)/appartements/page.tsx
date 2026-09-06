@@ -6,8 +6,8 @@ import { getAllPropertiesAdmin } from '@/lib/data/admin-properties';
 import { PropertyRowActions } from '@/components/admin/property-row-actions';
 import { Pagination } from '@/components/properties/pagination';
 import { Input } from '@/components/ui/input';
-import { Select } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
+import { AutoSubmitSelect } from '@/components/admin/auto-submit-select';
 import { Badge, StatusDot } from '@/components/ui/badge';
 import { EmptyState } from '@/components/ui/empty-state';
 import { DUTCH_CITIES, PROPERTY_STATUS_LABELS } from '@/lib/utils/constants';
@@ -21,11 +21,15 @@ export default async function AdminPropertiesPage({
 }: {
   searchParams: { search?: string; status?: string; city?: string; page?: string };
 }) {
+  const requestedPage = Number(searchParams.page);
+  const status = Object.hasOwn(PROPERTY_STATUS_LABELS, searchParams.status ?? '') ? searchParams.status : undefined;
+  const city = DUTCH_CITIES.includes(searchParams.city as (typeof DUTCH_CITIES)[number]) ? searchParams.city : undefined;
+  const hasActiveFilters = Boolean(searchParams.search?.trim() || status || city);
   const { properties, total, page, pageSize } = await getAllPropertiesAdmin({
     search: searchParams.search,
-    status: searchParams.status,
-    city: searchParams.city,
-    page: searchParams.page ? Number(searchParams.page) : 1,
+    status,
+    city,
+    page: Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1,
   });
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
@@ -49,21 +53,26 @@ export default async function AdminPropertiesPage({
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-300" />
           <Input name="search" placeholder="Rechercher un titre, une ville, un slug..." defaultValue={searchParams.search} className="pl-10" />
         </div>
-        <Select name="status" defaultValue={searchParams.status} className="sm:w-52">
+        <AutoSubmitSelect name="status" defaultValue={status} className="sm:w-52">
           <option value="">Tous les statuts</option>
           <option value="draft">Brouillon</option>
           <option value="available">Disponible</option>
           <option value="reserved">Réservé</option>
           <option value="rented">Loué</option>
           <option value="unavailable">Indisponible</option>
-        </Select>
-        <Select name="city" defaultValue={searchParams.city} className="sm:w-52">
+        </AutoSubmitSelect>
+        <AutoSubmitSelect name="city" defaultValue={city} className="sm:w-52">
           <option value="">Toutes les villes</option>
           {DUTCH_CITIES.map((city) => (
             <option key={city} value={city}>{city}</option>
           ))}
-        </Select>
+        </AutoSubmitSelect>
         <Button type="submit" variant="outline" className="w-full sm:w-auto">Filtrer</Button>
+        {hasActiveFilters && (
+          <Link href="/admin/appartements" className="inline-flex h-11 items-center justify-center rounded-xl px-3.5 text-sm font-medium text-ink-500 hover:bg-sand-100 hover:text-ink-900">
+            Réinitialiser
+          </Link>
+        )}
       </form>
 
       {properties.length === 0 ? (
@@ -151,7 +160,12 @@ export default async function AdminPropertiesPage({
             })}
           </div>
 
-          <Pagination currentPage={page} totalPages={totalPages} basePath="/admin/appartements" searchParams={searchParams} />
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            basePath="/admin/appartements"
+            searchParams={{ search: searchParams.search?.trim() || undefined, status, city }}
+          />
         </>
       )}
     </div>

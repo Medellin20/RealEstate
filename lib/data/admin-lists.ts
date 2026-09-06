@@ -8,7 +8,9 @@ export async function getAllViewingsAdmin(params: { status?: string; date?: stri
     .select('*, properties(title, slug, city), clients(first_name, last_name, email, phone)')
     .order('created_at', { ascending: false });
 
-  if (params.status) query = query.eq('status', params.status);
+  if (params.status && ['pending', 'payment_pending', 'paid', 'confirmed', 'cancelled', 'completed'].includes(params.status)) {
+    query = query.eq('status', params.status);
+  }
   if (params.date) query = query.eq('requested_date', params.date);
 
   const { data, error } = await query;
@@ -23,7 +25,9 @@ export async function getAllReservationsAdmin(params: { status?: string; scope?:
     .select('*, properties(title, slug, city), clients(first_name, last_name, email, phone)')
     .order('created_at', { ascending: false });
 
-  if (params.status) query = query.eq('status', params.status);
+  if (params.status && ['submitted', 'under_review', 'accepted', 'rejected', 'awaiting_guarantee', 'guarantee_paid', 'confirmed', 'cancelled'].includes(params.status)) {
+    query = query.eq('status', params.status);
+  }
   if (params.scope === 'pending') query = query.in('status', ['submitted', 'under_review']);
 
   const { data, error } = await query;
@@ -55,7 +59,9 @@ export async function getAllGuaranteesAdmin(params: { status?: string } = {}) {
     .select('*, reservations(reference, property_id, properties(title)), clients(first_name, last_name, email)')
     .order('created_at', { ascending: false });
 
-  if (params.status) query = query.eq('status', params.status);
+  if (params.status && ['awaiting_payment', 'payment_declared', 'payment_received', 'reservation_confirmed', 'refund_requested', 'refund_processing', 'refunded', 'cancelled'].includes(params.status)) {
+    query = query.eq('status', params.status);
+  }
 
   const { data, error } = await query;
   if (error) return [];
@@ -69,7 +75,9 @@ export async function getAllRefundsAdmin(params: { status?: string } = {}) {
     .select('*, reservations(reference, properties(title)), clients(first_name, last_name, email)')
     .order('created_at', { ascending: false });
 
-  if (params.status) query = query.eq('status', params.status);
+  if (params.status && ['requested', 'approved', 'processing', 'refunded', 'rejected'].includes(params.status)) {
+    query = query.eq('status', params.status);
+  }
 
   const { data, error } = await query;
   if (error) return [];
@@ -80,8 +88,9 @@ export async function getAllClientsAdmin(search?: string) {
   const supabase = createAdminClient();
   let query = supabase.from('clients').select('*').order('created_at', { ascending: false });
 
-  if (search) {
-    query = query.or(`first_name.ilike.%${search}%,last_name.ilike.%${search}%,email.ilike.%${search}%`);
+  const normalizedSearch = search?.trim();
+  if (normalizedSearch) {
+    query = query.or(`first_name.ilike.%${normalizedSearch}%,last_name.ilike.%${normalizedSearch}%,email.ilike.%${normalizedSearch}%`);
   }
 
   const { data, error } = await query;

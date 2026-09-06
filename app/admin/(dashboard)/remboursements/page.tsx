@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { getAllRefundsAdmin } from '@/lib/data/admin-lists';
 import { updateRefundStatus } from '@/actions/admin-refunds';
 import { StatusSelect } from '@/components/admin/status-select';
@@ -35,6 +36,11 @@ export default async function AdminRefundsPage({ searchParams }: { searchParams:
             ))}
           </AutoSubmitSelect>
         </form>
+        {searchParams.status && (
+          <Link href="/admin/remboursements" className="text-sm font-medium text-canal-700 hover:text-canal-900">
+            Réinitialiser les filtres
+          </Link>
+        )}
       </div>
 
       {refunds.length === 0 ? (

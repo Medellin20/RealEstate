@@ -53,6 +53,11 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
             </AutoSubmitSelect>
             {searchParams.scope === 'pending' && <input type="hidden" name="scope" value="pending" />}
           </form>
+          {(searchParams.status || searchParams.scope === 'pending') && (
+            <Link href="/admin/reservations" className="inline-flex h-9 items-center justify-center rounded-xl px-3 text-sm font-medium text-canal-700 hover:bg-canal-50 hover:text-canal-900">
+              Réinitialiser
+            </Link>
+          )}
         </div>
       </div>
 

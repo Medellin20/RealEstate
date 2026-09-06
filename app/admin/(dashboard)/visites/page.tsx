@@ -46,6 +46,11 @@ export default async function AdminViewingsPage({ searchParams }: { searchParams
           </AutoSubmitSelect>
           {searchParams.date === 'today' && <input type="hidden" name="date" value="today" />}
         </form>
+        {(searchParams.status || searchParams.date === 'today') && (
+          <Link href="/admin/visites" className="text-sm font-medium text-canal-700 hover:text-canal-900">
+            Réinitialiser les filtres
+          </Link>
+        )}
       </div>
 
       {viewings.length === 0 ? (

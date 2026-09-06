@@ -40,6 +40,8 @@ export const PROPERTY_STATUS_LABELS: Record<string, { label: string; colorClass:
 
 export const VIEWING_STATUS_LABELS: Record<string, string> = {
   pending: 'En attente',
+  payment_pending: 'En attente de paiement',
+  paid: 'Payée',
   confirmed: 'Confirmée',
   cancelled: 'Annulée',
   completed: 'Terminée',
@@ -50,6 +52,8 @@ export const RESERVATION_STATUS_LABELS: Record<string, string> = {
   under_review: 'En cours d’examen',
   accepted: 'Acceptée',
   rejected: 'Refusée',
+  awaiting_guarantee: 'En attente de garantie',
+  guarantee_paid: 'Garantie versée',
   confirmed: 'Confirmée',
   cancelled: 'Annulée',
 };

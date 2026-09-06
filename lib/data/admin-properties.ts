@@ -4,7 +4,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 export async function getAllPropertiesAdmin(params: { search?: string; status?: string; city?: string; page?: number } = {}) {
   const supabase = createAdminClient();
   const pageSize = 12;
-  const page = params.page && params.page > 0 ? params.page : 1;
+  const page = params.page && Number.isInteger(params.page) && params.page > 0 ? params.page : 1;
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
@@ -13,8 +13,9 @@ export async function getAllPropertiesAdmin(params: { search?: string; status?: 
     .select('*, property_images(id, url, is_primary)', { count: 'exact' })
     .order('created_at', { ascending: false });
 
-  if (params.search) {
-    query = query.or(`title.ilike.%${params.search}%,city.ilike.%${params.search}%,slug.ilike.%${params.search}%`);
+  const search = params.search?.trim();
+  if (search) {
+    query = query.or(`title.ilike.%${search}%,city.ilike.%${search}%,slug.ilike.%${search}%`);
   }
   if (params.status) {
     query = query.eq('status', params.status);

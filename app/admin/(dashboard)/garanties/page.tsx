@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { getAllGuaranteesAdmin } from '@/lib/data/admin-lists';
 import { updateGuaranteeStatus } from '@/actions/admin-guarantees';
 import { StatusSelect } from '@/components/admin/status-select';
@@ -35,6 +36,11 @@ export default async function AdminGuaranteesPage({ searchParams }: { searchPara
             ))}
           </AutoSubmitSelect>
         </form>
+        {searchParams.status && (
+          <Link href="/admin/garanties" className="text-sm font-medium text-canal-700 hover:text-canal-900">
+            Réinitialiser les filtres
+          </Link>
+        )}
       </div>
 
       {guarantees.length === 0 ? (

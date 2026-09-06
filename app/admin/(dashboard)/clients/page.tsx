@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { Search, Users } from 'lucide-react';
 import { getAllClientsAdmin } from '@/lib/data/admin-lists';
 import { Input } from '@/components/ui/input';
@@ -25,6 +26,11 @@ export default async function AdminClientsPage({ searchParams }: { searchParams:
           <Input name="search" placeholder="Rechercher par nom ou e-mail..." defaultValue={searchParams.search} className="pl-10" />
         </div>
         <Button type="submit" variant="outline" className="w-full sm:w-auto">Rechercher</Button>
+        {searchParams.search?.trim() && (
+          <Link href="/admin/clients" className="inline-flex h-11 items-center justify-center rounded-xl px-3.5 text-sm font-medium text-ink-500 hover:bg-sand-100 hover:text-ink-900">
+            Réinitialiser
+          </Link>
+        )}
       </form>
 
       {clients.length === 0 ? (
