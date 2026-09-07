@@ -19,6 +19,9 @@ type EmailAlertResult =
         | 'delivery_failed';
     };
 
+/**
+ * Échappe les caractères HTML dangereux.
+ */
 function escapeHtml(value: string): string {
   return value.replace(
     /[&<>'"]/g,
@@ -29,20 +32,34 @@ function escapeHtml(value: string): string {
         '>': '&gt;',
         "'": '&#39;',
         '"': '&quot;',
-      })[character] as string
+      })[character] ?? character
   );
+}
+
+/**
+ * Vérifie si une adresse e-mail est valide.
+ */
+function isValidEmail(address: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address);
 }
 
 /**
  * Envoie une alerte e-mail à l'administrateur.
  *
- * L'échec de l'e-mail ne bloque pas la création
- * de la demande de visite.
+ * Variables d'environnement nécessaires :
+ *
+ * GMAIL_USER
+ * GMAIL_APP_PASSWORD
+ * ALERT_EMAIL
  */
 export async function sendAdminAlert(
   subject: string,
   details: AlertDetails
 ): Promise<EmailAlertResult> {
+  // ---------------------------------------------------------
+  // 1. Récupération des variables d'environnement
+  // ---------------------------------------------------------
+
   const user = process.env.GMAIL_USER?.trim();
 
   const appPassword = process.env.GMAIL_APP_PASSWORD
@@ -51,12 +68,13 @@ export async function sendAdminAlert(
 
   const recipient = process.env.ALERT_EMAIL?.trim();
 
-  /*
-   * Vérification de la configuration.
-   */
+  // ---------------------------------------------------------
+  // 2. Vérification de la configuration
+  // ---------------------------------------------------------
+
   if (!user || !appPassword || !recipient) {
     console.error(
-      'EMAIL CONFIG ERROR: GMAIL_USER, GMAIL_APP_PASSWORD ou ALERT_EMAIL est manquant.'
+      'EMAIL CONFIG ERROR: variables GMAIL_USER, GMAIL_APP_PASSWORD ou ALERT_EMAIL manquantes.'
     );
 
     return {
@@ -65,29 +83,22 @@ export async function sendAdminAlert(
     };
   }
 
-  /*
-   * Support de plusieurs destinataires :
-   *
-   * email1@gmail.com,email2@gmail.com
-   *
-   * ou
-   *
-   * email1@gmail.com;email2@gmail.com
-   */
+  // ---------------------------------------------------------
+  // 3. Gestion de plusieurs destinataires
+  // ---------------------------------------------------------
+
   const recipients = recipient
     .split(/[;,]/)
     .map((address) => address.trim())
     .filter(Boolean);
 
-  /*
-   * Validation correcte des adresses e-mail.
-   */
-  const isEmail = (address: string): boolean =>
-  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address);
+  // ---------------------------------------------------------
+  // 4. Validation des destinataires
+  // ---------------------------------------------------------
 
   if (
     recipients.length === 0 ||
-    !recipients.every(isEmail)
+    !recipients.every(isValidEmail)
   ) {
     console.error(
       'EMAIL CONFIG ERROR: ALERT_EMAIL contient une adresse e-mail invalide.',
@@ -100,9 +111,10 @@ export async function sendAdminAlert(
     };
   }
 
-  /*
-   * Construction du contenu texte.
-   */
+  // ---------------------------------------------------------
+  // 5. Préparation du contenu texte
+  // ---------------------------------------------------------
+
   const text = Object.entries(details)
     .filter(
       ([, value]) =>
@@ -115,9 +127,10 @@ export async function sendAdminAlert(
     )
     .join('\n');
 
-  /*
-   * Construction du tableau HTML.
-   */
+  // ---------------------------------------------------------
+  // 6. Préparation des lignes HTML
+  // ---------------------------------------------------------
+
   const rows = Object.entries(details)
     .filter(
       ([, value]) =>
@@ -127,21 +140,25 @@ export async function sendAdminAlert(
     .map(
       ([label, value]) => `
         <tr>
-          <td style="
-            padding: 10px 12px;
-            color: #607078;
-            border-bottom: 1px solid #eeeeee;
-            vertical-align: top;
-          ">
+          <td
+            style="
+              padding: 10px 12px;
+              color: #607078;
+              border-bottom: 1px solid #eeeeee;
+              vertical-align: top;
+            "
+          >
             ${escapeHtml(label)}
           </td>
 
-          <td style="
-            padding: 10px 12px;
-            font-weight: 600;
-            border-bottom: 1px solid #eeeeee;
-            vertical-align: top;
-          ">
+          <td
+            style="
+              padding: 10px 12px;
+              font-weight: 600;
+              border-bottom: 1px solid #eeeeee;
+              vertical-align: top;
+            "
+          >
             ${escapeHtml(String(value))}
           </td>
         </tr>
@@ -149,12 +166,11 @@ export async function sendAdminAlert(
     )
     .join('');
 
+  // ---------------------------------------------------------
+  // 7. Création du transporteur SMTP Gmail
+  // ---------------------------------------------------------
+
   try {
-    /*
-     * Configuration SMTP Gmail.
-     *
-     * Port 465 = connexion SSL directe.
-     */
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 465,
@@ -170,14 +186,20 @@ export async function sendAdminAlert(
       socketTimeout: 15000,
     });
 
-    /*
-     * Vérification de la connexion SMTP.
-     */
+    // -------------------------------------------------------
+    // 8. Vérification de la connexion Gmail
+    // -------------------------------------------------------
+
     await transporter.verify();
 
-    /*
-     * Envoi du message.
-     */
+    console.log(
+      'GMAIL SMTP CONNECTION OK'
+    );
+
+    // -------------------------------------------------------
+    // 9. Envoi du message
+    // -------------------------------------------------------
+
     const info = await transporter.sendMail({
       from: {
         name: 'Real Estate NL',
@@ -192,14 +214,19 @@ export async function sendAdminAlert(
 
       html: `
         <!DOCTYPE html>
+
         <html lang="fr">
           <head>
             <meta charset="UTF-8" />
+
             <meta
               name="viewport"
               content="width=device-width, initial-scale=1.0"
             />
-            <title>${escapeHtml(subject)}</title>
+
+            <title>
+              ${escapeHtml(subject)}
+            </title>
           </head>
 
           <body
@@ -211,6 +238,7 @@ export async function sendAdminAlert(
               color: #263238;
             "
           >
+
             <div
               style="
                 max-width: 700px;
@@ -221,6 +249,8 @@ export async function sendAdminAlert(
                 overflow: hidden;
               "
             >
+
+              <!-- En-tête -->
 
               <div
                 style="
@@ -239,6 +269,8 @@ export async function sendAdminAlert(
                   ${escapeHtml(subject)}
                 </h2>
               </div>
+
+              <!-- Contenu -->
 
               <div style="padding: 24px;">
 
@@ -260,19 +292,27 @@ export async function sendAdminAlert(
                     line-height: 1.6;
                   "
                 >
-                  Connectez-vous à l’espace administrateur
+                  Une nouvelle demande vient d'être
+                  enregistrée sur le site Real Estate NL.
+                  Connectez-vous à l'espace administrateur
                   pour traiter cette demande.
                 </p>
 
               </div>
+
             </div>
+
           </body>
         </html>
       `,
     });
 
+    // -------------------------------------------------------
+    // 10. Confirmation
+    // -------------------------------------------------------
+
     console.log(
-      'EMAIL SENT:',
+      'EMAIL SENT SUCCESSFULLY:',
       info.messageId
     );
 
@@ -280,6 +320,10 @@ export async function sendAdminAlert(
       sent: true,
     };
   } catch (error) {
+    // -------------------------------------------------------
+    // 11. Gestion des erreurs SMTP
+    // -------------------------------------------------------
+
     console.error(
       'EMAIL DELIVERY ERROR:',
       error
