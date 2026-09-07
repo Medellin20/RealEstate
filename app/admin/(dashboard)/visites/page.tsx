@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { getAllViewingsAdmin } from '@/lib/data/admin-lists';
 import { updateViewingStatus } from '@/actions/admin-viewings';
 import { StatusSelect } from '@/components/admin/status-select';
+import { ApproveViewingButton } from '@/components/admin/approve-viewing-button';
 import { Badge } from '@/components/ui/badge';
 import { EmptyState } from '@/components/ui/empty-state';
 import { AutoSubmitSelect } from '@/components/admin/auto-submit-select';
@@ -20,7 +21,7 @@ const STATUS_OPTIONS = Object.entries(VIEWING_STATUS_LABELS).map(([value, label]
 
 export default async function AdminViewingsPage({ searchParams }: { searchParams: { status?: string; date?: string } }) {
   const today = new Date().toISOString().slice(0, 10);
-  const viewings = await getAllViewingsAdmin({
+  const { viewings, error } = await getAllViewingsAdmin({
     status: searchParams.status,
     date: searchParams.date === 'today' ? today : undefined,
   });
@@ -53,7 +54,11 @@ export default async function AdminViewingsPage({ searchParams }: { searchParams
         )}
       </div>
 
-      {viewings.length === 0 ? (
+      {error ? (
+        <div role="alert" className="rounded-2xl border border-brick-200 bg-brick-50 p-5 text-sm text-brick-700">
+          Impossible de charger les visites : {error}
+        </div>
+      ) : viewings.length === 0 ? (
         <EmptyState title="Aucune demande de visite" />
       ) : (
         <div className="space-y-3">
@@ -87,11 +92,16 @@ export default async function AdminViewingsPage({ searchParams }: { searchParams
 
               <div className="mt-3 flex flex-col gap-3 border-t border-ink-100 pt-3 sm:flex-row sm:items-center sm:justify-between">
                 <span className="text-xs text-ink-400">Reçue le {formatDateTime(viewing.created_at)}</span>
-                <StatusSelect
-                  value={viewing.status as ViewingStatus}
-                  options={STATUS_OPTIONS}
-                  onUpdate={(status) => updateViewingStatus(viewing.id, status)}
-                />
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                  {viewing.status !== 'confirmed' && viewing.status !== 'completed' && viewing.status !== 'cancelled' && (
+                    <ApproveViewingButton viewingId={viewing.id} />
+                  )}
+                  <StatusSelect
+                    value={viewing.status as ViewingStatus}
+                    options={STATUS_OPTIONS}
+                    onUpdate={(status) => updateViewingStatus(viewing.id, status)}
+                  />
+                </div>
               </div>
             </div>
           ))}
