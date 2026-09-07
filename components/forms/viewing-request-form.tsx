@@ -102,7 +102,12 @@ export function ViewingRequestForm({
         ))}
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          void handleSubmit(onSubmit)();
+        }}
+      >
         <AnimatePresence mode="wait">
           {step === 0 && (
             <motion.div
@@ -236,7 +241,12 @@ export function ViewingRequestForm({
               <ArrowRight className="h-4 w-4" />
             </Button>
           ) : (
-            <Button type="submit" isLoading={isPending} className="w-full sm:w-auto">
+            <Button
+              type="button"
+              onClick={() => void handleSubmit(onSubmit)()}
+              isLoading={isPending}
+              className="w-full sm:w-auto"
+            >
               Envoyer la demande de visite
             </Button>
           )}
