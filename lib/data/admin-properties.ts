@@ -6,6 +6,8 @@ type AdminPropertiesParams = {
   status?: string;
   city?: string;
   postalCode?: string;
+  minPrice?: number;
+  maxPrice?: number;
   page?: number;
 };
 
@@ -44,6 +46,8 @@ export async function getAllPropertiesAdmin(params: AdminPropertiesParams = {}) 
   if (postalCode) {
     query = query.ilike('postal_code', `%${postalCode}%`);
   }
+  if (params.minPrice !== undefined) query = query.gte('monthly_price', params.minPrice);
+  if (params.maxPrice !== undefined) query = query.lte('monthly_price', params.maxPrice);
 
   const { data, error, count } = await query.range(from, to);
   if (error) {

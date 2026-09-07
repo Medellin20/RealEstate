@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { dutchPhoneSchema } from './phone';
 
 export const viewingRequestSchema = z.object({
   propertyId: z.string().uuid(),
@@ -12,11 +13,7 @@ export const viewingRequestSchema = z.object({
   firstName: z.string().trim().min(2, 'Le prénom doit contenir au moins 2 caractères.'),
   lastName: z.string().trim().min(2, 'Le nom doit contenir au moins 2 caractères.'),
   email: z.string().trim().email('Adresse e-mail invalide.'),
-  phone: z
-    .string()
-    .trim()
-    .min(8, 'Numéro de téléphone invalide.')
-    .max(20, 'Numéro de téléphone invalide.'),
+  phone: dutchPhoneSchema,
 });
 
 export type ViewingRequestInput = z.infer<typeof viewingRequestSchema>;

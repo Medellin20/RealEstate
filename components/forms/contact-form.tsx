@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label, FieldError } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { formatDutchPhoneInput } from '@/lib/utils/phone';
 
 export function ContactForm() {
   const [isPending, startTransition] = React.useTransition();
@@ -53,7 +54,14 @@ export function ContactForm() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <Label htmlFor="phone">Téléphone (facultatif)</Label>
-          <Input id="phone" type="tel" placeholder="+31 6 12 34 56 78" {...register('phone')} />
+          <Input
+            id="phone"
+            type="tel"
+            inputMode="tel"
+            maxLength={12}
+            placeholder="+31612345678"
+            {...register('phone', { onChange: (event) => { event.target.value = formatDutchPhoneInput(event.target.value, true); } })}
+          />
           <FieldError message={errors.phone?.message} />
         </div>
         <div>

@@ -19,18 +19,24 @@ export const dynamic = 'force-dynamic';
 export default async function AdminPropertiesPage({
   searchParams,
 }: {
-  searchParams: { search?: string; status?: string; city?: string; postalCode?: string; page?: string };
+  searchParams: { search?: string; status?: string; city?: string; postalCode?: string; minPrice?: string; maxPrice?: string; page?: string };
 }) {
   const requestedPage = Number(searchParams.page);
   const status = Object.hasOwn(PROPERTY_STATUS_LABELS, searchParams.status ?? '') ? searchParams.status : undefined;
   const city = DUTCH_CITIES.includes(searchParams.city as (typeof DUTCH_CITIES)[number]) ? searchParams.city : undefined;
   const postalCode = searchParams.postalCode?.replace(/[^a-zA-Z0-9 ]/g, '').trim() || undefined;
-  const hasActiveFilters = Boolean(searchParams.search?.trim() || status || city || postalCode);
+  const minPrice = Number(searchParams.minPrice);
+  const maxPrice = Number(searchParams.maxPrice);
+  const validMinPrice = Number.isFinite(minPrice) && minPrice >= 0 ? minPrice : undefined;
+  const validMaxPrice = Number.isFinite(maxPrice) && maxPrice >= 0 ? maxPrice : undefined;
+  const hasActiveFilters = Boolean(searchParams.search?.trim() || status || city || postalCode || validMinPrice !== undefined || validMaxPrice !== undefined);
   const { properties, total, page, pageSize } = await getAllPropertiesAdmin({
     search: searchParams.search,
     status,
     city,
     postalCode,
+    minPrice: validMinPrice,
+    maxPrice: validMaxPrice,
     page: Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1,
   });
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
@@ -59,6 +65,8 @@ export default async function AdminPropertiesPage({
           <MapPin className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-300" />
           <Input name="postalCode" placeholder="Code postal" defaultValue={postalCode} className="pl-10" />
         </div>
+        <Input name="minPrice" type="number" min="0" step="0.01" placeholder="Prix min." defaultValue={searchParams.minPrice} className="sm:w-36" />
+        <Input name="maxPrice" type="number" min="0" step="0.01" placeholder="Prix max." defaultValue={searchParams.maxPrice} className="sm:w-36" />
         <AutoSubmitSelect name="status" defaultValue={status} className="sm:w-52">
           <option value="">Tous les statuts</option>
           <option value="draft">Brouillon</option>
@@ -170,7 +178,14 @@ export default async function AdminPropertiesPage({
             currentPage={page}
             totalPages={totalPages}
             basePath="/admin/appartements"
-            searchParams={{ search: searchParams.search?.trim() || undefined, status, city, postalCode }}
+            searchParams={{
+              search: searchParams.search?.trim() || undefined,
+              status,
+              city,
+              postalCode,
+              minPrice: validMinPrice?.toString(),
+              maxPrice: validMaxPrice?.toString(),
+            }}
           />
         </>
       )}

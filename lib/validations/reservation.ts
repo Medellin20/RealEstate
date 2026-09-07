@@ -1,11 +1,12 @@
 import { z } from 'zod';
+import { dutchPhoneSchema } from './phone';
 
 export const reservationSchema = z.object({
   propertyId: z.string().uuid(),
   firstName: z.string().trim().min(2, 'Le prénom doit contenir au moins 2 caractères.'),
   lastName: z.string().trim().min(2, 'Le nom doit contenir au moins 2 caractères.'),
   email: z.string().trim().email('Adresse e-mail invalide.'),
-  phone: z.string().trim().min(8, 'Numéro de téléphone invalide.').max(20),
+  phone: dutchPhoneSchema,
   desiredMoveInDate: z.string().min(1, 'Merci d’indiquer une date d’entrée souhaitée.'),
   durationMonths: z.coerce
     .number()

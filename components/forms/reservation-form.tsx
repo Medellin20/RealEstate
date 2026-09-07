@@ -15,6 +15,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label, FieldError } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils/cn';
+import { formatDutchPhoneInput } from '@/lib/utils/phone';
 
 const STEPS = ['Vos coordonnées', 'Votre projet de location', 'Récapitulatif'] as const;
 
@@ -124,7 +125,14 @@ export function ReservationForm({
               </div>
               <div>
                 <Label htmlFor="phone">Téléphone</Label>
-                <Input id="phone" type="tel" placeholder="+31 6 12 34 56 78" {...register('phone')} />
+                <Input
+                  id="phone"
+                  type="tel"
+                  inputMode="tel"
+                  maxLength={12}
+                  placeholder="+31612345678"
+                  {...register('phone', { onChange: (event) => { event.target.value = formatDutchPhoneInput(event.target.value); } })}
+                />
                 <FieldError message={errors.phone?.message} />
               </div>
             </motion.div>
