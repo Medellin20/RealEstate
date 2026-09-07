@@ -127,6 +127,12 @@ export async function sendAdminAlert(
     )
     .join('\n');
 
+  const receivedAt = new Intl.DateTimeFormat('fr-FR', {
+    dateStyle: 'full',
+    timeStyle: 'short',
+    timeZone: 'Europe/Amsterdam',
+  }).format(new Date());
+
   // ---------------------------------------------------------
   // 6. Préparation des lignes HTML
   // ---------------------------------------------------------
@@ -137,15 +143,18 @@ export async function sendAdminAlert(
         value !== undefined &&
         value !== null
     )
-    .map(
-      ([label, value]) => `
+    .map(([label, value], index) => `
         <tr>
           <td
             style="
-              padding: 10px 12px;
-              color: #607078;
-              border-bottom: 1px solid #eeeeee;
+              width: 42%;
+              padding: 13px 16px;
+              color: #64748b;
+              background: ${index % 2 === 0 ? '#f8fafc' : '#ffffff'};
+              border-bottom: 1px solid #e8edf1;
               vertical-align: top;
+              font-size: 13px;
+              font-weight: 600;
             "
           >
             ${escapeHtml(label)}
@@ -153,10 +162,15 @@ export async function sendAdminAlert(
 
           <td
             style="
-              padding: 10px 12px;
+              padding: 13px 16px;
               font-weight: 600;
-              border-bottom: 1px solid #eeeeee;
+              color: #172b36;
+              background: ${index % 2 === 0 ? '#f8fafc' : '#ffffff'};
+              border-bottom: 1px solid #e8edf1;
               vertical-align: top;
+              font-size: 14px;
+              line-height: 1.45;
+              word-break: break-word;
             "
           >
             ${escapeHtml(String(value))}
@@ -229,79 +243,33 @@ export async function sendAdminAlert(
             </title>
           </head>
 
-          <body
-            style="
-              margin: 0;
-              padding: 30px 15px;
-              background: #f5f7f8;
-              font-family: Arial, Helvetica, sans-serif;
-              color: #263238;
-            "
-          >
-
-            <div
-              style="
-                max-width: 700px;
-                margin: 0 auto;
-                background: #ffffff;
-                border: 1px solid #eeeeee;
-                border-radius: 12px;
-                overflow: hidden;
-              "
-            >
-
-              <!-- En-tête -->
-
-              <div
-                style="
-                  padding: 24px;
-                  background: #f5f7f8;
-                  border-bottom: 1px solid #eeeeee;
-                "
-              >
-                <h2
-                  style="
-                    margin: 0;
-                    font-size: 22px;
-                    color: #263238;
-                  "
-                >
-                  ${escapeHtml(subject)}
-                </h2>
-              </div>
-
-              <!-- Contenu -->
-
-              <div style="padding: 24px;">
-
-                <table
-                  style="
-                    width: 100%;
-                    border-collapse: collapse;
-                    font-size: 14px;
-                  "
-                >
-                  ${rows}
-                </table>
-
-                <p
-                  style="
-                    margin: 24px 0 0;
-                    color: #607078;
-                    font-size: 14px;
-                    line-height: 1.6;
-                  "
-                >
-                  Une nouvelle demande vient d'être
-                  enregistrée sur le site Real Estate NL.
-                  Connectez-vous à l'espace administrateur
-                  pour traiter cette demande.
-                </p>
-
-              </div>
-
+          <body style="margin:0;padding:0;background:#eef3f5;font-family:Arial,Helvetica,sans-serif;color:#172b36;">
+            <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">
+              Nouvelle demande reçue sur Real Estate NL.
             </div>
-
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="padding:32px 12px;background:#eef3f5;">
+              <tr><td align="center">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:680px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(23,43,54,.10);">
+                  <tr><td style="padding:24px 28px;background:#0c4a52;">
+                    <p style="margin:0 0 6px;color:#bce3df;font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;">Real Estate NL · Administration</p>
+                    <h1 style="margin:0;color:#ffffff;font-size:23px;line-height:1.3;">${escapeHtml(subject)}</h1>
+                  </td></tr>
+                  <tr><td style="padding:28px;">
+                    <p style="margin:0 0 5px;color:#172b36;font-size:16px;font-weight:700;">Une nouvelle demande a été reçue.</p>
+                    <p style="margin:0 0 22px;color:#64748b;font-size:13px;line-height:1.5;">Reçue le ${escapeHtml(receivedAt)} · Informations transmises depuis le site.</p>
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border:1px solid #e8edf1;border-radius:10px;border-spacing:0;overflow:hidden;">
+                      ${rows}
+                    </table>
+                    <div style="margin-top:24px;padding:14px 16px;border-left:4px solid #0c8b89;background:#edf8f7;color:#30545a;font-size:13px;line-height:1.55;">
+                      Consultez l’espace administrateur pour assurer le suivi de cette demande.
+                    </div>
+                  </td></tr>
+                  <tr><td style="padding:18px 28px;border-top:1px solid #e8edf1;background:#f8fafc;color:#80909b;font-size:12px;line-height:1.5;">
+                    Cet e-mail est envoyé automatiquement par Real Estate NL. Merci de ne pas y répondre.
+                  </td></tr>
+                </table>
+              </td></tr>
+            </table>
           </body>
         </html>
       `,

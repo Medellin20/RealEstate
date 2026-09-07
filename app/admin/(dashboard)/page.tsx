@@ -5,8 +5,6 @@ import {
   CheckCircle2,
   Clock,
   Home,
-  CalendarClock,
-  FileText,
   PlusCircle,
   BellRing,
 } from 'lucide-react';
@@ -68,9 +66,6 @@ export default async function AdminDashboardPage() {
         <StatCard href="/admin/appartements?status=available" icon={Home} label="Disponibles" value={stats.availableProperties} tone="positive" />
         <StatCard href="/admin/appartements?status=reserved" icon={Clock} label="Réservés" value={stats.reservedProperties} tone="warning" />
         <StatCard href="/admin/appartements?status=rented" icon={CheckCircle2} label="Loués" value={stats.rentedProperties} />
-        <StatCard href="/admin/visites" icon={CalendarClock} label="Demandes de visite" value={stats.viewingRequestsTotal} tone="info" />
-        <StatCard href="/admin/visites?date=today" icon={CalendarClock} label="Visites aujourd’hui" value={stats.viewingsToday} tone="positive" />
-        <StatCard href="/admin/reservations?scope=pending" icon={FileText} label="Réservations en attente" value={stats.reservationsPending} tone="warning" />
       </div>
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/70 p-5 sm:p-6">
