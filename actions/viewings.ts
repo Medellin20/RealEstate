@@ -1,95 +1,294 @@
-'use server';
+import 'server-only';
 
-import { revalidatePath } from 'next/cache';
-import { createAdminClient } from '@/lib/supabase/admin';
-import { upsertClient } from '@/lib/data/clients';
-import { recordStatusChange } from '@/lib/data/history';
-import { viewingRequestSchema, type ViewingRequestInput } from '@/lib/validations/viewing';
-import { generateReference } from '@/lib/utils/reference';
-import { sendAdminAlert } from '@/lib/notifications/email';
-import type { ActionResult } from '@/types';
+import nodemailer from 'nodemailer';
+
+type AlertDetails = Record<
+  string,
+  string | number | null | undefined
+>;
+
+type EmailAlertResult =
+  | {
+      sent: true;
+    }
+  | {
+      sent: false;
+      reason:
+        | 'not_configured'
+        | 'invalid_recipient'
+        | 'delivery_failed';
+    };
+
+function escapeHtml(value: string): string {
+  return value.replace(
+    /[&<>'"]/g,
+    (character) =>
+      ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;',
+      })[character] as string
+  );
+}
 
 /**
- * Crée une demande de visite : upsert du client, insertion de la demande,
- * puis redirection vers la confirmation. La suite est traitée manuellement.
+ * Envoie une alerte e-mail à l'administrateur.
+ *
+ * L'échec de l'e-mail ne bloque pas la création
+ * de la demande de visite.
  */
-export async function createViewingRequest(
-  input: ViewingRequestInput,
-  propertySlug: string
-): Promise<ActionResult<{ reference: string }>> {
-  const parsed = viewingRequestSchema.safeParse(input);
-  if (!parsed.success) {
+export async function sendAdminAlert(
+  subject: string,
+  details: AlertDetails
+): Promise<EmailAlertResult> {
+  const user = process.env.GMAIL_USER?.trim();
+
+  const appPassword = process.env.GMAIL_APP_PASSWORD
+    ?.trim()
+    .replace(/\s/g, '');
+
+  const recipient = process.env.ALERT_EMAIL?.trim();
+
+  /*
+   * Vérification de la configuration.
+   */
+  if (!user || !appPassword || !recipient) {
+    console.error(
+      'EMAIL CONFIG ERROR: GMAIL_USER, GMAIL_APP_PASSWORD ou ALERT_EMAIL est manquant.'
+    );
+
     return {
-      success: false,
-      message: 'Merci de corriger les champs indiqués.',
-      fieldErrors: parsed.error.flatten().fieldErrors,
+      sent: false,
+      reason: 'not_configured',
     };
   }
 
-  const supabase = createAdminClient();
+  /*
+   * Support de plusieurs destinataires :
+   *
+   * email1@gmail.com,email2@gmail.com
+   *
+   * ou
+   *
+   * email1@gmail.com;email2@gmail.com
+   */
+  const recipients = recipient
+    .split(/[;,]/)
+    .map((address) => address.trim())
+    .filter(Boolean);
 
-  const { data: property, error: propertyError } = await supabase
-    .from('properties')
-    .select('id, title, status, is_published')
-    .eq('id', parsed.data.propertyId)
-    .maybeSingle();
-
-  if (propertyError || !property || !property.is_published) {
-    return { success: false, message: 'Ce logement n’est plus disponible.' };
-  }
-
-  const client = await upsertClient({
-    firstName: parsed.data.firstName,
-    lastName: parsed.data.lastName,
-    email: parsed.data.email,
-    phone: parsed.data.phone,
-  });
-
-  const reference = generateReference('VIS');
-  const initialStatus = 'pending';
-
-  const { data: viewing, error: insertError } = await supabase
-    .from('viewing_requests')
-    .insert({
-      reference,
-      property_id: property.id,
-      client_id: client.id,
-      requested_date: parsed.data.requestedDate,
-      requested_time_slot: parsed.data.requestedTimeSlot,
-      status: initialStatus,
-      fee_amount: 0,
-    })
-    .select('*')
-    .single();
-
-  if (insertError || !viewing) {
-    return { success: false, message: 'Une erreur est survenue, merci de réessayer.' };
-  }
-
-  await recordStatusChange({
-    entityType: 'viewing_request',
-    entityId: viewing.id,
-    fromStatus: null,
-    toStatus: initialStatus,
-    changedBy: 'client',
-  });
-
-  await sendAdminAlert(`Nouvelle demande de visite — ${reference}`, {
-    Référence: reference,
-    Logement: property.title,
-    Client: `${parsed.data.firstName} ${parsed.data.lastName}`,
-    Email: parsed.data.email,
-    Téléphone: parsed.data.phone,
-    Date: parsed.data.requestedDate,
-    Créneau: parsed.data.requestedTimeSlot,
-  });
-
-  revalidatePath('/admin/visites');
-  revalidatePath('/admin');
-
-  return {
-    success: true,
-    message: 'Votre demande de visite a bien été envoyée.',
-    data: { reference },
+  /*
+   * Validation correcte des adresses e-mail.
+   */
+  const isEmail = (address: string): boolean => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address);
   };
+
+  if (
+    recipients.length === 0 ||
+    !recipients.every(isEmail)
+  ) {
+    console.error(
+      'EMAIL CONFIG ERROR: ALERT_EMAIL contient une adresse e-mail invalide.',
+      recipients
+    );
+
+    return {
+      sent: false,
+      reason: 'invalid_recipient',
+    };
+  }
+
+  /*
+   * Construction du contenu texte.
+   */
+  const text = Object.entries(details)
+    .filter(
+      ([, value]) =>
+        value !== undefined &&
+        value !== null
+    )
+    .map(
+      ([label, value]) =>
+        `${label}: ${String(value)}`
+    )
+    .join('\n');
+
+  /*
+   * Construction du tableau HTML.
+   */
+  const rows = Object.entries(details)
+    .filter(
+      ([, value]) =>
+        value !== undefined &&
+        value !== null
+    )
+    .map(
+      ([label, value]) => `
+        <tr>
+          <td style="
+            padding: 10px 12px;
+            color: #607078;
+            border-bottom: 1px solid #eeeeee;
+            vertical-align: top;
+          ">
+            ${escapeHtml(label)}
+          </td>
+
+          <td style="
+            padding: 10px 12px;
+            font-weight: 600;
+            border-bottom: 1px solid #eeeeee;
+            vertical-align: top;
+          ">
+            ${escapeHtml(String(value))}
+          </td>
+        </tr>
+      `
+    )
+    .join('');
+
+  try {
+    /*
+     * Configuration SMTP Gmail.
+     *
+     * Port 465 = connexion SSL directe.
+     */
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+
+      auth: {
+        user,
+        pass: appPassword,
+      },
+
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 15000,
+    });
+
+    /*
+     * Vérification de la connexion SMTP.
+     */
+    await transporter.verify();
+
+    /*
+     * Envoi du message.
+     */
+    const info = await transporter.sendMail({
+      from: {
+        name: 'Real Estate NL',
+        address: user,
+      },
+
+      to: recipients,
+
+      subject,
+
+      text,
+
+      html: `
+        <!DOCTYPE html>
+        <html lang="fr">
+          <head>
+            <meta charset="UTF-8" />
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1.0"
+            />
+            <title>${escapeHtml(subject)}</title>
+          </head>
+
+          <body
+            style="
+              margin: 0;
+              padding: 30px 15px;
+              background: #f5f7f8;
+              font-family: Arial, Helvetica, sans-serif;
+              color: #263238;
+            "
+          >
+            <div
+              style="
+                max-width: 700px;
+                margin: 0 auto;
+                background: #ffffff;
+                border: 1px solid #eeeeee;
+                border-radius: 12px;
+                overflow: hidden;
+              "
+            >
+
+              <div
+                style="
+                  padding: 24px;
+                  background: #f5f7f8;
+                  border-bottom: 1px solid #eeeeee;
+                "
+              >
+                <h2
+                  style="
+                    margin: 0;
+                    font-size: 22px;
+                    color: #263238;
+                  "
+                >
+                  ${escapeHtml(subject)}
+                </h2>
+              </div>
+
+              <div style="padding: 24px;">
+
+                <table
+                  style="
+                    width: 100%;
+                    border-collapse: collapse;
+                    font-size: 14px;
+                  "
+                >
+                  ${rows}
+                </table>
+
+                <p
+                  style="
+                    margin: 24px 0 0;
+                    color: #607078;
+                    font-size: 14px;
+                    line-height: 1.6;
+                  "
+                >
+                  Connectez-vous à l’espace administrateur
+                  pour traiter cette demande.
+                </p>
+
+              </div>
+            </div>
+          </body>
+        </html>
+      `,
+    });
+
+    console.log(
+      'EMAIL SENT:',
+      info.messageId
+    );
+
+    return {
+      sent: true,
+    };
+  } catch (error) {
+    console.error(
+      'EMAIL DELIVERY ERROR:',
+      error
+    );
+
+    return {
+      sent: false,
+      reason: 'delivery_failed',
+    };
+  }
 }
