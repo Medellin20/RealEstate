@@ -163,7 +163,7 @@ export function ViewingRequestForm({
                   id="phone"
                   type="tel"
                   inputMode="tel"
-                  maxLength={12}
+                  maxLength={10}
                   placeholder="+31612345678"
                   {...register('phone')}
                   onBlur={(event) => {
