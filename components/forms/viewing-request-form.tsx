@@ -16,7 +16,7 @@ import { TIME_SLOTS } from '@/lib/utils/constants';
 import { cn } from '@/lib/utils/cn';
 import { formatDutchPhoneInput } from '@/lib/utils/phone';
 
-const STEPS = ['Date & créneau', 'Vos coordonnées', 'Confirmation'] as const;
+const STEPS = ['Date & créneau', 'Vos coordonnées', 'Récapitulatif'] as const;
 
 export function ViewingRequestForm({
   propertyId,
@@ -195,8 +195,8 @@ export function ViewingRequestForm({
               </div>
 
               <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-                Vérifiez simplement vos informations puis confirmez votre demande de visite.
-                Aucun code ou vérification supplémentaire ne sera demandé.
+                Vérifiez vos informations puis confirmez votre demande de visite. Aucun code,
+                paiement ou vérification supplémentaire ne sera demandé.
               </p>
             </div>
           )}
