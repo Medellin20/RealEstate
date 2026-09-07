@@ -25,6 +25,37 @@ function getSearchTerms(value: string) {
   ];
 }
 
+function normalizeSearchValue(value: string) {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+function getPropertySearchScore(
+  property: Record<string, unknown>,
+  terms: string[],
+  rawSearch: string
+) {
+  const searchableText = normalizeSearchValue(
+    SEARCHABLE_COLUMNS.map((column) => String(property[column] ?? '')).join(' ')
+  );
+  const normalizedTitle = normalizeSearchValue(String(property.title ?? ''));
+  const normalizedSearch = normalizeSearchValue(rawSearch).replace(
+    /^(logement|titre)\s*[:\-]?\s*/,
+    ''
+  );
+  const exactTitleBonus = normalizedTitle === normalizedSearch ? 1_000 : 0;
+
+  return (
+    exactTitleBonus +
+    terms.reduce(
+      (score, term) => score + (searchableText.includes(normalizeSearchValue(term)) ? 1 : 0),
+      0
+    )
+  );
+}
+
 export async function getAllPropertiesAdmin(params: AdminPropertiesParams = {}) {
   const supabase = createAdminClient();
   const pageSize = 12;
@@ -37,8 +68,12 @@ export async function getAllPropertiesAdmin(params: AdminPropertiesParams = {}) 
     .select('*, property_images(id, url, is_primary)', { count: 'exact' })
     .order('created_at', { ascending: false });
 
-  for (const term of getSearchTerms(params.search ?? '')) {
-    query = query.or(SEARCHABLE_COLUMNS.map((column) => `${column}.ilike.*${term}*`).join(','));
+  const searchTerms = getSearchTerms(params.search ?? '');
+  const searchFilters = searchTerms.flatMap((term) =>
+    SEARCHABLE_COLUMNS.map((column) => `${column}.ilike.*${term}*`)
+  );
+  if (searchFilters.length > 0) {
+    query = query.or(searchFilters.join(','));
   }
   if (params.status) {
     query = query.eq('status', params.status);
@@ -52,6 +87,29 @@ export async function getAllPropertiesAdmin(params: AdminPropertiesParams = {}) 
   }
   if (params.minPrice !== undefined) query = query.gte('monthly_price', params.minPrice);
   if (params.maxPrice !== undefined) query = query.lte('monthly_price', params.maxPrice);
+
+  if (searchTerms.length > 0) {
+    const { data, error } = await query;
+    if (error) {
+      console.error('getAllPropertiesAdmin search error:', error.message);
+      return { properties: [], total: 0, page, pageSize };
+    }
+
+    const rankedProperties = (data ?? [])
+      .map((property) => ({
+        property,
+        score: getPropertySearchScore(property, searchTerms, params.search ?? ''),
+      }))
+      .sort((a, b) => b.score - a.score)
+      .map(({ property }) => property);
+
+    return {
+      properties: rankedProperties.slice(from, to + 1),
+      total: rankedProperties.length,
+      page,
+      pageSize,
+    };
+  }
 
   const { data, error, count } = await query.range(from, to);
   if (error) {
