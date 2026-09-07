@@ -156,6 +156,17 @@ export interface Reservation {
   updated_at: string;
 }
 
+export interface RequestSubmission {
+  id: string;
+  request_type: 'viewing' | 'reservation_payment';
+  source_id: string;
+  reference: string;
+  property_id: string;
+  client_id: string;
+  form_data: Record<string, unknown>;
+  created_at: string;
+}
+
 export interface GuaranteePayment {
   id: string;
   reference: string;
@@ -254,6 +265,7 @@ export interface Database {
       };
       viewing_requests: { Row: ViewingRequest; Insert: Partial<ViewingRequest>; Update: Partial<ViewingRequest> };
       reservations: { Row: Reservation; Insert: Partial<Reservation>; Update: Partial<Reservation> };
+      request_submissions: { Row: RequestSubmission; Insert: Partial<RequestSubmission>; Update: Partial<RequestSubmission> };
       guarantee_payments: { Row: GuaranteePayment; Insert: Partial<GuaranteePayment>; Update: Partial<GuaranteePayment> };
       refund_requests: { Row: RefundRequest; Insert: Partial<RefundRequest>; Update: Partial<RefundRequest> };
       bank_settings: { Row: BankSettings; Insert: Partial<BankSettings>; Update: Partial<BankSettings> };

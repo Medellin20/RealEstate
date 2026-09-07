@@ -13,6 +13,7 @@ import {
 import { generateReference } from '@/lib/utils/reference';
 import type { ActionResult } from '@/types';
 import { notifyAdminOfReservation } from '@/lib/notifications/reservation';
+import { recordRequestSubmission } from '@/lib/data/request-submissions';
 
 /**
  * Crée une demande de réservation de logement.
@@ -142,6 +143,32 @@ export async function createReservation(
       message:
         'Une erreur est survenue lors de l’enregistrement de votre demande. Merci de réessayer.',
     };
+  }
+
+  try {
+    await recordRequestSubmission({
+      requestType: 'reservation_payment',
+      sourceId: reservation.id,
+      reference,
+      propertyId: property.id,
+      clientId: client.id,
+      formData: {
+        firstName: parsed.data.firstName,
+        lastName: parsed.data.lastName,
+        email: parsed.data.email,
+        phone: parsed.data.phone,
+        desiredMoveInDate: parsed.data.desiredMoveInDate,
+        durationMonths: parsed.data.durationMonths,
+        occupantsCount: parsed.data.occupantsCount,
+        hasPets: parsed.data.hasPets,
+        employmentContract: parsed.data.employmentContract,
+        monthlyIncome: parsed.data.monthlyIncome,
+        originCity: parsed.data.originCity,
+        message: parsed.data.message || null,
+      },
+    });
+  } catch (error) {
+    console.error('RESERVATION SUBMISSION ARCHIVE ERROR:', { reference, error });
   }
 
   // ---------------------------------------------------------

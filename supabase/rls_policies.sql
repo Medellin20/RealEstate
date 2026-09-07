@@ -23,6 +23,7 @@ alter table property_amenities    enable row level security;
 alter table clients                enable row level security;
 alter table viewing_requests      enable row level security;
 alter table reservations           enable row level security;
+alter table request_submissions    enable row level security;
 alter table guarantee_payments    enable row level security;
 alter table refund_requests       enable row level security;
 alter table bank_settings          enable row level security;

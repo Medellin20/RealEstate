@@ -223,6 +223,25 @@ create index reservations_client_idx on reservations (client_id);
 create index reservations_status_idx on reservations (status);
 
 -- -----------------------------------------------------------------------------
+-- REQUEST SUBMISSIONS (registre unifié des formulaires de visite et paiement)
+-- -----------------------------------------------------------------------------
+
+create table request_submissions (
+  id uuid primary key default gen_random_uuid(),
+  request_type text not null check (request_type in ('viewing', 'reservation_payment')),
+  source_id uuid not null,
+  reference text not null unique,
+  property_id uuid not null references properties(id) on delete restrict,
+  client_id uuid not null references clients(id) on delete restrict,
+  form_data jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now()
+);
+
+create index request_submissions_type_created_idx on request_submissions (request_type, created_at desc);
+create index request_submissions_property_idx on request_submissions (property_id);
+create index request_submissions_client_idx on request_submissions (client_id);
+
+-- -----------------------------------------------------------------------------
 -- GUARANTEE PAYMENTS (dépôt de garantie par virement)
 -- -----------------------------------------------------------------------------
 

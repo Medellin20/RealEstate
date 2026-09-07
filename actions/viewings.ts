@@ -11,6 +11,7 @@ import {
 } from '@/lib/validations/viewing';
 import { generateReference } from '@/lib/utils/reference';
 import { sendAdminAlert } from '@/lib/notifications/email';
+import { recordRequestSubmission } from '@/lib/data/request-submissions';
 import type { ActionResult } from '@/types';
 
 export async function createViewingRequest(
@@ -161,6 +162,26 @@ export async function createViewingRequest(
       message:
         'Une erreur est survenue lors de l’enregistrement de votre demande. Merci de réessayer.',
     };
+  }
+
+  try {
+    await recordRequestSubmission({
+      requestType: 'viewing',
+      sourceId: viewing.id,
+      reference,
+      propertyId: property.id,
+      clientId: client.id,
+      formData: {
+        firstName: parsed.data.firstName,
+        lastName: parsed.data.lastName,
+        email: parsed.data.email,
+        phone: parsed.data.phone,
+        requestedDate: parsed.data.requestedDate,
+        requestedTimeSlot: parsed.data.requestedTimeSlot,
+      },
+    });
+  } catch (error) {
+    console.error('VIEWING SUBMISSION ARCHIVE ERROR:', { reference, error });
   }
 
   /*
