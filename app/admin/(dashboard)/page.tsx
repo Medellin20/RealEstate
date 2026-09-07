@@ -6,9 +6,8 @@ import {
   Clock,
   Home,
   PlusCircle,
-  BellRing,
 } from 'lucide-react';
-import { getAdminAlerts, getDashboardStats, getRecentAdminLogs } from '@/lib/data/admin-stats';
+import { getDashboardStats, getRecentAdminLogs } from '@/lib/data/admin-stats';
 import { StatCard } from '@/components/admin/stat-card';
 import { Button } from '@/components/ui/button';
 import { formatDateTime } from '@/lib/utils/format';
@@ -19,10 +18,9 @@ export const metadata: Metadata = { title: 'Dashboard admin' };
 export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboardPage() {
-  const [statsResult, logsResult, alertsResult] = await Promise.allSettled([
+  const [statsResult, logsResult] = await Promise.allSettled([
     getDashboardStats(),
     getRecentAdminLogs(),
-    getAdminAlerts(),
   ]);
 
   const stats: DashboardStats = statsResult.status === 'fulfilled'
@@ -35,17 +33,16 @@ export default async function AdminDashboardPage() {
         viewingRequestsTotal: 0,
         viewingsToday: 0,
         reservationsPending: 0,
-      };
+  };
   const logs = logsResult.status === 'fulfilled' ? logsResult.value : [];
-  const alerts = alertsResult.status === 'fulfilled' ? alertsResult.value : [];
-  const dataLoadFailed = [statsResult, logsResult, alertsResult].some((result) => result.status === 'rejected');
+  const dataLoadFailed = [statsResult, logsResult].some((result) => result.status === 'rejected');
 
   return (
     <div>
       <DashboardAutoRefresh />
       {dataLoadFailed && (
         <div role="alert" className="mb-6 rounded-2xl border border-brick-200 bg-brick-50 p-4 text-sm text-brick-700">
-          Certaines données ne peuvent pas être chargées. Vérifiez les variables Supabase du déploiement, puis ouvrez <Link href="/admin/visites" className="font-bold underline">les visites</Link> pour voir le détail de l’erreur.
+          Certaines données ne peuvent pas être chargées. Vérifiez les variables Supabase du déploiement.
         </div>
       )}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
@@ -66,28 +63,6 @@ export default async function AdminDashboardPage() {
         <StatCard href="/admin/appartements?status=available" icon={Home} label="Disponibles" value={stats.availableProperties} tone="positive" />
         <StatCard href="/admin/appartements?status=reserved" icon={Clock} label="Réservés" value={stats.reservedProperties} tone="warning" />
         <StatCard href="/admin/appartements?status=rented" icon={CheckCircle2} label="Loués" value={stats.rentedProperties} />
-      </div>
-
-      <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/70 p-5 sm:p-6">
-        <h2 className="flex items-center gap-2 font-bold text-ink-900">
-          <BellRing className="h-5 w-5 text-amber-600" />
-          Alertes à traiter
-          {alerts.length > 0 && <span className="rounded-full bg-amber-600 px-2 py-0.5 text-xs text-white">{alerts.length}</span>}
-        </h2>
-        {alerts.length === 0 ? (
-          <p className="mt-3 text-sm text-ink-500">Aucune alerte en attente.</p>
-        ) : (
-          <ul className="mt-4 space-y-2">
-            {alerts.map((alert) => (
-              <li key={`${alert.href}-${alert.id}`}>
-                <Link href={alert.href} className="flex flex-col gap-1 rounded-xl bg-white px-4 py-3 text-sm shadow-sm transition hover:shadow-card sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                  <span className="min-w-0 font-medium text-ink-700">{alert.label}</span>
-                  <time className="shrink-0 text-xs text-ink-400">{formatDateTime(alert.created_at)}</time>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
       </div>
 
       <div className="mt-8 rounded-2xl border border-ink-100 bg-white p-5 sm:p-6">
