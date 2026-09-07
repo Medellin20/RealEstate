@@ -63,7 +63,16 @@ export async function loginAdmin(_prevState: AdminLoginState, formData: FormData
 
   clearRateLimit(clientKey);
 
-  const token = await createAdminSessionToken();
+  let token: string;
+  try {
+    token = await createAdminSessionToken();
+  } catch (error) {
+    console.error('ADMIN SESSION CREATION ERROR:', error);
+    return {
+      success: false,
+      message: 'La configuration de session administrateur est invalide. Vérifiez ADMIN_SESSION_SECRET.',
+    };
+  }
   cookies().set(ADMIN_SESSION_COOKIE, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',

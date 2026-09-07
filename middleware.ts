@@ -11,10 +11,19 @@ export async function middleware(request: NextRequest) {
 
   const isLoginPage = pathname === '/admin/login';
   const token = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
-  const isAuthenticated = await isValidAdminSessionToken(token);
+  let isAuthenticated = false;
+
+  try {
+    isAuthenticated = await isValidAdminSessionToken(token);
+  } catch (error) {
+    // Une configuration de session invalide ne doit jamais afficher une
+    // page Next.js blanche. On renvoie simplement vers la connexion.
+    console.error('ADMIN SESSION VALIDATION ERROR:', error);
+  }
 
   if (!isAuthenticated && !isLoginPage) {
     const loginUrl = new URL('/admin/login', request.url);
+    if (token) loginUrl.searchParams.set('session', 'expired');
     return NextResponse.redirect(loginUrl);
   }
 

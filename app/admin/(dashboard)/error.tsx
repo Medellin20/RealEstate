@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import Link from 'next/link';
 import { AlertTriangle, RefreshCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,10 +11,6 @@ export default function AdminError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    console.error('ADMIN RENDER ERROR:', error);
-  }, [error]);
-
   return (
     <div className="flex min-h-[60vh] items-center justify-center">
       <div className="max-w-lg rounded-2xl border border-brick-200 bg-white p-6 text-center shadow-soft">
