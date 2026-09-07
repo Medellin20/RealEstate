@@ -71,15 +71,21 @@ export async function createReservation(input: ReservationInput, propertySlug: s
     return { success: false, message: 'Une erreur est survenue, merci de réessayer.' };
   }
 
-  await recordStatusChange({
-    entityType: 'reservation',
-    entityId: reservation.id,
-    fromStatus: null,
-    toStatus: 'submitted',
-    changedBy: 'client',
-  });
+  // L’historique ne doit pas empêcher l’alerte e-mail ni la confirmation
+  // de la réservation si cette table est momentanément indisponible.
+  try {
+    await recordStatusChange({
+      entityType: 'reservation',
+      entityId: reservation.id,
+      fromStatus: null,
+      toStatus: 'submitted',
+      changedBy: 'client',
+    });
+  } catch (error) {
+    console.error('RESERVATION HISTORY ERROR:', { reference, error });
+  }
 
-  await sendAdminAlert(`Nouvelle réservation — ${reference}`, {
+  const emailResult = await sendAdminAlert(`Nouvelle réservation — ${reference}`, {
     Référence: reference,
     Logement: property.title,
     Client: `${parsed.data.firstName} ${parsed.data.lastName}`,
@@ -92,7 +98,19 @@ export async function createReservation(input: ReservationInput, propertySlug: s
     'Contrat de travail': parsed.data.employmentContract,
     'Revenu mensuel': `${parsed.data.monthlyIncome} €`,
     'Ville d’origine': parsed.data.originCity,
+    Message: parsed.data.message || undefined,
   });
+
+  // Une réservation est enregistrée même si l’e-mail est indisponible,
+  // mais l’erreur est consignée afin de pouvoir la corriger immédiatement.
+  if (!emailResult.sent) {
+    console.error('RESERVATION ADMIN EMAIL FAILED:', {
+      reference,
+      reason: emailResult.reason,
+    });
+  } else {
+    console.log(`RESERVATION ADMIN EMAIL SENT FOR ${reference}`);
+  }
 
   revalidatePath('/admin/reservations');
   revalidatePath('/admin');
