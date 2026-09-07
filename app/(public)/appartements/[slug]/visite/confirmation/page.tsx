@@ -26,7 +26,7 @@ export default async function ViewingConfirmationPage({
         </div>
 
         <h1 className="mt-5 text-xl font-extrabold text-ink-900">
-          Votre demande de visite est envoyée
+          Votre demande de visite est confirmée
         </h1>
 
         <p className="mt-2 text-sm text-ink-500">
@@ -40,13 +40,8 @@ export default async function ViewingConfirmationPage({
           <Row label="Statut" value={VIEWING_STATUS_LABELS[viewing.status] ?? viewing.status} />
         </div>
 
-        <p className="mt-4 text-sm text-ink-500">
-          Nous avons bien reçu vos informations et les avons transmises à notre équipe.
-          Vous recevrez une réponse dans moins de 15 minutes pour savoir si votre visite est confirmée.
-        </p>
-
-        <p className="mt-5 rounded-xl border border-canal-200 bg-canal-50 p-4 text-sm font-bold leading-relaxed text-canal-800">
-          La demande est en attente de confirmation. Nous vous contacterons dès que la visite sera validée.
+        <p className="mt-4 rounded-xl border border-canal-200 bg-canal-50 p-4 text-sm leading-relaxed text-canal-800">
+          Vos informations ont bien été enregistrées et transmises à notre équipe. Aucune vérification supplémentaire, aucun code et aucun paiement ne vous seront demandés.
         </p>
 
         <div className="mt-8 flex flex-col gap-2.5 sm:flex-row">

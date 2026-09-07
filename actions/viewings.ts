@@ -257,7 +257,7 @@ export async function createViewingRequest(
     success: true,
 
     message:
-      'Votre demande de visite a bien été envoyée. Vous recevrez une réponse dans un délai de 15 minutes afin de confirmer votre visite.',
+      'Votre demande de visite a bien été confirmée.',
 
     data: {
       reference,
