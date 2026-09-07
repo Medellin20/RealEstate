@@ -20,9 +20,8 @@ import { sendAdminAlert } from '@/lib/notifications/email';
  * La demande est enregistrée dans Supabase puis une alerte
  * est envoyée à l'administrateur par e-mail.
  *
- * Si l'envoi de l'e-mail échoue, la réservation reste enregistrée,
- * mais l'utilisateur reçoit un message d'erreur au lieu d'être
- * redirigé vers la page de confirmation.
+ * L'e-mail est une notification : un échec de livraison ne doit pas
+ * empêcher la confirmation d'une réservation déjà enregistrée.
  */
 export async function createReservation(
   input: ReservationInput,
@@ -211,22 +210,11 @@ export async function createReservation(
       reference,
       reason: emailResult.reason,
     });
-
-    /*
-     * La réservation est déjà enregistrée dans Supabase.
-     * On ne redirige cependant pas vers la confirmation
-     * puisque l'agence n'a pas reçu son e-mail.
-     */
-    return {
-      success: false,
-      message:
-        'Votre demande a été enregistrée, mais nous n’avons pas pu envoyer la notification à l’agence. Merci de réessayer ou de nous contacter directement.',
-    };
+  } else {
+    console.log(
+      `RESERVATION ADMIN EMAIL SENT FOR ${reference}`
+    );
   }
-
-  console.log(
-    `RESERVATION ADMIN EMAIL SENT FOR ${reference}`
-  );
 
   // ---------------------------------------------------------
   // 10. Actualisation des pages administrateur

@@ -26,7 +26,7 @@ export default async function ViewingConfirmationPage({
         </div>
 
         <h1 className="mt-5 text-xl font-extrabold text-ink-900">
-          Votre demande de visite est confirmée
+          Vous recevrez une notification par e-mail sous 10 minutes
         </h1>
 
         <p className="mt-2 text-sm text-ink-500">
