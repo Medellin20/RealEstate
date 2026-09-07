@@ -14,11 +14,15 @@ type AdminPropertiesParams = {
 const SEARCHABLE_COLUMNS = ['title', 'city', 'slug', 'address', 'neighborhood', 'postal_code'];
 
 function getSearchTerms(value: string) {
-  return [...new Set(value
-    .trim()
-    .split(/\s+/)
-    .map((term) => term.replace(/[^\p{L}\p{N}-]/gu, ''))
-    .filter((term) => term.length >= 2))];
+  return [
+    ...new Set(
+      value
+        .trim()
+        .split(/\s+/)
+        .map((term) => term.replace(/[^\p{L}\p{N}-]/gu, ''))
+        .filter(Boolean)
+    ),
+  ];
 }
 
 export async function getAllPropertiesAdmin(params: AdminPropertiesParams = {}) {

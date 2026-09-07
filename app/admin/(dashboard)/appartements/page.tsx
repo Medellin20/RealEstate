@@ -56,10 +56,10 @@ export default async function AdminPropertiesPage({
         </Link>
       </div>
 
-      <form className="mb-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap" action="/admin/appartements" method="get">
+      <form role="search" className="mb-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap" action="/admin/appartements" method="get">
         <div className="relative flex-1">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-300" />
-          <Input name="search" placeholder="Titre, ville, quartier, adresse ou slug..." defaultValue={searchParams.search} className="pl-10" />
+          <Input name="search" placeholder="Rechercher par titre ou ville..." defaultValue={searchParams.search} className="pl-10" />
         </div>
         <div className="relative sm:w-48">
           <MapPin className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-300" />
@@ -81,7 +81,10 @@ export default async function AdminPropertiesPage({
             <option key={city} value={city}>{city}</option>
           ))}
         </AutoSubmitSelect>
-        <Button type="submit" variant="outline" className="w-full sm:w-auto">Filtrer</Button>
+        <Button type="submit" className="w-full sm:w-auto">
+          <Search className="h-4 w-4" />
+          Rechercher
+        </Button>
         {hasActiveFilters && (
           <Link href="/admin/appartements" className="inline-flex h-11 items-center justify-center rounded-xl px-3.5 text-sm font-medium text-ink-500 hover:bg-sand-100 hover:text-ink-900">
             Réinitialiser
