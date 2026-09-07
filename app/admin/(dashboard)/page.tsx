@@ -15,16 +15,41 @@ import { StatCard } from '@/components/admin/stat-card';
 import { Button } from '@/components/ui/button';
 import { formatDateTime } from '@/lib/utils/format';
 import { DashboardAutoRefresh } from '@/components/admin/dashboard-auto-refresh';
+import type { DashboardStats } from '@/types';
 
 export const metadata: Metadata = { title: 'Dashboard admin' };
 export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboardPage() {
-  const [stats, logs, alerts] = await Promise.all([getDashboardStats(), getRecentAdminLogs(), getAdminAlerts()]);
+  const [statsResult, logsResult, alertsResult] = await Promise.allSettled([
+    getDashboardStats(),
+    getRecentAdminLogs(),
+    getAdminAlerts(),
+  ]);
+
+  const stats: DashboardStats = statsResult.status === 'fulfilled'
+    ? statsResult.value
+    : {
+        totalProperties: 0,
+        availableProperties: 0,
+        reservedProperties: 0,
+        rentedProperties: 0,
+        viewingRequestsTotal: 0,
+        viewingsToday: 0,
+        reservationsPending: 0,
+      };
+  const logs = logsResult.status === 'fulfilled' ? logsResult.value : [];
+  const alerts = alertsResult.status === 'fulfilled' ? alertsResult.value : [];
+  const dataLoadFailed = [statsResult, logsResult, alertsResult].some((result) => result.status === 'rejected');
 
   return (
     <div>
       <DashboardAutoRefresh />
+      {dataLoadFailed && (
+        <div role="alert" className="mb-6 rounded-2xl border border-brick-200 bg-brick-50 p-4 text-sm text-brick-700">
+          Certaines données ne peuvent pas être chargées. Vérifiez les variables Supabase du déploiement, puis ouvrez <Link href="/admin/visites" className="font-bold underline">les visites</Link> pour voir le détail de l’erreur.
+        </div>
+      )}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-ink-900">Tableau de bord</h1>
