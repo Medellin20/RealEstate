@@ -5,19 +5,22 @@ export const metadata: Metadata = { title: 'Mentions légales' };
 
 export default function MentionsLegalesPage() {
   return (
-    <LegalPage title="Mentions légales" updatedAt="9 août 2026">
+    <LegalPage title="Mentions légales" updatedAt="7 septembre 2026">
       <h2>Éditeur du site</h2>
       <p>
-        Le site Real Estate NL est édité par Real Estate NL B.V., société à responsabilité limitée
-        de droit néerlandais. <em>[Ces informations sont fournies à titre d’exemple et doivent être
-        complétées avec les données réelles de votre société : raison sociale, numéro KVK, adresse
-        du siège, numéro de TVA, directeur de la publication.]</em>
+        Le site Real Estate NL est édité par <strong>NL Real Estate B.V.</strong>, makelaardij
+        fondée en 2006, inscrite auprès de la Kamer van Koophandel sous le numéro{' '}
+        <strong>KvK 34253699</strong>.
+      </p>
+      <p>
+        Siège : Gustav Mahlerplein 64, Unit A, 1082 MA Amsterdam, Pays-Bas.<br />
+        Numéro de coffre : NL02139484.
       </p>
 
       <h2>Hébergement</h2>
       <p>
-        L’application est hébergée sur l’infrastructure de votre fournisseur d’hébergement
-        (ex : Vercel Inc.) et les données sont stockées via Supabase (PostgreSQL).
+        L’application est hébergée sur une infrastructure cloud et les données sont stockées via
+        Supabase (PostgreSQL).
       </p>
 
       <h2>Propriété intellectuelle</h2>
