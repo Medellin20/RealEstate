@@ -39,6 +39,7 @@ export default async function ReservationPage({ params }: { params: { slug: stri
                 propertyId={property.id}
                 propertyTitle={property.title}
                 reservationFee={formatPrice(property.monthly_price)}
+                confirmationUrl={`/appartements/${property.slug}/reserver/confirmation`}
               />
             </div>
           </div>

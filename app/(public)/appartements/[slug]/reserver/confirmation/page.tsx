@@ -1,24 +1,10 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 import { CheckCircle2, Home } from 'lucide-react';
-import { getReservationByReference } from '@/lib/data/dossier';
 import { Button } from '@/components/ui/button';
-import { RESERVATION_STATUS_LABELS } from '@/lib/utils/constants';
-import { formatDate, formatPrice } from '@/lib/utils/format';
 
-export const metadata = { title: 'Dossier de paiement envoyé' };
+export const metadata = { title: 'Dossier envoyé' };
 
-export default async function ReservationConfirmationPage({
-  searchParams,
-}: {
-  searchParams: { ref?: string };
-}) {
-  if (!searchParams.ref) notFound();
-  const reservation = await getReservationByReference(searchParams.ref);
-  if (!reservation) notFound();
-
-  const property = (reservation as any).properties;
-
+export default function ReservationConfirmationPage() {
   return (
     <div className="container-app flex min-h-[70vh] items-center justify-center py-6 sm:py-14">
       <div className="w-full max-w-2xl rounded-3xl border border-ink-100 bg-white p-5 text-center shadow-card sm:p-8">
@@ -27,51 +13,25 @@ export default async function ReservationConfirmationPage({
         </div>
 
         <h1 className="mt-5 text-xl font-extrabold text-ink-900 sm:text-2xl">
-          Votre dossier de réservation est bien envoyé
+          Votre dossier a bien été envoyé
         </h1>
 
-        <p className="mt-4 rounded-2xl border border-canal-200 bg-canal-50 px-4 py-3 text-base font-bold text-canal-800">
+        <p className="mt-5 rounded-2xl border border-canal-200 bg-canal-50 px-4 py-3 text-base font-bold text-canal-800">
           Vous recevrez une notification par e-mail sous 10 minutes.
         </p>
 
-        <p className="mt-3 text-sm text-ink-500">
-          Référence : <span className="font-semibold text-ink-700">{reservation.reference}</span>
+        <p className="mt-4 text-sm leading-relaxed text-ink-500">
+          Vos informations ont été transmises à notre équipe. Nous vous contacterons par e-mail
+          pour la suite de votre demande de réservation.
         </p>
 
-        <div className="mt-6 space-y-2 rounded-2xl bg-sand-100/70 p-5 text-left text-sm">
-          <Row label="Logement" value={property?.title ?? '—'} />
-          <Row label="Frais de réservation" value={property?.monthly_price != null ? formatPrice(property.monthly_price) : '—'} />
-          <Row label="Emménagement souhaité" value={formatDate(reservation.desired_move_in_date)} />
-          <Row label="Durée" value={`${reservation.duration_months} mois`} />
-          <Row label="Statut" value={RESERVATION_STATUS_LABELS[reservation.status] ?? reservation.status} />
-        </div>
-
-        <p className="mt-4 rounded-2xl border border-canal-200 bg-canal-50 p-4 text-sm leading-relaxed text-canal-800">
-          Vos informations ont bien été enregistrées et transmises à notre équipe. Après examen de
-          votre dossier, nous vous communiquerons les modalités de paiement en toute sécurité.
-        </p>
-
-        <div className="mt-8 flex flex-col gap-2.5 sm:flex-row">
-          <Link href="/mon-compte" className="flex-1">
-            <Button variant="outline" className="w-full">Suivre mon dossier</Button>
-          </Link>
-          <Link href="/appartements" className="flex-1">
-            <Button className="w-full">
-              <Home className="h-4 w-4" />
-              Voir d’autres logements
-            </Button>
-          </Link>
-        </div>
+        <Link href="/appartements" className="mt-8 inline-block w-full sm:w-auto">
+          <Button className="w-full sm:w-auto">
+            <Home className="h-4 w-4" />
+            Voir les appartements
+          </Button>
+        </Link>
       </div>
-    </div>
-  );
-}
-
-function Row({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-      <span className="text-ink-400">{label}</span>
-      <span className="break-words font-medium text-ink-700 sm:text-right">{value}</span>
     </div>
   );
 }

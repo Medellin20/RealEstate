@@ -9,7 +9,7 @@ import { sendAdminAlert } from '@/lib/notifications/email';
 import type { ActionResult } from '@/types';
 
 /**
- * Transmet le formulaire de paiement de réservation à l'agence.
+ * Transmet le formulaire de réservation à l'agence.
  * Cette action n'enregistre ni client ni réservation : son seul effet est
  * l'envoi de l'e-mail à l'adresse définie dans ALERT_EMAIL.
  */
@@ -42,7 +42,7 @@ export async function createReservation(
   }
 
   const emailResult = await sendAdminAlert(
-    `Dossier de paiement de réservation — ${property.title}`,
+    `Nouvelle demande de réservation — ${property.title}`,
     {
       Logement: property.title,
       'Frais de réservation (1 mois de loyer)': `${property.monthly_price} €`,
