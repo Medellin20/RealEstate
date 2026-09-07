@@ -30,7 +30,7 @@ export default async function ReservationConfirmationPage({
           Votre dossier de réservation est bien envoyé
         </h1>
 
-        <p className="mt-2 text-sm text-ink-500">
+        <p className="mt-4 rounded-2xl border border-canal-200 bg-canal-50 px-4 py-3 text-base font-bold text-canal-800">
           Vous recevrez une notification par e-mail sous 10 minutes.
         </p>
 
