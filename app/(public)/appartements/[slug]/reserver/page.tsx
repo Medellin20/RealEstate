@@ -37,7 +37,6 @@ export default async function ReservationPage({ params }: { params: { slug: stri
             <div className="mt-8">
               <ReservationForm
                 propertyId={property.id}
-                propertySlug={property.slug}
                 propertyTitle={property.title}
                 reservationFee={formatPrice(property.monthly_price)}
               />

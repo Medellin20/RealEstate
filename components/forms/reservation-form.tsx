@@ -21,12 +21,10 @@ const STEPS = ['Vos coordonnées', 'Votre projet de location', 'Récapitulatif']
 
 export function ReservationForm({
   propertyId,
-  propertySlug,
   propertyTitle,
   reservationFee,
 }: {
   propertyId: string;
-  propertySlug: string;
   propertyTitle: string;
   reservationFee: string;
 }) {
@@ -63,7 +61,7 @@ export function ReservationForm({
 
   function onSubmit(data: ReservationInput) {
     startTransition(async () => {
-      const result = await createReservation(data, propertySlug);
+      const result = await createReservation(data);
       if (result && !result.success) {
         toast.error(result.message);
       }
