@@ -34,6 +34,7 @@ export function ViewingRequestForm({
 
   const {
     register,
+    getValues,
     setValue,
     handleSubmit,
     trigger,
@@ -48,6 +49,11 @@ export function ViewingRequestForm({
   const minDate = new Date().toISOString().split('T')[0];
 
   async function goNext() {
+    if (step === 1) {
+      const phone = formatDutchPhoneInput(getValues('phone'));
+      setValue('phone', phone, { shouldDirty: true, shouldValidate: true });
+    }
+
     const fieldsByStep: (keyof ViewingRequestInput)[][] = [
       ['requestedDate', 'requestedTimeSlot'],
       ['firstName', 'lastName', 'email', 'phone'],
@@ -170,7 +176,7 @@ export function ViewingRequestForm({
                   maxLength={12}
                   placeholder="+31612345678"
                   {...register('phone')}
-                  onChange={(event) => {
+                  onBlur={(event) => {
                     setValue('phone', formatDutchPhoneInput(event.currentTarget.value), {
                       shouldDirty: true,
                       shouldValidate: true,
