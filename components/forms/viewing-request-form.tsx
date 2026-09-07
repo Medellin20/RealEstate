@@ -4,7 +4,6 @@ import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { ArrowLeft, ArrowRight, CalendarClock, FileCheck2, User } from 'lucide-react';
 import { viewingRequestSchema, type ViewingRequestInput } from '@/lib/validations/viewing';
@@ -108,16 +107,9 @@ export function ViewingRequestForm({
           void handleSubmit(onSubmit)();
         }}
       >
-        <AnimatePresence mode="wait">
+        <div>
           {step === 0 && (
-            <motion.div
-              key="step-0"
-              initial={{ opacity: 0, x: 16 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -16 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-4"
-            >
+            <div key="step-0" className="space-y-4">
               <div className="flex items-center gap-2 text-ink-700">
                 <CalendarClock className="h-5 w-5 text-canal-600" />
                 <h3 className="font-bold">Choisissez une date et un créneau</h3>
@@ -139,18 +131,11 @@ export function ViewingRequestForm({
                 </Select>
                 <FieldError message={errors.requestedTimeSlot?.message} />
               </div>
-            </motion.div>
+            </div>
           )}
 
           {step === 1 && (
-            <motion.div
-              key="step-1"
-              initial={{ opacity: 0, x: 16 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -16 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-4"
-            >
+            <div key="step-1" className="space-y-4">
               <div className="flex items-center gap-2 text-ink-700">
                 <User className="h-5 w-5 text-canal-600" />
                 <h3 className="font-bold">Vos coordonnées</h3>
@@ -190,18 +175,11 @@ export function ViewingRequestForm({
                 />
                 <FieldError message={errors.phone?.message} />
               </div>
-            </motion.div>
+            </div>
           )}
 
           {step === 2 && (
-            <motion.div
-              key="step-2"
-              initial={{ opacity: 0, x: 16 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -16 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-4"
-            >
+            <div key="step-2" className="space-y-4">
               <div className="flex items-center gap-2 text-ink-700">
                 <FileCheck2 className="h-5 w-5 text-canal-600" />
                 <h3 className="font-bold">Récapitulatif de votre demande</h3>
@@ -220,9 +198,9 @@ export function ViewingRequestForm({
                 Aucun paiement n’est demandé en ligne. Notre équipe vous contactera pour confirmer
                 le créneau et organiser manuellement la suite.
               </p>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        </div>
 
         <div className="mt-7 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Button
