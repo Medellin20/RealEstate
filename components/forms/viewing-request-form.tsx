@@ -34,6 +34,7 @@ export function ViewingRequestForm({
 
   const {
     register,
+    setValue,
     handleSubmit,
     trigger,
     watch,
@@ -168,7 +169,13 @@ export function ViewingRequestForm({
                   inputMode="tel"
                   maxLength={12}
                   placeholder="+31612345678"
-                  {...register('phone', { onChange: (event) => { event.target.value = formatDutchPhoneInput(event.target.value); } })}
+                  {...register('phone')}
+                  onChange={(event) => {
+                    setValue('phone', formatDutchPhoneInput(event.currentTarget.value), {
+                      shouldDirty: true,
+                      shouldValidate: true,
+                    });
+                  }}
                 />
                 <FieldError message={errors.phone?.message} />
               </div>
