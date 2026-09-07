@@ -5,18 +5,35 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
-import { ArrowLeft, ArrowRight, CalendarClock, FileCheck2, User } from 'lucide-react';
-import { viewingRequestSchema, type ViewingRequestInput } from '@/lib/validations/viewing';
+import {
+  ArrowLeft,
+  ArrowRight,
+  CalendarClock,
+  FileCheck2,
+  User,
+} from 'lucide-react';
+
+import {
+  viewingRequestSchema,
+  type ViewingRequestInput,
+} from '@/lib/validations/viewing';
+
 import { createViewingRequest } from '@/actions/viewings';
+
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { Label, FieldError } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+
 import { TIME_SLOTS } from '@/lib/utils/constants';
 import { cn } from '@/lib/utils/cn';
 import { formatDutchPhoneInput } from '@/lib/utils/phone';
 
-const STEPS = ['Date & créneau', 'Vos coordonnées', 'Récapitulatif'] as const;
+const STEPS = [
+  'Date & créneau',
+  'Vos coordonnées',
+  'Récapitulatif',
+] as const;
 
 export function ViewingRequestForm({
   propertyId,
@@ -29,7 +46,24 @@ export function ViewingRequestForm({
 }) {
   const [step, setStep] = React.useState(0);
   const [isPending, startTransition] = React.useTransition();
+
   const router = useRouter();
+
+  /*
+   * Date minimale autorisée.
+   *
+   * On évite toISOString() car celui-ci travaille en UTC
+   * et peut provoquer un décalage de date selon le fuseau horaire.
+   */
+  const minDate = React.useMemo(() => {
+    const today = new Date();
+
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }, []);
 
   const {
     register,
@@ -41,187 +75,453 @@ export function ViewingRequestForm({
     formState: { errors },
   } = useForm<ViewingRequestInput>({
     resolver: zodResolver(viewingRequestSchema),
-    defaultValues: { propertyId },
+
+    defaultValues: {
+      propertyId,
+
+      requestedDate: '',
+      requestedTimeSlot: '',
+
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+    },
+
+    mode: 'onTouched',
   });
 
   const values = watch();
-  const minDate = new Date().toISOString().split('T')[0];
 
+  /**
+   * Passe à l'étape suivante.
+   */
   async function goNext() {
-    if (step === 1) {
-      const phone = formatDutchPhoneInput(getValues('phone'));
-      setValue('phone', phone, { shouldDirty: true, shouldValidate: true });
-    }
+    /*
+     * Étape 0
+     * -------
+     * Vérification de la date et du créneau.
+     */
+    if (step === 0) {
+      const valid = await trigger([
+        'requestedDate',
+        'requestedTimeSlot',
+      ]);
 
-    const fieldsByStep: (keyof ViewingRequestInput)[][] = [
-      ['requestedDate', 'requestedTimeSlot'],
-      ['firstName', 'lastName', 'email', 'phone'],
-    ];
-    const valid = await trigger(fieldsByStep[step]);
-    if (valid) setStep((s) => Math.min(s + 1, STEPS.length - 1));
-  }
-
-  function onSubmit(data: ViewingRequestInput) {
-    startTransition(async () => {
-      const result = await createViewingRequest(data, propertySlug);
-      if (!result.success || !result.data) {
-        toast.error(result.message || 'La demande de visite n’a pas pu être envoyée.');
+      if (!valid) {
         return;
       }
 
-      router.push(`/appartements/${propertySlug}/visite/confirmation?ref=${encodeURIComponent(result.data.reference)}`);
+      setStep(1);
+      return;
+    }
+
+    /*
+     * Étape 1
+     * -------
+     * On formate le téléphone avant de valider.
+     */
+    if (step === 1) {
+      const formattedPhone = formatDutchPhoneInput(
+        getValues('phone') || ''
+      );
+
+      setValue('phone', formattedPhone, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+
+      const valid = await trigger([
+        'firstName',
+        'lastName',
+        'email',
+        'phone',
+      ]);
+
+      if (!valid) {
+        return;
+      }
+
+      setStep(2);
+    }
+  }
+
+  /**
+   * Retour à l'étape précédente.
+   */
+  function goBack() {
+    setStep((currentStep) => Math.max(0, currentStep - 1));
+  }
+
+  /**
+   * Envoi final de la demande.
+   */
+  function onSubmit(data: ViewingRequestInput) {
+    startTransition(async () => {
+      const result = await createViewingRequest(
+        data,
+        propertySlug
+      );
+
+      if (!result.success || !result.data) {
+        toast.error(
+          result.message ||
+            'La demande de visite n’a pas pu être envoyée.'
+        );
+
+        return;
+      }
+
+      router.push(
+        `/appartements/${propertySlug}/visite/confirmation?ref=${encodeURIComponent(
+          result.data.reference
+        )}`
+      );
     });
   }
 
   return (
     <div>
-      {/* Indicateur d'étapes */}
+      {/* ================================
+          INDICATEUR DES ÉTAPES
+          ================================= */}
+
       <div className="mb-8 flex items-center gap-2">
-        {STEPS.map((label, i) => (
+        {STEPS.map((label, index) => (
           <React.Fragment key={label}>
             <div className="flex items-center gap-2">
               <span
                 className={cn(
                   'flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-colors',
-                  i < step
-                    ? 'bg-canal-600 text-white'
-                    : i === step
-                      ? 'bg-ink-700 text-white'
-                      : 'bg-ink-100 text-ink-400'
+
+                  index < step &&
+                    'bg-canal-600 text-white',
+
+                  index === step &&
+                    'bg-ink-700 text-white',
+
+                  index > step &&
+                    'bg-ink-100 text-ink-400'
                 )}
               >
-                {i + 1}
+                {index + 1}
               </span>
-              <span className={cn('hidden text-sm font-medium sm:block', i === step ? 'text-ink-900' : 'text-ink-400')}>
+
+              <span
+                className={cn(
+                  'hidden text-sm font-medium sm:block',
+
+                  index === step
+                    ? 'text-ink-900'
+                    : 'text-ink-400'
+                )}
+              >
                 {label}
               </span>
             </div>
-            {i < STEPS.length - 1 && <div className="h-px flex-1 bg-ink-100" />}
+
+            {index < STEPS.length - 1 && (
+              <div className="h-px flex-1 bg-ink-100" />
+            )}
           </React.Fragment>
         ))}
       </div>
 
+      {/* ================================
+          FORMULAIRE
+          ================================= */}
+
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          void handleSubmit(onSubmit)();
         }}
       >
-        <div>
-          {step === 0 && (
-            <div key="step-0" className="space-y-4">
-              <div className="flex items-center gap-2 text-ink-700">
-                <CalendarClock className="h-5 w-5 text-canal-600" />
-                <h3 className="font-bold">Choisissez une date et un créneau</h3>
-              </div>
-              <div>
-                <Label htmlFor="requestedDate">Date souhaitée</Label>
-                <Input id="requestedDate" type="date" min={minDate} {...register('requestedDate')} />
-                <FieldError message={errors.requestedDate?.message} />
-              </div>
-              <div>
-                <Label htmlFor="requestedTimeSlot">Créneau horaire</Label>
-                <Select id="requestedTimeSlot" {...register('requestedTimeSlot')}>
-                  <option value="">Sélectionnez un créneau</option>
-                  {TIME_SLOTS.map((slot) => (
-                    <option key={slot} value={slot}>
-                      {slot}
-                    </option>
-                  ))}
-                </Select>
-                <FieldError message={errors.requestedTimeSlot?.message} />
-              </div>
-            </div>
-          )}
+        {/* =================================
+            ÉTAPE 1 : DATE ET CRÉNEAU
+            ================================= */}
 
-          {step === 1 && (
-            <div key="step-1" className="space-y-4">
-              <div className="flex items-center gap-2 text-ink-700">
-                <User className="h-5 w-5 text-canal-600" />
-                <h3 className="font-bold">Vos coordonnées</h3>
-              </div>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div>
-                  <Label htmlFor="firstName">Prénom</Label>
-                  <Input id="firstName" {...register('firstName')} />
-                  <FieldError message={errors.firstName?.message} />
-                </div>
-                <div>
-                  <Label htmlFor="lastName">Nom</Label>
-                  <Input id="lastName" {...register('lastName')} />
-                  <FieldError message={errors.lastName?.message} />
-                </div>
-              </div>
+        {step === 0 && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-ink-700">
+              <CalendarClock className="h-5 w-5 text-canal-600" />
+
+              <h3 className="font-bold">
+                Choisissez une date et un créneau
+              </h3>
+            </div>
+
+            {/* DATE */}
+
+            <div>
+              <Label htmlFor="requestedDate">
+                Date souhaitée
+              </Label>
+
+              <Input
+                id="requestedDate"
+                type="date"
+                min={minDate}
+                {...register('requestedDate')}
+              />
+
+              <FieldError
+                message={errors.requestedDate?.message}
+              />
+            </div>
+
+            {/* CRÉNEAU */}
+
+            <div>
+              <Label htmlFor="requestedTimeSlot">
+                Créneau horaire
+              </Label>
+
+              <Select
+                id="requestedTimeSlot"
+                {...register('requestedTimeSlot')}
+              >
+                <option value="">
+                  Sélectionnez un créneau
+                </option>
+
+                {TIME_SLOTS.map((slot) => (
+                  <option
+                    key={slot}
+                    value={slot}
+                  >
+                    {slot}
+                  </option>
+                ))}
+              </Select>
+
+              <FieldError
+                message={
+                  errors.requestedTimeSlot?.message
+                }
+              />
+            </div>
+          </div>
+        )}
+
+        {/* =================================
+            ÉTAPE 2 : COORDONNÉES
+            ================================= */}
+
+        {step === 1 && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-ink-700">
+              <User className="h-5 w-5 text-canal-600" />
+
+              <h3 className="font-bold">
+                Vos coordonnées
+              </h3>
+            </div>
+
+            {/* PRÉNOM + NOM */}
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div>
-                <Label htmlFor="email">E-mail</Label>
-                <Input id="email" type="email" {...register('email')} />
-                <FieldError message={errors.email?.message} />
-              </div>
-              <div>
-                <Label htmlFor="phone">Téléphone</Label>
+                <Label htmlFor="firstName">
+                  Prénom
+                </Label>
+
                 <Input
-                  id="phone"
-                  type="tel"
-                  inputMode="tel"
-                  maxLength={11}
-                  placeholder="+31612345678"
-                  {...register('phone')}
-                  onBlur={(event) => {
-                    setValue('phone', formatDutchPhoneInput(event.currentTarget.value), {
-                      shouldDirty: true,
-                      shouldValidate: true,
-                    });
-                  }}
+                  id="firstName"
+                  autoComplete="given-name"
+                  {...register('firstName')}
                 />
-                <FieldError message={errors.phone?.message} />
+
+                <FieldError
+                  message={errors.firstName?.message}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="lastName">
+                  Nom
+                </Label>
+
+                <Input
+                  id="lastName"
+                  autoComplete="family-name"
+                  {...register('lastName')}
+                />
+
+                <FieldError
+                  message={errors.lastName?.message}
+                />
               </div>
             </div>
-          )}
 
-          {step === 2 && (
-            <div key="step-2" className="space-y-4">
-              <div className="flex items-center gap-2 text-ink-700">
-                <FileCheck2 className="h-5 w-5 text-canal-600" />
-                <h3 className="font-bold">Récapitulatif de votre demande</h3>
-              </div>
+            {/* EMAIL */}
 
-              <div className="space-y-2 rounded-xl border border-ink-100 bg-sand-100/60 p-4 text-sm">
-                <Row label="Logement" value={propertyTitle} />
-                <Row label="Date" value={values.requestedDate || '—'} />
-                <Row label="Créneau" value={values.requestedTimeSlot || '—'} />
-                <Row label="Nom" value={`${values.firstName || ''} ${values.lastName || ''}`.trim() || '—'} />
-                <Row label="E-mail" value={values.email || '—'} />
-                <Row label="Téléphone" value={values.phone || '—'} />
-              </div>
+            <div>
+              <Label htmlFor="email">
+                E-mail
+              </Label>
 
-              <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-                Vérifiez vos informations puis confirmez votre demande de visite. Aucun code,
-                paiement ou vérification supplémentaire ne sera demandé.
-              </p>
+              <Input
+                id="email"
+                type="email"
+                autoComplete="email"
+                {...register('email')}
+              />
+
+              <FieldError
+                message={errors.email?.message}
+              />
             </div>
-          )}
-        </div>
+
+            {/* TÉLÉPHONE */}
+
+            <div>
+              <Label htmlFor="phone">
+                Téléphone
+              </Label>
+
+              <Input
+                id="phone"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                maxLength={16}
+                placeholder="+31612345678"
+                {...register('phone', {
+                  onBlur: (event) => {
+                    const formattedPhone =
+                      formatDutchPhoneInput(
+                        event.target.value
+                      );
+
+                    setValue(
+                      'phone',
+                      formattedPhone,
+                      {
+                        shouldDirty: true,
+                        shouldValidate: true,
+                      }
+                    );
+                  },
+                })}
+              />
+
+              <FieldError
+                message={errors.phone?.message}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* =================================
+            ÉTAPE 3 : RÉCAPITULATIF
+            ================================= */}
+
+        {step === 2 && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-ink-700">
+              <FileCheck2 className="h-5 w-5 text-canal-600" />
+
+              <h3 className="font-bold">
+                Récapitulatif de votre demande
+              </h3>
+            </div>
+
+            <div className="space-y-2 rounded-xl border border-ink-100 bg-sand-100/60 p-4 text-sm">
+              <Row
+                label="Logement"
+                value={propertyTitle}
+              />
+
+              <Row
+                label="Date"
+                value={
+                  values.requestedDate || '—'
+                }
+              />
+
+              <Row
+                label="Créneau"
+                value={
+                  values.requestedTimeSlot || '—'
+                }
+              />
+
+              <Row
+                label="Nom"
+                value={
+                  `${values.firstName || ''} ${
+                    values.lastName || ''
+                  }`.trim() || '—'
+                }
+              />
+
+              <Row
+                label="E-mail"
+                value={
+                  values.email || '—'
+                }
+              />
+
+              <Row
+                label="Téléphone"
+                value={
+                  values.phone || '—'
+                }
+              />
+            </div>
+
+            <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
+              Vérifiez vos informations puis confirmez
+              votre demande de visite. Aucun code, paiement
+              ou vérification supplémentaire ne sera demandé.
+            </p>
+          </div>
+        )}
+
+        {/* =================================
+            BOUTONS DE NAVIGATION
+            ================================= */}
 
         <div className="mt-7 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+          {/* RETOUR */}
+
           <Button
             type="button"
             variant="outline"
-            onClick={() => setStep((s) => Math.max(0, s - 1))}
-            className={cn('w-full sm:w-auto', step === 0 && 'hidden sm:inline-flex sm:invisible')}
+            onClick={goBack}
+            className={cn(
+              'w-full sm:w-auto',
+              step === 0 &&
+                'hidden sm:inline-flex sm:invisible'
+            )}
           >
             <ArrowLeft className="h-4 w-4" />
+
             Retour
           </Button>
 
-          {step < STEPS.length - 1 ? (
-            <Button type="button" onClick={goNext} className="w-full sm:w-auto">
-              Continuer
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          ) : (
+          {/* CONTINUER */}
+
+          {step < STEPS.length - 1 && (
             <Button
               type="button"
-              onClick={() => void handleSubmit(onSubmit)()}
+              onClick={() => void goNext()}
+              className="w-full sm:w-auto"
+            >
+              Continuer
+
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          )}
+
+          {/* CONFIRMER */}
+
+          {step === STEPS.length - 1 && (
+            <Button
+              type="button"
+              onClick={() =>
+                void handleSubmit(onSubmit)()
+              }
               isLoading={isPending}
               className="w-full sm:w-auto"
             >
@@ -234,11 +534,25 @@ export function ViewingRequestForm({
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
+/**
+ * Ligne du récapitulatif.
+ */
+function Row({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
   return (
     <div className="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-      <span className="text-ink-400">{label}</span>
-      <span className="break-words font-medium text-ink-700 sm:text-right">{value}</span>
+      <span className="text-ink-400">
+        {label}
+      </span>
+
+      <span className="break-words font-medium text-ink-700 sm:text-right">
+        {value}
+      </span>
     </div>
   );
 }
