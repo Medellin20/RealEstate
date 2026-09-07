@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { AutoSubmitSelect } from '@/components/admin/auto-submit-select';
 import { EmptyState } from '@/components/ui/empty-state';
-import { formatDate, formatDateTime, formatPrice } from '@/lib/utils/format';
+import { formatDate, formatDateTime } from '@/lib/utils/format';
 import { RESERVATION_STATUS_LABELS } from '@/lib/utils/constants';
 import type { ReservationStatus } from '@/types/database';
 
@@ -25,7 +25,7 @@ const PENDING_STATUS_OPTIONS = STATUS_OPTIONS.filter(({ value }) =>
 );
 
 export default async function AdminReservationsPage({ searchParams }: { searchParams: { status?: string; scope?: string } }) {
-  const reservations = await getAllReservationsAdmin({ status: searchParams.status, scope: searchParams.scope });
+  const { reservations, error } = await getAllReservationsAdmin({ status: searchParams.status, scope: searchParams.scope });
   const statusHistory = await getReservationStatusHistory(reservations.map((reservation) => reservation.id));
 
   return (
@@ -61,7 +61,11 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
         </div>
       </div>
 
-      {reservations.length === 0 ? (
+      {error ? (
+        <div role="alert" className="rounded-2xl border border-brick-200 bg-brick-50 p-5 text-sm text-brick-700">
+          Impossible de charger les réservations : {error}
+        </div>
+      ) : reservations.length === 0 ? (
         <EmptyState title="Aucune réservation" />
       ) : (
         <div className="space-y-3">

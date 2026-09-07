@@ -31,20 +31,32 @@ export async function getAllViewingsAdmin(params: { status?: string; date?: stri
 }
 
 export async function getAllReservationsAdmin(params: { status?: string; scope?: string } = {}) {
-  const supabase = createAdminClient();
-  let query = supabase
-    .from('reservations')
-    .select('*, properties(title, slug, city), clients(first_name, last_name, email, phone)')
-    .order('created_at', { ascending: false });
+  try {
+    const supabase = createAdminClient();
+    let query = supabase
+      .from('reservations')
+      .select('*, properties(title, slug, city), clients(first_name, last_name, email, phone)')
+      .order('created_at', { ascending: false });
 
-  if (params.status && ['submitted', 'under_review', 'accepted', 'rejected', 'awaiting_guarantee', 'guarantee_paid', 'confirmed', 'cancelled'].includes(params.status)) {
-    query = query.eq('status', params.status);
+    if (params.status && ['submitted', 'under_review', 'accepted', 'rejected', 'awaiting_guarantee', 'guarantee_paid', 'confirmed', 'cancelled'].includes(params.status)) {
+      query = query.eq('status', params.status);
+    }
+    if (params.scope === 'pending') query = query.in('status', ['submitted', 'under_review']);
+
+    const { data, error } = await query;
+    if (error) {
+      console.error('ADMIN RESERVATIONS QUERY ERROR:', error);
+      return { reservations: [], error: error.message };
+    }
+
+    return { reservations: data ?? [], error: null };
+  } catch (error) {
+    console.error('ADMIN RESERVATIONS SETUP ERROR:', error);
+    return {
+      reservations: [],
+      error: 'La connexion à la base de données a échoué. Vérifiez la configuration Supabase.',
+    };
   }
-  if (params.scope === 'pending') query = query.in('status', ['submitted', 'under_review']);
-
-  const { data, error } = await query;
-  if (error) return [];
-  return data ?? [];
 }
 
 export async function getReservationStatusHistory(reservationIds: string[]) {

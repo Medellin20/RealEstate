@@ -12,7 +12,7 @@ import {
 } from '@/lib/validations/reservation';
 import { generateReference } from '@/lib/utils/reference';
 import type { ActionResult } from '@/types';
-import { sendAdminAlert } from '@/lib/notifications/email';
+import { notifyAdminOfReservation } from '@/lib/notifications/reservation';
 
 /**
  * Crée une demande de réservation de logement.
@@ -168,38 +168,7 @@ export async function createReservation(
   // 8. Envoi de l'e-mail à l'administrateur
   // ---------------------------------------------------------
 
-  const emailResult = await sendAdminAlert(
-    `Nouvelle réservation — ${reference}`,
-    {
-      Référence: reference,
-      Logement: property.title,
-      Client: `${parsed.data.firstName} ${parsed.data.lastName}`,
-      Email: parsed.data.email,
-      Téléphone: parsed.data.phone,
-
-      'Date souhaitée':
-        parsed.data.desiredMoveInDate,
-
-      Durée: `${parsed.data.durationMonths} mois`,
-
-      Occupants: parsed.data.occupantsCount,
-
-      'Animaux de compagnie':
-        parsed.data.hasPets ? 'Oui' : 'Non',
-
-      'Contrat de travail':
-        parsed.data.employmentContract,
-
-      'Revenu mensuel':
-        `${parsed.data.monthlyIncome} €`,
-
-      'Ville d’origine':
-        parsed.data.originCity,
-
-      Message:
-        parsed.data.message || undefined,
-    }
-  );
+  const emailResult = await notifyAdminOfReservation(reservation.id);
 
   // ---------------------------------------------------------
   // 9. Vérification de l'envoi de l'e-mail
@@ -208,7 +177,6 @@ export async function createReservation(
   if (!emailResult.sent) {
     console.error('RESERVATION ADMIN EMAIL FAILED:', {
       reference,
-      reason: emailResult.reason,
     });
   } else {
     console.log(
