@@ -384,8 +384,8 @@ export function ViewingRequestForm({
                 type="tel"
                 inputMode="tel"
                 autoComplete="tel"
-                maxLength={16}
-                placeholder="+31612345678"
+                maxLength={13}
+                placeholder="+31 635219711"
                 {...register('phone', {
                   onBlur: (event) => {
                     const formattedPhone =

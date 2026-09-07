@@ -58,8 +58,8 @@ export function ContactForm() {
             id="phone"
             type="tel"
             inputMode="tel"
-            maxLength={12}
-            placeholder="+31612345678"
+            maxLength={13}
+            placeholder="+31 635219711"
             {...register('phone', { onChange: (event) => { event.target.value = formatDutchPhoneInput(event.target.value, true); } })}
           />
           <FieldError message={errors.phone?.message} />

@@ -56,7 +56,7 @@ export default async function HomePage() {
       {/* HERO */}
       <section className="relative overflow-hidden bg-ink-950">
         <div className="container-app relative pb-16 pt-20 sm:pb-24 sm:pt-28 lg:pt-32">
-          <FadeIn>
+          <div>
             <span className="text-eyebrow inline-block rounded-full bg-white/10 px-3 py-1.5 uppercase text-sand-200">
               Agence spécialisée — Pays-Bas
             </span>
@@ -67,7 +67,7 @@ export default async function HomePage() {
               Real Estate NL facilite la recherche, les visites et la réservation d’appartements
               aux Pays-Bas — un accompagnement clair, sécurisé et sans mauvaise surprise.
             </p>
-          </FadeIn>
+          </div>
 
           <FadeIn delay={0.15} className="mt-8 max-w-4xl">
             <HeroSearchBar />

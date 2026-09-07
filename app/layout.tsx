@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Open_Sans } from 'next/font/google';
 import { Toaster } from 'sonner';
 import './globals.css';
@@ -12,6 +12,12 @@ const openSans = Open_Sans({
 });
 
 const siteUrl = getSiteUrl();
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
