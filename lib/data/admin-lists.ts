@@ -14,7 +14,10 @@ export async function getAllViewingsAdmin(params: { status?: string; date?: stri
   if (params.date) query = query.eq('requested_date', params.date);
 
   const { data, error } = await query;
-  if (error) return [];
+  if (error) {
+    console.error('ADMIN VIEWINGS QUERY ERROR:', error);
+    return [];
+  }
   return data ?? [];
 }
 

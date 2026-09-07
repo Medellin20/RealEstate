@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 import { Button } from '@/components/ui/button';
-import { LanguageTranslator } from '@/components/layout/language-translator';
 
 const NAV_LINKS = [
   { href: '/', label: 'Accueil', icon: Home },
@@ -92,7 +91,6 @@ export function Navbar() {
         </Link>
 
         <div className="hidden items-center gap-2 md:flex">
-          <LanguageTranslator id="desktop-language-translator" />
           <Link
             href="/mon-compte"
             className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-ink-500 transition-colors hover:text-ink-900"
@@ -132,7 +130,6 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-1.5 md:hidden">
-          <LanguageTranslator id="mobile-language-translator" />
           <button
             onClick={() => setMobileOpen((open) => !open)}
             className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl text-ink-700 hover:bg-sand-100"
