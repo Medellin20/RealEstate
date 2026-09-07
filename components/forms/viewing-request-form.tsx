@@ -195,8 +195,8 @@ export function ViewingRequestForm({
               </div>
 
               <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-                Aucun paiement n’est demandé en ligne. Notre équipe vous contactera pour confirmer
-                le créneau et organiser manuellement la suite.
+                Vérifiez simplement vos informations puis confirmez votre demande de visite.
+                Aucun code ou vérification supplémentaire ne sera demandé.
               </p>
             </div>
           )}
@@ -225,7 +225,7 @@ export function ViewingRequestForm({
               isLoading={isPending}
               className="w-full sm:w-auto"
             >
-              Envoyer la demande de visite
+              Confirmer la visite
             </Button>
           )}
         </div>
