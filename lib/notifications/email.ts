@@ -82,9 +82,8 @@ export async function sendAdminAlert(
   /*
    * Validation correcte des adresses e-mail.
    */
-  const isEmail = (address: string): boolean => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address);
-  };
+  const isEmail = (address: string): boolean =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address);
 
   if (
     recipients.length === 0 ||

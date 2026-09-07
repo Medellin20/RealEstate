@@ -1,294 +1,266 @@
-import 'server-only';
+'use server';
 
-import nodemailer from 'nodemailer';
+import { revalidatePath } from 'next/cache';
 
-type AlertDetails = Record<
-  string,
-  string | number | null | undefined
->;
+import { createAdminClient } from '@/lib/supabase/admin';
+import { upsertClient } from '@/lib/data/clients';
+import { recordStatusChange } from '@/lib/data/history';
+import {
+  viewingRequestSchema,
+  type ViewingRequestInput,
+} from '@/lib/validations/viewing';
+import { generateReference } from '@/lib/utils/reference';
+import { sendAdminAlert } from '@/lib/notifications/email';
+import type { ActionResult } from '@/types';
 
-type EmailAlertResult =
-  | {
-      sent: true;
-    }
-  | {
-      sent: false;
-      reason:
-        | 'not_configured'
-        | 'invalid_recipient'
-        | 'delivery_failed';
-    };
-
-function escapeHtml(value: string): string {
-  return value.replace(
-    /[&<>'"]/g,
-    (character) =>
-      ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        "'": '&#39;',
-        '"': '&quot;',
-      })[character] as string
-  );
-}
-
-/**
- * Envoie une alerte e-mail à l'administrateur.
- *
- * L'échec de l'e-mail ne bloque pas la création
- * de la demande de visite.
- */
-export async function sendAdminAlert(
-  subject: string,
-  details: AlertDetails
-): Promise<EmailAlertResult> {
-  const user = process.env.GMAIL_USER?.trim();
-
-  const appPassword = process.env.GMAIL_APP_PASSWORD
-    ?.trim()
-    .replace(/\s/g, '');
-
-  const recipient = process.env.ALERT_EMAIL?.trim();
-
+export async function createViewingRequest(
+  input: ViewingRequestInput,
+  propertySlug: string
+): Promise<ActionResult<{ reference: string }>> {
   /*
-   * Vérification de la configuration.
+   * Validation du formulaire.
    */
-  if (!user || !appPassword || !recipient) {
-    console.error(
-      'EMAIL CONFIG ERROR: GMAIL_USER, GMAIL_APP_PASSWORD ou ALERT_EMAIL est manquant.'
-    );
+  const parsed =
+    viewingRequestSchema.safeParse(input);
 
+  if (!parsed.success) {
     return {
-      sent: false,
-      reason: 'not_configured',
+      success: false,
+      message:
+        'Merci de corriger les champs indiqués.',
+      fieldErrors:
+        parsed.error.flatten().fieldErrors,
     };
   }
 
   /*
-   * Support de plusieurs destinataires :
-   *
-   * email1@gmail.com,email2@gmail.com
-   *
-   * ou
-   *
-   * email1@gmail.com;email2@gmail.com
+   * Connexion Supabase administrateur.
    */
-  const recipients = recipient
-    .split(/[;,]/)
-    .map((address) => address.trim())
-    .filter(Boolean);
+  const supabase = createAdminClient();
 
   /*
-   * Validation correcte des adresses e-mail.
+   * Vérification du logement.
    */
-  const isEmail = (address: string): boolean => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address);
-  };
+  const {
+    data: property,
+    error: propertyError,
+  } = await supabase
+    .from('properties')
+    .select(
+      'id, title, status, is_published'
+    )
+    .eq('id', parsed.data.propertyId)
+    .maybeSingle();
+
+  if (propertyError) {
+    console.error(
+      'PROPERTY ERROR:',
+      propertyError
+    );
+
+    return {
+      success: false,
+      message:
+        'Impossible de vérifier le logement. Merci de réessayer.',
+    };
+  }
 
   if (
-    recipients.length === 0 ||
-    !recipients.every(isEmail)
+    !property ||
+    !property.is_published
   ) {
-    console.error(
-      'EMAIL CONFIG ERROR: ALERT_EMAIL contient une adresse e-mail invalide.',
-      recipients
-    );
-
     return {
-      sent: false,
-      reason: 'invalid_recipient',
+      success: false,
+      message:
+        'Ce logement n’est plus disponible.',
     };
   }
 
   /*
-   * Construction du contenu texte.
+   * Création ou mise à jour du client.
    */
-  const text = Object.entries(details)
-    .filter(
-      ([, value]) =>
-        value !== undefined &&
-        value !== null
-    )
-    .map(
-      ([label, value]) =>
-        `${label}: ${String(value)}`
-    )
-    .join('\n');
-
-  /*
-   * Construction du tableau HTML.
-   */
-  const rows = Object.entries(details)
-    .filter(
-      ([, value]) =>
-        value !== undefined &&
-        value !== null
-    )
-    .map(
-      ([label, value]) => `
-        <tr>
-          <td style="
-            padding: 10px 12px;
-            color: #607078;
-            border-bottom: 1px solid #eeeeee;
-            vertical-align: top;
-          ">
-            ${escapeHtml(label)}
-          </td>
-
-          <td style="
-            padding: 10px 12px;
-            font-weight: 600;
-            border-bottom: 1px solid #eeeeee;
-            vertical-align: top;
-          ">
-            ${escapeHtml(String(value))}
-          </td>
-        </tr>
-      `
-    )
-    .join('');
+  let client;
 
   try {
-    /*
-     * Configuration SMTP Gmail.
-     *
-     * Port 465 = connexion SSL directe.
-     */
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
+    client = await upsertClient({
+      firstName:
+        parsed.data.firstName,
 
-      auth: {
-        user,
-        pass: appPassword,
-      },
+      lastName:
+        parsed.data.lastName,
 
-      connectionTimeout: 10000,
-      greetingTimeout: 10000,
-      socketTimeout: 15000,
+      email:
+        parsed.data.email,
+
+      phone:
+        parsed.data.phone,
     });
-
-    /*
-     * Vérification de la connexion SMTP.
-     */
-    await transporter.verify();
-
-    /*
-     * Envoi du message.
-     */
-    const info = await transporter.sendMail({
-      from: {
-        name: 'Real Estate NL',
-        address: user,
-      },
-
-      to: recipients,
-
-      subject,
-
-      text,
-
-      html: `
-        <!DOCTYPE html>
-        <html lang="fr">
-          <head>
-            <meta charset="UTF-8" />
-            <meta
-              name="viewport"
-              content="width=device-width, initial-scale=1.0"
-            />
-            <title>${escapeHtml(subject)}</title>
-          </head>
-
-          <body
-            style="
-              margin: 0;
-              padding: 30px 15px;
-              background: #f5f7f8;
-              font-family: Arial, Helvetica, sans-serif;
-              color: #263238;
-            "
-          >
-            <div
-              style="
-                max-width: 700px;
-                margin: 0 auto;
-                background: #ffffff;
-                border: 1px solid #eeeeee;
-                border-radius: 12px;
-                overflow: hidden;
-              "
-            >
-
-              <div
-                style="
-                  padding: 24px;
-                  background: #f5f7f8;
-                  border-bottom: 1px solid #eeeeee;
-                "
-              >
-                <h2
-                  style="
-                    margin: 0;
-                    font-size: 22px;
-                    color: #263238;
-                  "
-                >
-                  ${escapeHtml(subject)}
-                </h2>
-              </div>
-
-              <div style="padding: 24px;">
-
-                <table
-                  style="
-                    width: 100%;
-                    border-collapse: collapse;
-                    font-size: 14px;
-                  "
-                >
-                  ${rows}
-                </table>
-
-                <p
-                  style="
-                    margin: 24px 0 0;
-                    color: #607078;
-                    font-size: 14px;
-                    line-height: 1.6;
-                  "
-                >
-                  Connectez-vous à l’espace administrateur
-                  pour traiter cette demande.
-                </p>
-
-              </div>
-            </div>
-          </body>
-        </html>
-      `,
-    });
-
-    console.log(
-      'EMAIL SENT:',
-      info.messageId
-    );
-
-    return {
-      sent: true,
-    };
   } catch (error) {
     console.error(
-      'EMAIL DELIVERY ERROR:',
+      'CLIENT ERROR:',
       error
     );
 
     return {
-      sent: false,
-      reason: 'delivery_failed',
+      success: false,
+      message:
+        'Impossible d’enregistrer vos informations. Merci de réessayer.',
     };
   }
+
+  /*
+   * Génération de la référence.
+   */
+  const reference =
+    generateReference('VIS');
+
+  const initialStatus = 'pending';
+
+  /*
+   * Création de la demande de visite.
+   */
+  const {
+    data: viewing,
+    error: insertError,
+  } = await supabase
+    .from('viewing_requests')
+    .insert({
+      reference,
+
+      property_id:
+        property.id,
+
+      client_id:
+        client.id,
+
+      requested_date:
+        parsed.data.requestedDate,
+
+      requested_time_slot:
+        parsed.data.requestedTimeSlot,
+
+      status:
+        initialStatus,
+
+      fee_amount: 0,
+    })
+    .select('*')
+    .single();
+
+  if (
+    insertError ||
+    !viewing
+  ) {
+    console.error(
+      'VIEWING REQUEST ERROR:',
+      insertError
+    );
+
+    return {
+      success: false,
+      message:
+        'Une erreur est survenue lors de l’enregistrement de votre demande. Merci de réessayer.',
+    };
+  }
+
+  /*
+   * Historique.
+   */
+  try {
+    await recordStatusChange({
+      entityType:
+        'viewing_request',
+
+      entityId:
+        viewing.id,
+
+      fromStatus:
+        null,
+
+      toStatus:
+        initialStatus,
+
+      changedBy:
+        'client',
+    });
+  } catch (error) {
+    console.error(
+      'HISTORY ERROR:',
+      error
+    );
+  }
+
+  /*
+   * Envoi de l'e-mail administrateur.
+   */
+  const emailResult =
+    await sendAdminAlert(
+      `Nouvelle demande de visite — ${reference}`,
+      {
+        Référence:
+          reference,
+
+        Logement:
+          property.title,
+
+        Client:
+          `${parsed.data.firstName} ${parsed.data.lastName}`,
+
+        Email:
+          parsed.data.email,
+
+        Téléphone:
+          parsed.data.phone,
+
+        Date:
+          parsed.data.requestedDate,
+
+        Créneau:
+          parsed.data.requestedTimeSlot,
+      }
+    );
+
+  /*
+   * L'e-mail est uniquement une notification.
+   * La demande a déjà été enregistrée.
+   */
+  if (!emailResult.sent) {
+    console.error(
+      'ADMIN EMAIL FAILED:',
+      {
+        reference,
+        reason:
+          emailResult.reason,
+      }
+    );
+  } else {
+    console.log(
+      `ADMIN EMAIL SENT FOR ${reference}`
+    );
+  }
+
+  /*
+   * Actualisation des pages administrateur.
+   */
+  revalidatePath(
+    '/admin/visites'
+  );
+
+  revalidatePath(
+    '/admin'
+  );
+
+  /*
+   * Réponse au formulaire.
+   */
+  return {
+    success: true,
+
+    message:
+      'Votre demande de visite a bien été envoyée. Vous recevrez une réponse dans un délai de 15 minutes afin de confirmer votre visite.',
+
+    data: {
+      reference,
+    },
+  };
 }
