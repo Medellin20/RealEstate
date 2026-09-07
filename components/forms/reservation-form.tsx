@@ -23,10 +23,12 @@ export function ReservationForm({
   propertyId,
   propertySlug,
   propertyTitle,
+  reservationFee,
 }: {
   propertyId: string;
   propertySlug: string;
   propertyTitle: string;
+  reservationFee: string;
 }) {
   const [step, setStep] = React.useState(0);
   const [isPending, startTransition] = React.useTransition();
@@ -223,6 +225,7 @@ export function ReservationForm({
               </div>
               <div className="space-y-2 rounded-xl border border-ink-100 bg-sand-100/60 p-4 text-sm">
                 <Row label="Logement" value={propertyTitle} />
+                <Row label="Frais de réservation (1 mois de loyer)" value={reservationFee} />
                 <Row label="Nom" value={`${values.firstName || ''} ${values.lastName || ''}`.trim() || '—'} />
                 <Row label="E-mail" value={values.email || '—'} />
                 <Row label="Date de réservation" value={values.desiredMoveInDate || '—'} />
@@ -234,8 +237,8 @@ export function ReservationForm({
                 <Row label="Ville d’origine" value={values.originCity || '—'} />
               </div>
               <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-                Cette étape transmet uniquement votre demande de réservation. Aucun paiement ni
-                justificatif bancaire n’est demandé sur le site. L’agence vous contactera pour la suite.
+                Les frais de réservation correspondent à un mois de loyer ({reservationFee}).
+                Après vérification de votre dossier, l’agence vous transmettra les modalités de paiement.
               </p>
             </motion.div>
           )}
@@ -259,7 +262,7 @@ export function ReservationForm({
             </Button>
           ) : (
             <Button type="submit" isLoading={isPending} className="w-full sm:w-auto">
-              Envoyer la demande de réservation
+              Envoyer mon dossier de paiement
             </Button>
           )}
         </div>

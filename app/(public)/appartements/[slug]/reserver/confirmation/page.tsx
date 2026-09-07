@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { RESERVATION_STATUS_LABELS } from '@/lib/utils/constants';
 import { formatDate } from '@/lib/utils/format';
 
-export const metadata = { title: 'Demande de réservation envoyée' };
+export const metadata = { title: 'Dossier de paiement envoyé' };
 
 export default async function ReservationConfirmationPage({
   searchParams,
@@ -26,11 +26,11 @@ export default async function ReservationConfirmationPage({
           <CheckCircle2 className="h-7 w-7" />
         </div>
 
-        <h1 className="mt-5 text-xl font-extrabold text-ink-900">Votre demande de réservation est envoyée</h1>
+        <h1 className="mt-5 text-xl font-extrabold text-ink-900">Votre dossier de paiement est envoyé</h1>
 
         <p className="mt-2 text-sm text-ink-500">
-          Notre équipe va examiner votre dossier et vous contactera pour organiser manuellement la suite.
-          Aucun paiement ni justificatif bancaire n’est demandé sur le site.
+          Notre équipe va examiner votre dossier et vous communiquera les modalités de paiement.
+          Les frais de réservation correspondent à un mois de loyer.
         </p>
 
         <p className="mt-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-bold leading-relaxed text-red-700">
@@ -38,7 +38,7 @@ export default async function ReservationConfirmationPage({
         </p>
 
         <p className="mt-2 text-sm text-ink-500">
-          Numéro de réservation : <span className="font-semibold text-ink-700">{reservation.reference}</span>
+          Référence de paiement : <span className="font-semibold text-ink-700">{reservation.reference}</span>
         </p>
 
         <div className="mt-6 space-y-2 rounded-xl bg-sand-100/60 p-4 text-left text-sm">

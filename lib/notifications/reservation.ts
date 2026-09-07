@@ -27,7 +27,7 @@ export async function notifyAdminOfReservation(
   const [{ data: client, error: clientError }, { data: property, error: propertyError }] =
     await Promise.all([
       supabase.from('clients').select('*').eq('id', reservation.client_id).maybeSingle(),
-      supabase.from('properties').select('title').eq('id', reservation.property_id).maybeSingle(),
+      supabase.from('properties').select('title, monthly_price').eq('id', reservation.property_id).maybeSingle(),
     ]);
 
   if (clientError || propertyError || !client || !property) {
@@ -40,10 +40,11 @@ export async function notifyAdminOfReservation(
   }
 
   const result = await sendAdminAlert(
-    `Nouvelle réservation — ${reservation.reference}`,
+    `Nouveau dossier de paiement de réservation — ${reservation.reference}`,
     {
       Référence: reservation.reference,
       Logement: property.title,
+      'Frais de réservation (1 mois de loyer)': `${property.monthly_price} €`,
       Client: `${client.first_name} ${client.last_name}`,
       Email: client.email,
       Téléphone: client.phone,
