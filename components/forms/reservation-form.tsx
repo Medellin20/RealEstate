@@ -30,6 +30,7 @@ export function ReservationForm({
 }) {
   const [step, setStep] = React.useState(0);
   const [isPending, startTransition] = React.useTransition();
+  const [hasSent, setHasSent] = React.useState(false);
 
   const {
     register,
@@ -64,6 +65,9 @@ export function ReservationForm({
       const result = await createReservation(data);
       if (result && !result.success) {
         toast.error(result.message);
+      } else if (result?.success) {
+        setHasSent(true);
+        toast.success(result.message);
       }
     });
   }
@@ -235,8 +239,9 @@ export function ReservationForm({
                 <Row label="Ville d’origine" value={values.originCity || '—'} />
               </div>
               <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-                Les frais de réservation correspondent à un mois de loyer ({reservationFee}).
-                Après vérification de votre dossier, l’agence vous transmettra les modalités de paiement.
+                {hasSent
+                  ? 'Vous recevrez une notification dans votre e-mail sous 10 minutes.'
+                  : `Les frais de réservation correspondent à un mois de loyer (${reservationFee}). Après vérification de votre dossier, l’agence vous transmettra les modalités de paiement.`}
               </p>
             </motion.div>
           )}
@@ -259,7 +264,7 @@ export function ReservationForm({
               <ArrowRight className="h-4 w-4" />
             </Button>
           ) : (
-            <Button type="submit" isLoading={isPending} className="w-full sm:w-auto">
+            <Button type="submit" isLoading={isPending} disabled={hasSent} className="w-full sm:w-auto">
               Envoyer mon dossier de paiement
             </Button>
           )}
