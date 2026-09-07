@@ -17,12 +17,6 @@ export default function MentionsLegalesPage() {
         Numéro de coffre : NL02139484.
       </p>
 
-      <h2>Hébergement</h2>
-      <p>
-        L’application est hébergée sur une infrastructure cloud et les données sont stockées via
-        Supabase (PostgreSQL).
-      </p>
-
       <h2>Propriété intellectuelle</h2>
       <p>
         L’ensemble des contenus présents sur ce site (textes, photographies, logo, charte graphique)

@@ -26,13 +26,6 @@ export default function ConfidentialitePage() {
         archivées conformément aux obligations légales applicables.
       </p>
 
-      <h2>Sécurité</h2>
-      <p>
-        Vos données sont stockées sur une infrastructure Supabase sécurisée, protégée par des
-        politiques de sécurité au niveau des lignes (Row Level Security). L’accès aux dossiers est
-        réservé à notre équipe administrative.
-      </p>
-
       <h2>Vos droits</h2>
       <p>
         Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez d’un
