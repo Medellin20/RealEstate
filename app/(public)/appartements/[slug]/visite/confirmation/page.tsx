@@ -41,12 +41,12 @@ export default async function ViewingConfirmationPage({
         </div>
 
         <p className="mt-4 text-sm text-ink-500">
-          Notre équipe va examiner votre demande et vous contactera pour confirmer le rendez-vous.
-          Aucun paiement ni justificatif bancaire n’est demandé sur le site.
+          Nous avons bien reçu vos informations et les avons transmises à notre équipe.
+          Vous recevrez une réponse dans moins de 15 minutes pour savoir si votre visite est confirmée.
         </p>
 
-        <p className="mt-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-bold leading-relaxed text-red-700">
-          Si vous ne recevez pas une confirmation par mail ou par WhatsApp en moins de 24 h, sachez que votre dossier a été rejeté.
+        <p className="mt-5 rounded-xl border border-canal-200 bg-canal-50 p-4 text-sm font-bold leading-relaxed text-canal-800">
+          La demande est en attente de confirmation. Nous vous contacterons dès que la visite sera validée.
         </p>
 
         <div className="mt-8 flex flex-col gap-2.5 sm:flex-row">
