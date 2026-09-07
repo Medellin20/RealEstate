@@ -70,6 +70,6 @@ export async function createReservation(
 
   return {
     success: true,
-    message: 'Vos informations ont été envoyées à l’agence.',
+    message: 'Vous recevrez une notification par e-mail.',
   };
 }
