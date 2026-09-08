@@ -31,14 +31,14 @@ export default async function ReservationPage({ params }: { params: { slug: stri
             <h1 className="text-display-sm font-extrabold text-ink-900">Reserveringskosten betalen</h1>
             <p className="mt-1.5 text-ink-500">{property.title}</p>
             <div className="mt-5 rounded-xl border border-canal-200 bg-canal-50 p-4 text-sm leading-relaxed text-canal-800">
-              <strong>Reserveringskosten: {formatPrice(property.monthly_price)}.</strong>{' '}
-              Dit is één maand huur. Vul uw dossier in; ons team stuurt u daarna de betaalinstructies.
+              <strong>Reserveringskosten: {formatPrice(property.monthly_price / 2)}.</strong>{' '}
+              Dit is de helft van één maand huur. Vul uw dossier in; ons team stuurt u daarna de betaalinstructies.
             </div>
             <div className="mt-8">
               <ReservationForm
                 propertyId={property.id}
                 propertyTitle={property.title}
-                reservationFee={formatPrice(property.monthly_price)}
+                reservationFee={formatPrice(property.monthly_price / 2)}
                 confirmationUrl={`/appartements/${property.slug}/reserver/confirmation`}
               />
             </div>

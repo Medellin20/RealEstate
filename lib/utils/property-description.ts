@@ -132,3 +132,64 @@ export function generatePropertyDescriptionFromProperty(property: Property, amen
     availableFrom: property.available_from ?? '',
   }, amenityLabels);
 }
+
+/** Génère la version néerlandaise affichée sur la page publique, sans modifier la donnée stockée. */
+export function generateDutchPropertyDescription(
+  property: Property,
+  amenityLabels: string[] = []
+) {
+  const propertyType: Record<Property['property_type'], string> = {
+    appartement: 'appartement',
+    studio: 'studio',
+    maison: 'woning',
+    chambre: 'kamer',
+    loft: 'loft',
+    duplex: 'duplex',
+  };
+  const location = property.neighborhood
+    ? `in de wijk ${property.neighborhood}, in ${property.city}`
+    : `in ${property.city}`;
+  const interior = property.interior_type.trim().toLocaleLowerCase('nl-NL');
+  const floor = property.floor === null
+    ? ''
+    : property.floor === 0
+      ? 'op de begane grond'
+      : `op de ${property.floor}${property.floor === 1 ? 'e' : 'e'} verdieping`;
+  const rooms = [
+    `${property.bedrooms} slaapkamer${property.bedrooms === 1 ? '' : 's'}`,
+    `${property.bathrooms} badkamer${property.bathrooms === 1 ? '' : 's'}`,
+    floor,
+  ].filter(Boolean);
+  const features = [
+    property.has_elevator && 'een lift',
+    property.has_balcony && 'een balkon',
+    property.has_terrace && 'een terras',
+    property.has_parking && 'parkeergelegenheid',
+    property.has_garage && 'een garage',
+    property.has_garden && 'een tuin',
+    ...amenityLabels.map((label) => label.trim()).filter(Boolean),
+  ].filter((value): value is string => Boolean(value));
+  const availableFrom = property.available_from
+    ? new Intl.DateTimeFormat('nl-NL', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'UTC',
+      }).format(new Date(`${property.available_from}T00:00:00Z`))
+    : null;
+  const sentences = [
+    `Ontdek dit ${propertyType[property.property_type]} van ${interior}, ${property.surface_m2} m² groot, ${location}.`,
+    `De woning beschikt over ${rooms.join(' en ')}.`,
+    features.length > 0 ? `Daarnaast beschikt de woning over: ${features.join(', ')}.` : '',
+    availableFrom ? `Beschikbaar vanaf ${availableFrom}.` : '',
+    `De maandelijkse huur bedraagt ${formatEuro(property.monthly_price)}.`,
+    property.service_charges > 0
+      ? `Daar komen maandelijkse servicekosten van ${formatEuro(property.service_charges)} bij.`
+      : '',
+    property.deposit_amount > 0
+      ? `De waarborgsom bedraagt ${formatEuro(property.deposit_amount)}.`
+      : '',
+  ];
+
+  return sentences.filter(Boolean).join(' ');
+}

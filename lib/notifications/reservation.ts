@@ -48,7 +48,7 @@ export async function notifyAdminOfReservation(
         property,
         await getAmenityLabels(property.id)
       ),
-      'Frais de réservation (1 mois de loyer)': `${property.monthly_price} €`,
+      'Frais de réservation (50 % du loyer)': `${property.monthly_price / 2} €`,
       Client: `${client.first_name} ${client.last_name}`,
       Email: client.email,
       Téléphone: client.phone,

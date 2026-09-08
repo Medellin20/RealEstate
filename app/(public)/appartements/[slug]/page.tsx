@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button';
 import { FadeIn } from '@/components/ui/fade-in';
 import { PROPERTY_STATUS_LABELS } from '@/lib/utils/constants';
 import { formatDate, formatPrice, formatSurface } from '@/lib/utils/format';
+import { generateDutchPropertyDescription } from '@/lib/utils/property-description';
 
 interface PageProps {
   params: { slug: string };
@@ -29,15 +30,16 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const property = await getPropertyBySlug(params.slug);
   if (!property) return { title: 'woning introuvable' };
+  const dutchDescription = generateDutchPropertyDescription(property);
 
   const primaryImage = property.property_images.find((i) => i.is_primary) ?? property.property_images[0];
 
   return {
     title: `${property.title} — ${property.city}`,
-    description: property.description.slice(0, 155),
+    description: dutchDescription.slice(0, 155),
     openGraph: {
       title: property.title,
-      description: property.description.slice(0, 155),
+      description: dutchDescription.slice(0, 155),
       images: primaryImage ? [{ url: primaryImage.url }] : undefined,
     },
     alternates: {
@@ -50,6 +52,10 @@ export default async function PropertyDetailPage({ params }: PageProps) {
   const property = await getPropertyBySlug(params.slug);
   if (!property) notFound();
 
+  const dutchDescription = generateDutchPropertyDescription(
+    property,
+    property.amenities.map((amenity) => amenity.label_fr)
+  );
   const similar = await getSimilarProperties(property, 3);
   const statusMeta = PROPERTY_STATUS_LABELS[property.status];
   const isBookable = property.status === 'available';
@@ -58,7 +64,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
     '@context': 'https://schema.org',
     '@type': 'Apartment',
     name: property.title,
-    description: property.description,
+    description: dutchDescription,
     numberOfRooms: property.rooms ?? property.bedrooms,
     floorSize: { '@type': 'QuantitativeValue', value: property.surface_m2, unitCode: 'MTK' },
     address: { '@type': 'PostalAddress', addressLocality: property.city, addressCountry: 'NL' },
@@ -129,7 +135,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
             <div className="mt-10">
               <h2 className="text-lg font-bold text-ink-900">Beschrijving</h2>
               <p className="mt-3 whitespace-pre-line leading-relaxed text-ink-600">
-                {property.description}
+                {dutchDescription}
               </p>
             </div>
 

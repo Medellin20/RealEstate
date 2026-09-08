@@ -229,7 +229,7 @@ export function ReservationForm({
               </div>
               <div className="space-y-2 rounded-xl border border-ink-100 bg-sand-100/60 p-4 text-sm">
                 <Row label="woning" value={propertyTitle} />
-                <Row label="Reserveringskosten (1 maand huur)" value={reservationFee} />
+                <Row label="Reserveringskosten (50% van één maand huur)" value={reservationFee} />
                 <Row label="Naam" value={`${values.firstName || ''} ${values.lastName || ''}`.trim() || '—'} />
                 <Row label="E-mail" value={values.email || '—'} />
                 <Row label="Gewenste verhuisdatum" value={values.desiredMoveInDate || '—'} />
@@ -241,7 +241,7 @@ export function ReservationForm({
                 <Row label="Plaats van herkomst" value={values.originCity || '—'} />
               </div>
               <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-                De reserveringskosten bedragen één maand huur ({reservationFee}). Na controle van uw
+                De reserveringskosten bedragen 50% van één maand huur ({reservationFee}). Na controle van uw
                 dossier stuurt het agentschap u de betaalinstructies.
               </p>
             </motion.div>

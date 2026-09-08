@@ -49,7 +49,7 @@ export async function createReservation(
         property,
         await getAmenityLabels(property.id)
       ),
-      'Frais de réservation (1 mois de loyer)': `${property.monthly_price} €`,
+      'Frais de réservation (50 % du loyer)': `${property.monthly_price / 2} €`,
       Client: `${parsed.data.firstName} ${parsed.data.lastName}`,
       Email: parsed.data.email,
       Téléphone: parsed.data.phone,
