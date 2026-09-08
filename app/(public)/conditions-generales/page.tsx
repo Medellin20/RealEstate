@@ -1,40 +1,40 @@
 import type { Metadata } from 'next';
 import { LegalPage } from '@/components/shared/legal-page';
 
-export const metadata: Metadata = { title: 'Conditions générales' };
+export const metadata: Metadata = { title: 'Algemene voorwaarden' };
 
 export default function ConditionsGeneralesPage() {
   return (
-    <LegalPage title="Conditions générales d’utilisation" updatedAt="21 août 2026">
+    <LegalPage title="Algemene gebruiksvoorwaarden" updatedAt="21 augustus 2026">
       <h2>Objet</h2>
       <p>
-        Les présentes conditions générales régissent l’utilisation du site Real Estate NL et les
-        services de mise en relation pour la location d’appartements aux Pays-Bas.
+        Deze algemene voorwaarden regelen het gebruik van de website Real Estate NL en de diensten
+        voor het tot stand brengen van contacten voor de verhuur van appartementen in Nederland.
       </p>
 
-      <h2>Demandes de visite</h2>
+      <h2>Bezichtigingsaanvragen</h2>
       <p>
-        L’envoi d’une demande de visite depuis le site ne nécessite aucun paiement. Le créneau
-        demandé reste soumis à confirmation par Real Estate NL, qui contacte le client pour
-        organiser le rendez-vous.
+        Voor het versturen van een bezichtigingsaanvraag via de website is geen betaling nodig. Het
+        gewenste tijdstip is onder voorbehoud van bevestiging door Real Estate NL, dat contact
+        opneemt met de klant om de afspraak te organiseren.
       </p>
 
-      <h2>Demandes de réservation</h2>
+      <h2>Reserveringsaanvragen</h2>
       <p>
-        L’envoi d’une demande de réservation ne vaut pas acceptation définitive et ne nécessite
-        aucun paiement sur le site. Real Estate NL examine le dossier, communique sa décision et
-        organise directement avec le client les éventuelles formalités ultérieures.
+        Het versturen van een reserveringsaanvraag betekent geen definitieve aanvaarding en vereist
+        geen betaling op de website. Real Estate NL beoordeelt het dossier, deelt de beslissing mee
+        en regelt eventuele vervolgstappen rechtstreeks met de klant.
       </p>
 
-      <h2>Responsabilité</h2>
+      <h2>Aansprakelijkheid</h2>
       <p>
-        Real Estate NL agit en tant qu’intermédiaire entre locataires et propriétaires ou
-        gestionnaires de biens. Le contrat de location définitif est conclu directement entre le
-        locataire et le bailleur du logement concerné.
+        Real Estate NL treedt op als tussenpersoon tussen huurders en eigenaren of beheerders. Het
+        definitieve huurcontract wordt rechtstreeks gesloten tussen de huurder en de verhuurder van
+        de betreffende woning.
       </p>
 
-      <h2>Droit applicable</h2>
-      <p>Les présentes conditions générales sont soumises au droit néerlandais.</p>
+      <h2>Toepasselijk recht</h2>
+      <p>Op deze algemene voorwaarden is Nederlands recht van toepassing.</p>
     </LegalPage>
   );
 }

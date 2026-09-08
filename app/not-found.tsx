@@ -10,18 +10,18 @@ export default function NotFound() {
       <Navbar />
       <main className="flex flex-1 items-center justify-center py-20">
         <div className="container-app text-center">
-          <p className="text-eyebrow text-canal-600">Erreur 404</p>
+          <p className="text-eyebrow text-canal-600">Fout 404</p>
           <h1 className="mt-3 text-display-md font-extrabold text-ink-900 sm:text-display-lg">
             Page introuvable
           </h1>
           <p className="mx-auto mt-4 max-w-md text-ink-500">
-            Le logement ou la page que vous recherchez n’existe pas ou n’est plus disponible.
+            De woning of pagina die u zoekt bestaat niet of is niet meer beschikbaar.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link href="/">
               <Button variant="outline">
                 <Home className="h-4 w-4" />
-                Retour à l’accueil
+                Terug naar home
               </Button>
             </Link>
             <Link href="/appartements">

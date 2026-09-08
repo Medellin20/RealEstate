@@ -22,7 +22,7 @@ export default function AdminLoginPage() {
           </div>
           <h1 className="mt-4 text-center text-lg font-bold text-white">Espace administrateur</h1>
           <p className="mt-1 text-center text-sm text-sand-400">
-            Connectez-vous pour gérer les annonces et les dossiers clients.
+            Log in om advertenties en klantdossiers te beheren.
           </p>
 
           <div className="mt-6">

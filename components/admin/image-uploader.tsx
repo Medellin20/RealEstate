@@ -42,7 +42,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
         toast.error(result.message);
       }
     } catch {
-      toast.error('Connexion impossible. Aucune photo n’a été ajoutée.');
+      toast.error('Verbinding mislukt. Er is geen foto toegevoegd.');
     } finally {
       setIsUploading(false);
       setPendingCount(0);
@@ -71,7 +71,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
         }
       } catch {
         setImages(previousImages);
-        toast.error('Connexion impossible. La photo n’a pas été supprimée.');
+        toast.error('Verbinding mislukt. De foto is niet verwijderd.');
       }
     });
   }
@@ -88,7 +88,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
         }
       } catch {
         setImages(previousImages);
-        toast.error('Connexion impossible. L’image principale n’a pas été modifiée.');
+        toast.error('Verbinding mislukt. De hoofdfoto is niet gewijzigd.');
       }
     });
   }
@@ -109,7 +109,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
         }
       } catch {
         setImages(previousImages);
-        toast.error('Connexion impossible. L’ordre des photos n’a pas été modifié.');
+        toast.error('Verbinding mislukt. De volgorde van de foto’s is niet gewijzigd.');
       }
     });
   }
@@ -127,16 +127,16 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
           <>
             <Loader2 className="h-6 w-6 animate-spin text-ink-500" />
             <p className="text-sm font-medium text-ink-600">
-              Téléversement de {pendingCount} image{pendingCount > 1 ? 's' : ''} en cours...
+              Uploaden van {pendingCount} image{pendingCount > 1 ? 's' : ''} en cours...
             </p>
           </>
         ) : (
           <>
             <UploadCloud className="h-6 w-6 text-ink-400" />
             <p className="text-sm font-medium text-ink-600">
-              Cliquez pour sélectionner des photos, ou glissez-déposez ici
+              Klik om foto’s te selecteren of sleep ze hiernaartoe
             </p>
-            <p className="text-xs text-ink-400">JPG, PNG ou WebP — 10 Mo max. par image</p>
+            <p className="text-xs text-ink-400">JPG, PNG of WebP — 10 Mo max. par image</p>
           </>
         )}
       </label>
@@ -175,7 +175,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
                     type="button"
                     onClick={() => handleSetPrimary(image.id)}
                     disabled={isPending}
-                    title="Définir comme image principale"
+                    title="Als hoofdfoto instellen"
                     className="rounded-full bg-white/90 p-1.5 text-ink-700 hover:bg-white"
                   >
                     <Star className="h-3.5 w-3.5" />
@@ -185,7 +185,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
                   type="button"
                   onClick={() => move(index, -1)}
                   disabled={isPending || index === 0}
-                  title="Déplacer vers la gauche"
+                  title="Naar links verplaatsen"
                   className="rounded-full bg-white/90 p-1.5 text-ink-700 hover:bg-white disabled:opacity-40"
                 >
                   <ArrowLeft className="h-3.5 w-3.5" />
@@ -194,7 +194,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
                   type="button"
                   onClick={() => move(index, 1)}
                   disabled={isPending || index === images.length - 1}
-                  title="Déplacer vers la droite"
+                  title="Naar rechts verplaatsen"
                   className="rounded-full bg-white/90 p-1.5 text-ink-700 hover:bg-white disabled:opacity-40"
                 >
                   <ArrowRight className="h-3.5 w-3.5" />
@@ -203,7 +203,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
                   type="button"
                   onClick={() => setImageToDelete(image)}
                   disabled={isPending}
-                  title="Supprimer"
+                  title="Verwijderen"
                   className="rounded-full bg-white/90 p-1.5 text-brick-500 hover:bg-white"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
@@ -217,10 +217,10 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
       <Modal
         open={imageToDelete !== null}
         onClose={() => setImageToDelete(null)}
-        title="Supprimer cette photo ?"
+        title="Deze foto verwijderen?"
       >
         <p className="text-sm text-ink-500">
-          La photo sera retirée du logement et supprimée définitivement du stockage.
+          De foto wordt van de woning verwijderd en definitief uit de opslag gewist.
         </p>
         <div className="mt-6 flex gap-2.5">
           <Button variant="outline" className="flex-1" onClick={() => setImageToDelete(null)}>

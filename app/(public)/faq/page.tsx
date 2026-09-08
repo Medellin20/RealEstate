@@ -4,52 +4,52 @@ import { FadeIn } from '@/components/ui/fade-in';
 
 export const metadata: Metadata = {
   title: 'FAQ',
-  description: 'Questions fréquentes sur les demandes de visite et de réservation chez Real Estate NL.',
+  description: 'Veelgestelde vragen over bezichtigingen en reserveringen bij Real Estate NL.',
 };
 
 const CATEGORIES = [
   {
-    title: 'Visites',
+    title: 'Bezichtigingen',
     items: [
       {
-        question: 'Comment réserver une visite ?',
+        question: 'Hoe reserveer ik een bezichtiging?',
         answer:
-          'Depuis la fiche d’un logement, cliquez sur « Réserver une visite », choisissez une date et un créneau, puis envoyez votre demande. Notre équipe vous contacte ensuite pour confirmer le rendez-vous.',
+          'Klik op de woningpagina op «Plan een bezichtiging», kies een datum en tijdstip en verstuur uw aanvraag. Ons team neemt daarna contact met u op om de afspraak te bevestigen.',
       },
       {
-        question: 'Dois-je payer pour envoyer une demande ?',
+        question: 'Moet ik betalen om een aanvraag te versturen?',
         answer:
-          'Non. Aucun paiement ni justificatif bancaire n’est demandé sur le site pour transmettre une demande de visite.',
+          'Nee. Voor het indienen van een bezichtigingsaanvraag is geen betaling of bankbewijs nodig op de website.',
       },
       {
-        question: 'Puis-je changer la date de ma visite ?',
+        question: 'Kan ik de datum van mijn bezichtiging wijzigen?',
         answer:
-          'Oui, contactez notre équipe via le formulaire de contact en indiquant votre référence de visite ; nous vous proposerons un nouveau créneau disponible.',
+          'Ja, neem via het contactformulier contact op met ons team en vermeld uw bezichtigingsreferentie. Wij stellen een nieuw beschikbaar tijdstip voor.',
       },
     ],
   },
   {
-    title: 'Réservation',
+    title: 'Reserveringen',
     items: [
       {
-        question: 'Que se passe-t-il après l’envoi de ma demande de réservation ?',
+        question: 'Wat gebeurt er nadat ik mijn reserveringsaanvraag heb verstuurd?',
         answer:
-          'Notre équipe examine votre dossier (profession, revenus, durée souhaitée), vous informe de sa décision et organise manuellement les formalités suivantes.',
+          'Ons team beoordeelt uw dossier (beroep, inkomen en gewenste duur), informeert u over de beslissing en regelt de volgende formaliteiten handmatig.',
       },
       {
-        question: 'Quels documents dois-je fournir ?',
+        question: 'Welke documenten moet ik aanleveren?',
         answer:
-          'Selon le logement, une pièce d’identité, un justificatif de revenus et une lettre de recommandation ou de garant peuvent être demandés lors de la finalisation de votre dossier.',
+          'Afhankelijk van de woning kunnen bij de afronding van uw dossier een identiteitsbewijs, inkomensbewijs en aanbevelingsbrief of garantstelling worden gevraagd.',
       },
     ],
   },
   {
-    title: 'Délais',
+    title: 'Termijnen',
     items: [
       {
-        question: 'Sous quel délai recevrai-je une réponse à ma demande ?',
+        question: 'Wanneer ontvang ik antwoord op mijn aanvraag?',
         answer:
-          'Nous répondons généralement aux demandes de visite et de réservation sous 48 heures ouvrées.',
+          'Wij beantwoorden bezichtigings- en reserveringsaanvragen doorgaans binnen 48 werkuren.',
       },
     ],
   },
@@ -59,12 +59,12 @@ export default function FaqPage() {
   return (
     <div className="container-app py-14 sm:py-20">
       <FadeIn>
-        <span className="text-eyebrow uppercase text-canal-600">Aide</span>
+        <span className="text-eyebrow uppercase text-canal-600">Hulp</span>
         <h1 className="mt-2 text-display-sm font-extrabold text-ink-900 sm:text-display-md">
-          Questions fréquentes
+          Veelgestelde vragen
         </h1>
         <p className="mt-3 max-w-xl text-ink-500">
-          Tout ce qu’il faut savoir pour demander une visite ou réserver un logement.
+          Alles wat u moet weten over het aanvragen van een bezichtiging of reserveren van een woning.
         </p>
       </FadeIn>
 

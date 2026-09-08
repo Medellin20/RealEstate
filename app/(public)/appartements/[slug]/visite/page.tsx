@@ -6,7 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 import { getPropertyBySlug } from '@/lib/data/properties';
 import { ViewingRequestForm } from '@/components/forms/viewing-request-form';
 
-export const metadata: Metadata = { title: 'Réserver une visite' };
+export const metadata: Metadata = { title: 'Plan een bezichtiging' };
 
 export default async function ViewingRequestPage({ params }: { params: { slug: string } }) {
   const property = await getPropertyBySlug(params.slug);
@@ -21,13 +21,13 @@ export default async function ViewingRequestPage({ params }: { params: { slug: s
         className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-ink-500 hover:text-ink-900"
       >
         <ArrowLeft className="h-4 w-4" />
-        Retour au logement
+        Terug naar de woning
       </Link>
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-5">
         <div className="lg:col-span-3">
           <div className="rounded-2xl border border-ink-100 bg-white p-4 shadow-soft sm:p-8">
-            <h1 className="text-display-sm font-extrabold text-ink-900">Réserver une visite</h1>
+            <h1 className="text-display-sm font-extrabold text-ink-900">Plan een bezichtiging</h1>
             <p className="mt-1.5 text-ink-500">{property.title}</p>
             <div className="mt-8">
               <ViewingRequestForm

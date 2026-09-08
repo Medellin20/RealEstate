@@ -34,10 +34,10 @@ export function HeroSearchBar() {
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-1">
           <label className="mb-1 flex items-center gap-1.5 text-xs font-semibold text-ink-500">
-            <MapPin className="h-3.5 w-3.5" /> Ville
+            <MapPin className="h-3.5 w-3.5" /> Stad
           </label>
           <Select value={city} onChange={(e) => setCity(e.target.value)}>
-            <option value="">Toutes les villes</option>
+            <option value="">Alle steden</option>
             {DUTCH_CITIES.map((c) => (
               <option key={c} value={c}>
                 {c}
@@ -51,7 +51,7 @@ export function HeroSearchBar() {
             <Wallet className="h-3.5 w-3.5" /> Budget min.
           </label>
           <Select value={minPrice} onChange={(e) => setMinPrice(e.target.value)}>
-            <option value="">Aucun</option>
+            <option value="">geen</option>
             {[500, 750, 1000, 1250, 1500, 2000].map((v) => (
               <option key={v} value={v}>
                 €{v}
@@ -65,7 +65,7 @@ export function HeroSearchBar() {
             <Wallet className="h-3.5 w-3.5" /> Budget max.
           </label>
           <Select value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)}>
-            <option value="">Aucun</option>
+            <option value="">geen</option>
             {[1000, 1500, 2000, 2500, 3000, 4000, 5000].map((v) => (
               <option key={v} value={v}>
                 €{v}
@@ -79,7 +79,7 @@ export function HeroSearchBar() {
             <BedDouble className="h-3.5 w-3.5" /> Chambres
           </label>
           <Select value={bedrooms} onChange={(e) => setBedrooms(e.target.value)}>
-            <option value="">Indifférent</option>
+            <option value="">Geen voorkeur</option>
             {[1, 2, 3, 4].map((v) => (
               <option key={v} value={v}>
                 {v}+
@@ -93,7 +93,7 @@ export function HeroSearchBar() {
             <Building2 className="h-3.5 w-3.5" /> Type
           </label>
           <Select value={type} onChange={(e) => setType(e.target.value)}>
-            <option value="">Tous types</option>
+            <option value="">alle types</option>
             {PROPERTY_TYPES.map((t) => (
               <option key={t.value} value={t.value}>
                 {t.label}
@@ -105,7 +105,7 @@ export function HeroSearchBar() {
 
       <Button type="submit" size="lg" className="mt-3 w-full">
         <Search className="h-4.5 w-4.5" />
-        Voir les appartements disponibles
+        Beschikbare appartementen bekijken
       </Button>
     </form>
   );

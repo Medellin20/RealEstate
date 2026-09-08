@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { CheckCircle2, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export const metadata = { title: 'Dossier envoyé' };
+export const metadata = { title: 'Dossier verzonden' };
 
 export default function ReservationConfirmationPage() {
   return (
@@ -13,16 +13,16 @@ export default function ReservationConfirmationPage() {
         </div>
 
         <h1 className="mt-5 text-xl font-extrabold text-ink-900 sm:text-2xl">
-          Votre dossier a bien été envoyé
+          Uw dossier is verzonden
         </h1>
 
         <p className="mt-5 rounded-2xl border border-canal-200 bg-canal-50 px-4 py-3 text-base font-bold text-canal-800">
-          Vous recevrez une notification par e-mail sous 10 minutes.
+          U ontvangt binnen 10 minuten een e-mailmelding.
         </p>
 
         <p className="mt-4 text-sm leading-relaxed text-ink-500">
-          Vos informations ont été transmises à notre équipe. Nous vous contacterons par e-mail
-          pour la suite de votre demande de réservation.
+          Uw gegevens zijn aan ons team doorgegeven. We nemen per e-mail contact met u op
+          over het vervolg van uw reserveringsaanvraag.
         </p>
 
         <Link href="/appartements" className="mt-8 inline-block w-full sm:w-auto">

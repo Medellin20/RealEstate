@@ -32,7 +32,7 @@ export function PropertyRowActions({
           router.refresh();
         } else toast.error(result.message);
       } catch {
-        toast.error('Connexion impossible. Merci de réessayer.');
+        toast.error('Verbinding mislukt. Probeer het opnieuw.');
       }
     });
   }
@@ -46,7 +46,7 @@ export function PropertyRowActions({
           router.refresh();
         } else toast.error(result.message);
       } catch {
-        toast.error('Connexion impossible. Merci de réessayer.');
+        toast.error('Verbinding mislukt. Probeer het opnieuw.');
       }
     });
   }
@@ -59,11 +59,11 @@ export function PropertyRowActions({
         disabled={isPending}
         className="!h-9 w-full min-w-0 text-xs sm:w-auto sm:min-w-[8.5rem]"
       >
-        <option value="draft">Brouillon</option>
-        <option value="available">Disponible</option>
-        <option value="reserved">Réservé</option>
-        <option value="rented">Loué</option>
-        <option value="unavailable">Indisponible</option>
+        <option value="draft">Concept</option>
+        <option value="available">Beschikbaar</option>
+        <option value="reserved">Gereserveerd</option>
+        <option value="rented">Verhuurd</option>
+        <option value="unavailable">Niet beschikbaar</option>
       </Select>
 
       <Button className="w-full sm:w-auto" variant="outline" size="sm" onClick={handleTogglePublish} disabled={isPending}>
@@ -80,8 +80,8 @@ export function PropertyRowActions({
 
       <ConfirmDeleteButton
         action={() => deleteProperty(id)}
-        confirmTitle="Supprimer cet appartement ?"
-        confirmDescription="Cette action est irréversible et supprimera également toutes les photos associées."
+        confirmTitle="verwijderen cet appartement ?"
+        confirmDescription="deze action is irréversible en supprimera ook alle de photos associées."
       />
     </div>
   );

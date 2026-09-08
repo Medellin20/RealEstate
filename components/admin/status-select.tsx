@@ -29,7 +29,7 @@ export function StatusSelect<T extends string>({
           toast.error(result.message);
         }
       } catch {
-        toast.error('Connexion impossible. Merci de réessayer.');
+        toast.error('Verbinding mislukt. Probeer het opnieuw.');
       }
     });
   }

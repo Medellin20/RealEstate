@@ -23,13 +23,13 @@ import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import type { Amenity, Property } from '@/types/database';
 
 const BOOLEAN_FIELDS: { key: keyof PropertyInput; label: string }[] = [
-  { key: 'hasElevator', label: 'Ascenseur' },
-  { key: 'hasBalcony', label: 'Balcon' },
+  { key: 'hasElevator', label: 'Lift' },
+  { key: 'hasBalcony', label: 'Balkon' },
   { key: 'hasTerrace', label: 'Terrasse' },
   { key: 'hasParking', label: 'Parking' },
   { key: 'hasGarage', label: 'Garage' },
-  { key: 'hasGarden', label: 'Jardin' },
-  { key: 'isFurnished', label: 'Meublé' },
+  { key: 'hasGarden', label: 'Tuin' },
+  { key: 'isFurnished', label: 'Gemeubileerd' },
 ];
 
 function propertyToFormValues(property: Property, amenityIds: string[]): PropertyInput {
@@ -189,7 +189,7 @@ export function PropertyForm({
 
   function onSubmit(data: PropertyInput) {
     if (slugExists) {
-      setError('slug', { type: 'validate', message: 'Ce slug est déjà utilisé.' });
+      setError('slug', { type: 'validate', message: 'Deze slug is al in gebruik.' });
       return;
     }
 
@@ -219,20 +219,20 @@ export function PropertyForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       {/* INFORMATIONS GÉNÉRALES */}
-      <FormSection title="Informations générales">
+      <FormSection title="Algemene informatie">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <Label htmlFor="title">Titre</Label>
+            <Label htmlFor="title">Titel</Label>
             <Input id="title" error={slugExists ? 'duplicate' : errors.title?.message} {...register('title')} />
             <FieldError message={errors.title?.message} />
             {slugExists && (
               <p role="alert" className="mt-1.5 text-xs font-medium text-brick-500">
-                Cet appartement existe déjà : ce titre ou ce slug est déjà utilisé.
+                Dit appartement bestaat al: deze titel of slug is al in gebruik.
               </p>
             )}
             {availabilityError && (
               <p role="alert" className="mt-1.5 text-xs font-medium text-brick-500">
-                Impossible de vérifier si cet appartement existe déjà. Réessayez dans un instant.
+                Kan niet controleren of dit appartement al bestaat. Probeer het straks opnieuw.
               </p>
             )}
           </div>
@@ -251,7 +251,7 @@ export function PropertyForm({
                 className="mb-1.5 flex items-center gap-1 text-xs font-medium text-canal-600 hover:underline"
               >
                 <Wand2 className="h-3 w-3" />
-                Générer depuis le titre
+                Genereren uit titel
               </button>
             </div>
             <Input
@@ -266,11 +266,11 @@ export function PropertyForm({
                 },
               })}
             />
-            <FieldError message={slugExists ? 'Ce slug est déjà utilisé.' : errors.slug?.message} />
-            {isCheckingSlug && <p className="mt-1.5 text-xs text-ink-400">Vérification du slug…</p>}
+            <FieldError message={slugExists ? 'Deze slug is al in gebruik.' : errors.slug?.message} />
+            {isCheckingSlug && <p className="mt-1.5 text-xs text-ink-400">Slug controleren…</p>}
           </div>
           <div>
-            <Label htmlFor="propertyType">Type de logement</Label>
+            <Label htmlFor="propertyType">Woningtype</Label>
             <Select id="propertyType" {...register('propertyType')}>
               {PROPERTY_TYPES.map((t) => (
                 <option key={t.value} value={t.value}>
@@ -280,13 +280,13 @@ export function PropertyForm({
             </Select>
           </div>
           <div>
-            <Label htmlFor="status">Statut</Label>
+            <Label htmlFor="status">Status</Label>
             <Select id="status" {...register('status')}>
-              <option value="draft">Brouillon</option>
-              <option value="available">Disponible</option>
-              <option value="reserved">Réservé</option>
-              <option value="rented">Loué</option>
-              <option value="unavailable">Indisponible</option>
+              <option value="draft">Concept</option>
+              <option value="available">Beschikbaar</option>
+              <option value="reserved">Gereserveerd</option>
+              <option value="rented">Verhuurd</option>
+              <option value="unavailable">Niet beschikbaar</option>
             </Select>
           </div>
         </div>
@@ -294,79 +294,79 @@ export function PropertyForm({
         <div className="mt-4 flex flex-wrap gap-6">
           <label className="flex cursor-pointer items-center gap-2.5 text-sm text-ink-700">
             <Checkbox {...register('isPublished')} />
-            Publié (visible sur le site public)
+            Gepubliceerd (zichtbaar op de publieke website)
           </label>
           <label className="flex cursor-pointer items-center gap-2.5 text-sm text-ink-700">
             <Checkbox {...register('isFeatured')} />
-            Mettre en avant sur la page d’accueil
+            Uitlichten op de homepage
           </label>
         </div>
       </FormSection>
 
       {/* LOCALISATION */}
-      <FormSection title="Localisation">
+      <FormSection title="Locatie">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <Label htmlFor="address">Adresse complète</Label>
-            <Input id="address" placeholder="Communiquée au client après confirmation de la visite" {...register('address')} />
+            <Label htmlFor="address">Volledig adres</Label>
+            <Input id="address" placeholder="Wordt na bevestiging van de bezichtiging aan de klant meegedeeld" {...register('address')} />
           </div>
           <div>
-            <Label htmlFor="city">Ville</Label>
+            <Label htmlFor="city">Stad</Label>
             <Input id="city" placeholder="Ex : Amsterdam" {...register('city')} />
             <FieldError message={errors.city?.message} />
           </div>
           <div>
-            <Label htmlFor="postalCode">Code postal</Label>
+            <Label htmlFor="postalCode">Postcode</Label>
             <Input id="postalCode" {...register('postalCode')} />
           </div>
           <div>
-            <Label htmlFor="neighborhood">Quartier</Label>
+            <Label htmlFor="neighborhood">Wijk</Label>
             <Input id="neighborhood" {...register('neighborhood')} />
           </div>
         </div>
       </FormSection>
 
       {/* TARIFS */}
-      <FormSection title="Tarifs">
+      <FormSection title="Tarieven">
         <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2">
           <div>
-            <Label htmlFor="monthlyPrice">Prix mensuel (€)</Label>
+            <Label htmlFor="monthlyPrice">Maandelijkse huurprijs (€)</Label>
             <Input id="monthlyPrice" type="number" step="1" {...register('monthlyPrice')} />
             <FieldError message={errors.monthlyPrice?.message} />
           </div>
           <div>
-            <Label htmlFor="depositAmount">Dépôt (€)</Label>
+            <Label htmlFor="depositAmount">Waarborgsom (€)</Label>
             <Input id="depositAmount" type="number" step="1" {...register('depositAmount')} />
           </div>
         </div>
       </FormSection>
 
       {/* CARACTÉRISTIQUES */}
-      <FormSection title="Caractéristiques">
+      <FormSection title="Kenmerken">
         <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 sm:grid-cols-4">
           <div>
-            <Label htmlFor="surfaceM2">Surface (m²)</Label>
+            <Label htmlFor="surfaceM2">Oppervlakte (m²)</Label>
             <Input id="surfaceM2" type="number" step="0.5" {...register('surfaceM2')} />
             <FieldError message={errors.surfaceM2?.message} />
           </div>
           <div>
-            <Label htmlFor="bedrooms">Chambres</Label>
+            <Label htmlFor="bedrooms">Slaapkamers</Label>
             <Input id="bedrooms" type="number" {...register('bedrooms')} />
           </div>
           <div>
-            <Label htmlFor="bathrooms">Salles de bain</Label>
+            <Label htmlFor="bathrooms">Badkamers</Label>
             <Input id="bathrooms" type="number" {...register('bathrooms')} />
           </div>
           <div>
-            <Label htmlFor="rooms">Nombre de pièces</Label>
+            <Label htmlFor="rooms">Aantal kamers</Label>
             <Input id="rooms" type="number" {...register('rooms')} />
           </div>
           <div>
-            <Label htmlFor="floor">Étage</Label>
+            <Label htmlFor="floor">Verdieping</Label>
             <Input id="floor" type="number" {...register('floor')} />
           </div>
           <div>
-            <Label htmlFor="floorsCount">Nombre d’étages</Label>
+            <Label htmlFor="floorsCount">Aantal verdiepingen</Label>
             <Input id="floorsCount" type="number" min="1" {...register('floorsCount')} />
           </div>
           <div>
@@ -374,11 +374,11 @@ export function PropertyForm({
             <Input id="volumeM3" type="number" step="0.5" {...register('volumeM3')} />
           </div>
           <div>
-            <Label htmlFor="availableFrom">Disponible à partir du</Label>
+            <Label htmlFor="availableFrom">Beschikbaar vanaf</Label>
             <Input id="availableFrom" type="date" {...register('availableFrom')} />
           </div>
           <div>
-            <Label htmlFor="minimumStayMonths">Durée minimale (mois)</Label>
+            <Label htmlFor="minimumStayMonths">Minimale duur (maanden)</Label>
             <Input id="minimumStayMonths" type="number" {...register('minimumStayMonths')} />
           </div>
         </div>
@@ -393,53 +393,53 @@ export function PropertyForm({
         </div>
       </FormSection>
 
-      <FormSection title="Location et état du logement">
+      <FormSection title="Verhuur en staat van de woning">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div>
-            <Label htmlFor="contractType">Type de contrat</Label>
+            <Label htmlFor="contractType">Contracttype</Label>
             <Select id="contractType" {...register('contractType')}>
-              <option value="Période indéterminée">Période indéterminée</option>
-              <option value="Durée déterminée">Durée déterminée</option>
-              <option value="Location temporaire">Location temporaire</option>
+              <option value="Période indéterminée">Onbepaalde duur</option>
+              <option value="Durée déterminée">Bepaalde duur</option>
+              <option value="Location temporaire">Tijdelijke verhuur</option>
             </Select>
           </div>
           <div>
-            <Label htmlFor="interiorType">Intérieur</Label>
+            <Label htmlFor="interiorType">Interieur</Label>
             <Select id="interiorType" {...register('interiorType')}>
-              <option value="Non meublé">Non meublé</option>
-              <option value="Semi-meublé">Semi-meublé</option>
-              <option value="Meublé">Meublé</option>
+              <option value="Non meublé">Ongemeubileerd</option>
+              <option value="Semi-meublé">Gedeeltelijk gemeubileerd</option>
+              <option value="Meublé">Gemeubileerd</option>
             </Select>
           </div>
           <div>
-            <Label htmlFor="maintenanceCondition">État d’entretien</Label>
+            <Label htmlFor="maintenanceCondition">Onderhoudstoestand</Label>
             <Select id="maintenanceCondition" {...register('maintenanceCondition')}>
-              <option value="Excellent">Excellent</option>
-              <option value="Bien">Bien</option>
-              <option value="À rafraîchir">À rafraîchir</option>
-              <option value="À rénover">À rénover</option>
+              <option value="Excellent">Uitstekend</option>
+              <option value="Bien">Goed</option>
+              <option value="À rafraîchir">Op te frissen</option>
+              <option value="À rénover">Te renoveren</option>
             </Select>
           </div>
         </div>
       </FormSection>
 
-      <FormSection title="Construction et énergie">
+      <FormSection title="Bouw en energie">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div>
-            <Label htmlFor="constructionType">Type de construction</Label>
+            <Label htmlFor="constructionType">Bouwtype</Label>
             <Select id="constructionType" {...register('constructionType')}>
-              <option value="Bâtiment existant">Bâtiment existant</option>
-              <option value="Construction neuve">Construction neuve</option>
+              <option value="Bâtiment existant">Bestaand gebouw</option>
+              <option value="Construction neuve">Nieuwbouw</option>
             </Select>
           </div>
           <div>
-            <Label htmlFor="constructionYear">Année de construction</Label>
+            <Label htmlFor="constructionYear">Bouwjaar</Label>
             <Input id="constructionYear" type="number" min="1000" max="2200" {...register('constructionYear')} />
           </div>
           <div>
-            <Label htmlFor="energyLabel">Étiquette énergétique</Label>
+            <Label htmlFor="energyLabel">Energielabel</Label>
             <Select id="energyLabel" {...register('energyLabel')}>
-              <option value="">Non renseignée</option>
+              <option value="">Niet opgegeven</option>
               {['A++++', 'A+++', 'A++', 'A+', 'A', 'B', 'C', 'D', 'E', 'F', 'G'].map((label) => (
                 <option key={label} value={label}>{label}</option>
               ))}
@@ -449,7 +449,7 @@ export function PropertyForm({
       </FormSection>
 
       {/* ÉQUIPEMENTS */}
-      <FormSection title="Équipements">
+      <FormSection title="Voorzieningen">
         <Controller
           control={control}
           name="amenityIds"
@@ -478,7 +478,7 @@ export function PropertyForm({
       <div className="sticky bottom-4 flex justify-end">
         <Button type="submit" size="lg" isLoading={isPending} className="w-full shadow-lifted sm:w-auto">
           <Save className="h-4.5 w-4.5" />
-          {mode === 'create' ? 'Créer l’appartement' : 'Enregistrer les modifications'}
+          {mode === 'create' ? 'Appartement aanmaken' : 'Wijzigingen opslaan'}
         </Button>
       </div>
     </form>

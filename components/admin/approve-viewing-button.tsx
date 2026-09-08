@@ -20,10 +20,10 @@ export function ApproveViewingButton({ viewingId }: { viewingId: string }) {
           return;
         }
 
-        toast.success('Visite approuvée.');
+        toast.success('Bezichtiging goedgekeurd.');
         router.refresh();
       } catch {
-        toast.error('Impossible d’approuver la visite. Réessayez.');
+        toast.error('Bezichtiging goedkeuren mislukt. Probeer het opnieuw.');
       }
     });
   }

@@ -17,17 +17,17 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brick-50 text-brick-500">
             <AlertTriangle className="h-8 w-8" />
           </div>
-          <h1 className="mt-6 text-2xl font-extrabold text-ink-900">Une erreur est survenue</h1>
+          <h1 className="mt-6 text-2xl font-extrabold text-ink-900">Er is een fout opgetreden</h1>
           <p className="mt-2 max-w-md text-ink-500">
-            Nous rencontrons un problème technique. Merci de réessayer dans quelques instants.
+            Er is een technisch probleem. Probeer het over enkele ogenblikken opnieuw.
           </p>
           <div className="mt-7 flex items-center gap-3">
             <Button onClick={() => reset()}>
               <RefreshCcw className="h-4 w-4" />
-              Réessayer
+              Opnieuw proberen
             </Button>
             <Link href="/">
-              <Button variant="outline">Retour à l’accueil</Button>
+              <Button variant="outline">Terug naar home</Button>
             </Link>
           </div>
         </div>

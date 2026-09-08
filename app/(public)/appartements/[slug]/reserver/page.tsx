@@ -7,7 +7,7 @@ import { getPropertyBySlug } from '@/lib/data/properties';
 import { ReservationForm } from '@/components/forms/reservation-form';
 import { formatPrice } from '@/lib/utils/format';
 
-export const metadata: Metadata = { title: 'Payer les frais de réservation' };
+export const metadata: Metadata = { title: 'Payer de frais de reservering' };
 
 export default async function ReservationPage({ params }: { params: { slug: string } }) {
   const property = await getPropertyBySlug(params.slug);
@@ -22,17 +22,17 @@ export default async function ReservationPage({ params }: { params: { slug: stri
         className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-ink-500 hover:text-ink-900"
       >
         <ArrowLeft className="h-4 w-4" />
-        Retour au logement
+        Terug naar de woning
       </Link>
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-5">
         <div className="lg:col-span-3">
           <div className="rounded-2xl border border-ink-100 bg-white p-4 shadow-soft sm:p-8">
-            <h1 className="text-display-sm font-extrabold text-ink-900">Payer les frais de réservation</h1>
+            <h1 className="text-display-sm font-extrabold text-ink-900">Reserveringskosten betalen</h1>
             <p className="mt-1.5 text-ink-500">{property.title}</p>
             <div className="mt-5 rounded-xl border border-canal-200 bg-canal-50 p-4 text-sm leading-relaxed text-canal-800">
-              <strong>Frais de réservation : {formatPrice(property.monthly_price)}.</strong>{' '}
-              Ils correspondent à un mois de loyer. Remplissez votre dossier : notre équipe vous transmettra ensuite les modalités de paiement.
+              <strong>Reserveringskosten: {formatPrice(property.monthly_price)}.</strong>{' '}
+              Dit is één maand huur. Vul uw dossier in; ons team stuurt u daarna de betaalinstructies.
             </div>
             <div className="mt-8">
               <ReservationForm

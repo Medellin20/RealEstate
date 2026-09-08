@@ -2,18 +2,18 @@ import Link from 'next/link';
 import { Facebook, Home, Instagram, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
 
 const COLUMN_LINKS = [
-  { href: '/', label: 'Accueil' },
-  { href: '/appartements', label: 'Appartements' },
-  { href: '/comment-ca-marche', label: 'Comment ça marche' },
-  { href: '/a-propos', label: 'À propos' },
+  { href: '/', label: 'Home' },
+  { href: '/appartements', label: 'Appartementen' },
+  { href: '/comment-ca-marche', label: 'Hoe werkt het' },
+  { href: '/a-propos', label: 'Over ons' },
   { href: '/contact', label: 'Contact' },
   { href: '/faq', label: 'FAQ' },
 ];
 
 const LEGAL_LINKS = [
-  { href: '/mentions-legales', label: 'Mentions légales' },
-  { href: '/confidentialite', label: 'Confidentialité' },
-  { href: '/conditions-generales', label: 'Conditions générales' },
+  { href: '/mentions-legales', label: 'Juridische kennisgeving' },
+  { href: '/confidentialite', label: 'Privacy' },
+  { href: '/conditions-generales', label: 'Algemene voorwaarden' },
 ];
 
 export function Footer() {
@@ -32,8 +32,8 @@ export function Footer() {
             </span>
           </Link>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-sand-300">
-            Votre agence de confiance pour la location d’appartements aux Pays-Bas — de la
-            recherche à l’emménagement.
+            Uw betrouwbare agentschap voor het huren van appartementen in Nederland — van de
+            zoektocht tot de verhuizing.
           </p>
           <div className="mt-5 flex items-center gap-3">
             <a
@@ -61,7 +61,7 @@ export function Footer() {
         </div>
 
         <div>
-          <h3 className="text-eyebrow uppercase text-sand-400">Navigation</h3>
+          <h3 className="text-eyebrow uppercase text-sand-400">Navigatie</h3>
           <ul className="mt-4 space-y-2.5">
             {COLUMN_LINKS.map((link) => (
               <li key={link.href}>
@@ -74,7 +74,7 @@ export function Footer() {
         </div>
 
         <div>
-          <h3 className="text-eyebrow uppercase text-sand-400">Informations légales</h3>
+          <h3 className="text-eyebrow uppercase text-sand-400">Juridische informatie</h3>
           <ul className="mt-4 space-y-2.5">
             {LEGAL_LINKS.map((link) => (
               <li key={link.href}>
@@ -103,7 +103,7 @@ export function Footer() {
                 href="https://wa.me/31649496257"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Contacter Real Estate NL sur WhatsApp"
+                aria-label="Contacter Real Estate NL op WhatsApp"
                 className="flex items-center gap-2.5 text-sm text-sand-300 transition-colors hover:text-white"
               >
                 <Phone className="h-4 w-4 shrink-0" />
@@ -115,7 +115,7 @@ export function Footer() {
                 href="https://wa.me/31684130011"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Contacter Real Estate NL sur WhatsApp"
+                aria-label="Contacter Real Estate NL op WhatsApp"
                 className="flex items-center gap-2.5 text-sm text-sand-300 transition-colors hover:text-white"
               >
                 <Phone className="h-4 w-4 shrink-0" />
@@ -141,8 +141,8 @@ export function Footer() {
 
       <div className="border-t border-white/10">
         <div className="container-app flex flex-col items-center justify-between gap-3 py-5 text-xs text-sand-400 sm:flex-row">
-          <p>© {year} Real Estate NL. Tous droits réservés.</p>
-          <p>Location d’appartements aux Pays-Bas</p>
+          <p>© {year} Real Estate NL. Alle rechten voorbehouden.</p>
+          <p>Appartementen huren in Nederland</p>
         </div>
       </div>
     </footer>

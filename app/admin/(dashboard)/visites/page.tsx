@@ -11,7 +11,7 @@ import { formatDate, formatDateTime } from '@/lib/utils/format';
 import { VIEWING_STATUS_LABELS } from '@/lib/utils/constants';
 import type { ViewingStatus } from '@/types/database';
 
-export const metadata: Metadata = { title: 'Demandes de visite' };
+export const metadata: Metadata = { title: 'aanvragen de bezichtiging' };
 export const dynamic = 'force-dynamic';
 
 const STATUS_OPTIONS = Object.entries(VIEWING_STATUS_LABELS).map(([value, label]) => ({
@@ -30,15 +30,15 @@ export default async function AdminViewingsPage({ searchParams }: { searchParams
     <div>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-ink-900">Demandes de visite</h1>
+          <h1 className="text-2xl font-extrabold text-ink-900">Bezichtigingsaanvragen</h1>
           <p className="mt-1 text-sm text-ink-500">
-            {viewings.length} demande(s){searchParams.date === 'today' ? ' prévue(s) aujourd’hui' : ''}.
+            {viewings.length} aanvraag/aanvragen{searchParams.date === 'today' ? ' gepland voor vandaag' : ''}.
           </p>
         </div>
         <form action="/admin/visites" method="get" className="w-full sm:w-auto">
           <AutoSubmitSelect name="status" defaultValue={searchParams.status} className="sm:w-56">
-            {searchParams.date === 'today' && <option value="">Toutes les visites d’aujourd’hui</option>}
-            {searchParams.date !== 'today' && <option value="">Tous les statuts</option>}
+            {searchParams.date === 'today' && <option value="">Alle bezichtigingen van vandaag</option>}
+            {searchParams.date !== 'today' && <option value="">Alle statussen</option>}
             {STATUS_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}
@@ -49,7 +49,7 @@ export default async function AdminViewingsPage({ searchParams }: { searchParams
         </form>
         {(searchParams.status || searchParams.date === 'today') && (
           <Link href="/admin/visites" className="text-sm font-medium text-canal-700 hover:text-canal-900">
-            Réinitialiser les filtres
+            Filters resetten
           </Link>
         )}
       </div>
@@ -59,7 +59,7 @@ export default async function AdminViewingsPage({ searchParams }: { searchParams
           Impossible de charger les visites : {error}
         </div>
       ) : viewings.length === 0 ? (
-        <EmptyState title="Aucune demande de visite" />
+        <EmptyState title="Geen bezichtigingsaanvragen" />
       ) : (
         <div className="space-y-3">
           {viewings.map((viewing: any) => (
@@ -77,7 +77,7 @@ export default async function AdminViewingsPage({ searchParams }: { searchParams
 
               <div className="mt-3 grid grid-cols-1 gap-2 text-sm text-ink-600 sm:grid-cols-2 lg:grid-cols-4">
                 <p className="break-words">
-                  <span className="text-ink-400">Client : </span>
+                  <span className="text-ink-400">Klant : </span>
                   {viewing.clients?.first_name} {viewing.clients?.last_name}
                 </p>
                 <p>
@@ -85,13 +85,13 @@ export default async function AdminViewingsPage({ searchParams }: { searchParams
                   {viewing.clients?.email} · {viewing.clients?.phone}
                 </p>
                 <p>
-                  <span className="text-ink-400">Créneau : </span>
+                  <span className="text-ink-400">tijdslot : </span>
                   {formatDate(viewing.requested_date)} · {viewing.requested_time_slot}
                 </p>
               </div>
 
               <div className="mt-3 flex flex-col gap-3 border-t border-ink-100 pt-3 sm:flex-row sm:items-center sm:justify-between">
-                <span className="text-xs text-ink-400">Reçue le {formatDateTime(viewing.created_at)}</span>
+                <span className="text-xs text-ink-400">Ontvangen op {formatDateTime(viewing.created_at)}</span>
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                   {viewing.status !== 'confirmed' && viewing.status !== 'completed' && viewing.status !== 'cancelled' && (
                     <ApproveViewingButton viewingId={viewing.id} />

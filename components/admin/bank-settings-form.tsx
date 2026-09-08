@@ -47,7 +47,7 @@ export function BankSettingsForm({ settings }: { settings: BankSettings }) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="sm:col-span-2">
-          <Label htmlFor="beneficiaryName">Nom du bénéficiaire</Label>
+          <Label htmlFor="beneficiaryName">Naam van de begunstigde</Label>
           <Input id="beneficiaryName" {...register('beneficiaryName')} />
           <FieldError message={errors.beneficiaryName?.message} />
         </div>
@@ -62,19 +62,19 @@ export function BankSettingsForm({ settings }: { settings: BankSettings }) {
           <FieldError message={errors.bic?.message} />
         </div>
         <div>
-          <Label htmlFor="bankName">Nom de la banque</Label>
+          <Label htmlFor="bankName">Naam van de bank</Label>
           <Input id="bankName" {...register('bankName')} />
           <FieldError message={errors.bankName?.message} />
         </div>
         <div>
-          <Label htmlFor="defaultDepositAmount">Montant par défaut de la garantie (€)</Label>
+          <Label htmlFor="defaultDepositAmount">Standaard waarborgsom (€)</Label>
           <Input id="defaultDepositAmount" type="number" step="1" {...register('defaultDepositAmount')} />
           <FieldError message={errors.defaultDepositAmount?.message} />
         </div>
       </div>
 
       <div>
-        <Label htmlFor="paymentInstructions">Instructions de paiement (affichées au client)</Label>
+        <Label htmlFor="paymentInstructions">Betaalinstructies (zichtbaar voor de klant)</Label>
         <Textarea id="paymentInstructions" rows={4} {...register('paymentInstructions')} />
         <FieldError message={errors.paymentInstructions?.message} />
       </div>

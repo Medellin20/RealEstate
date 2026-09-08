@@ -62,7 +62,7 @@ export function Modal({
               {title && <h2 className="text-lg font-bold text-ink-900">{title}</h2>}
               <button
                 onClick={onClose}
-                aria-label="Fermer"
+                aria-label="Sluiten"
                 className="ml-auto rounded-full p-1.5 text-ink-400 transition-colors hover:bg-sand-100 hover:text-ink-700"
               >
                 <X className="h-5 w-5" />

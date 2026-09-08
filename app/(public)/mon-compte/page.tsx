@@ -11,7 +11,7 @@ import { getReservationTimelineSteps, getViewingTimelineSteps } from '@/lib/util
 import { formatDate } from '@/lib/utils/format';
 import { RESERVATION_STATUS_LABELS, VIEWING_STATUS_LABELS } from '@/lib/utils/constants';
 
-export const metadata: Metadata = { title: 'Mon compte' };
+export const metadata: Metadata = { title: 'Mijn account' };
 
 export default async function MonComptePage({ searchParams }: { searchParams: { email?: string } }) {
   const email = searchParams.email?.trim();
@@ -29,9 +29,9 @@ export default async function MonComptePage({ searchParams }: { searchParams: { 
   return (
     <div className="container-app py-10 sm:py-14">
       <div className="mb-8">
-        <h1 className="text-display-sm font-extrabold text-ink-900 sm:text-display-md">Mon compte</h1>
+        <h1 className="text-display-sm font-extrabold text-ink-900 sm:text-display-md">Mijn account</h1>
         <p className="mt-2 text-ink-500">
-          Bonjour {dossier.client.first_name}, voici le suivi de vos démarches auprès de Real Estate NL.
+          Hallo {dossier.client.first_name}, hier vindt u de voortgang van uw aanvragen bij Real Estate NL.
         </p>
       </div>
 
@@ -39,16 +39,16 @@ export default async function MonComptePage({ searchParams }: { searchParams: { 
       <section className="mb-12">
         <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-ink-900">
           <ShieldCheck className="h-5 w-5 text-canal-600" />
-          Mes réservations
+          Mijn reserveringen
         </h2>
 
         {dossier.reservations.length === 0 ? (
           <EmptyState
-            title="Aucune réservation pour le moment"
-            description="Parcourez nos annonces et réservez le logement de vos rêves aux Pays-Bas."
+            title="Nog geen reserveringen"
+            description="Bekijk onze advertenties en reserveer uw droomwoning in Nederland."
             action={
               <Link href="/appartements">
-                <Button>Voir les appartements</Button>
+                <Button>Appartementen bekijken</Button>
               </Link>
             }
           />
@@ -68,8 +68,8 @@ export default async function MonComptePage({ searchParams }: { searchParams: { 
                         {reservation.properties?.title}
                       </Link>
                       <p className="mt-0.5 text-sm text-ink-500">
-                        Entrée souhaitée le {formatDate(reservation.desired_move_in_date)} ·{' '}
-                        {reservation.duration_months} mois
+                        Gewenste intrekdatum: {formatDate(reservation.desired_move_in_date)} ·{' '}
+                        {reservation.duration_months} maanden
                       </p>
                     </div>
                     <Badge variant="outline">{RESERVATION_STATUS_LABELS[reservation.status]}</Badge>
@@ -83,14 +83,14 @@ export default async function MonComptePage({ searchParams }: { searchParams: { 
                     <div className="lg:col-span-3">
                       {reservation.status === 'submitted' && (
                         <p className="text-sm text-ink-400">
-                          Votre demande est en attente d’examen. Notre équipe vous contactera pour
-                          organiser manuellement la suite.
+                          Uw aanvraag wordt beoordeeld. Ons team neemt contact met u op om het
+                          vervolg handmatig te regelen.
                         </p>
                       )}
 
                       {reservation.status === 'rejected' && (
                         <p className="text-sm text-brick-500">
-                          Votre demande n’a malheureusement pas pu être acceptée pour ce logement.
+                          Uw aanvraag kon helaas niet worden geaccepteerd voor deze woning.
                         </p>
                       )}
                     </div>
@@ -105,11 +105,11 @@ export default async function MonComptePage({ searchParams }: { searchParams: { 
       <section>
         <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-ink-900">
           <CalendarClock className="h-5 w-5 text-canal-600" />
-          Mes demandes de visite
+          Mijn bezichtigingsaanvragen
         </h2>
 
         {dossier.viewings.length === 0 ? (
-          <EmptyState title="Aucune visite demandée" description="Réservez une visite depuis la fiche d’un logement." />
+          <EmptyState title="Nog geen bezichtigingen aangevraagd" description="Plan een bezichtiging vanaf de woningpagina." />
         ) : (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             {dossier.viewings.map((viewing: any) => (
@@ -150,22 +150,22 @@ function EmailLookupScreen({ notFoundEmail }: { notFoundEmail?: string }) {
         <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-canal-50 text-canal-600">
           <Mail className="h-6 w-6" />
         </div>
-        <h1 className="mt-4 text-center text-xl font-extrabold text-ink-900">Accéder à mon dossier</h1>
+        <h1 className="mt-4 text-center text-xl font-extrabold text-ink-900">Toegang tot mijn dossier</h1>
         <p className="mt-1.5 text-center text-sm text-ink-500">
-          Saisissez l’adresse e-mail utilisée lors de votre demande de visite ou de réservation.
+          Vul het e-mailadres in dat u gebruikte voor uw bezichtigings- of reserveringsaanvraag.
         </p>
 
         {notFoundEmail && (
           <p className="mt-4 rounded-lg bg-brick-50 px-3 py-2 text-center text-xs text-brick-600">
-            Aucun dossier trouvé pour « {notFoundEmail} ». Vérifiez l’orthographe de votre e-mail.
+            Geen dossier gevonden voor « {notFoundEmail} ». Controleer de spelling van uw e-mailadres.
           </p>
         )}
 
         <form action="/mon-compte" method="get" className="mt-6 space-y-3">
-          <Input type="email" name="email" placeholder="vous@exemple.com" required defaultValue={notFoundEmail} />
+          <Input type="email" name="email" placeholder="u@exemple.com" required defaultValue={notFoundEmail} />
           <Button type="submit" className="w-full">
             <Search className="h-4 w-4" />
-            Accéder à mon dossier
+            Naar mijn dossier
           </Button>
         </form>
       </div>

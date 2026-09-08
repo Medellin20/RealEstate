@@ -15,7 +15,7 @@ function SubmitButton() {
   const { pending } = useFormStatus();
   return (
     <Button type="submit" isLoading={pending} className="w-full">
-      J’ai effectué le virement
+      Ik heb de overschrijving uitgevoerd
     </Button>
   );
 }
@@ -30,25 +30,25 @@ export function DeclareTransferForm({ guaranteePaymentId }: { guaranteePaymentId
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div>
-          <Label htmlFor="transferDate">Date du virement</Label>
+          <Label htmlFor="transferDate">Datum van overschrijving</Label>
           <Input id="transferDate" name="transferDate" type="date" required />
           <FieldError message={state.fieldErrors?.transferDate?.[0]} />
         </div>
         <div>
-          <Label htmlFor="bankName">Banque émettrice</Label>
+          <Label htmlFor="bankName">Uitgevende bank</Label>
           <Input id="bankName" name="bankName" placeholder="Ex : ING, BNP Paribas..." required />
           <FieldError message={state.fieldErrors?.bankName?.[0]} />
         </div>
       </div>
 
       <div>
-        <Label htmlFor="reference">Référence utilisée</Label>
+        <Label htmlFor="reference">Gebruikte referentie</Label>
         <Input id="reference" name="reference" placeholder="Ex : GUARANTEE-REN-000123" required />
         <FieldError message={state.fieldErrors?.reference?.[0]} />
       </div>
 
       <div>
-        <Label htmlFor="proof">Justificatif de virement (facultatif)</Label>
+        <Label htmlFor="proof">Bewijs van overschrijving (optioneel)</Label>
         <label
           htmlFor="proof"
           className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-dashed border-ink-200 bg-sand-100/50 px-4 py-6 text-sm text-ink-500 transition-colors hover:border-ink-300 hover:bg-sand-100"

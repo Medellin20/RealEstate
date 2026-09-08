@@ -4,7 +4,7 @@ import { getBankSettings } from '@/lib/data/bank';
 import { BankSettingsForm } from '@/components/admin/bank-settings-form';
 import { formatDateTime } from '@/lib/utils/format';
 
-export const metadata: Metadata = { title: 'Configuration bancaire' };
+export const metadata: Metadata = { title: 'Bankconfiguratie' };
 export const dynamic = 'force-dynamic';
 
 export default async function AdminBankSettingsPage() {
@@ -13,14 +13,14 @@ export default async function AdminBankSettingsPage() {
   if (!settings) {
     return (
       <div>
-        <h1 className="text-2xl font-extrabold text-ink-900">Configuration bancaire</h1>
+        <h1 className="text-2xl font-extrabold text-ink-900">Bankconfiguratie</h1>
         <div className="mt-6 flex items-start gap-3 rounded-2xl border border-brick-200 bg-brick-50 p-5 text-sm text-brick-700">
           <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" />
           <div>
             <p className="font-semibold">Configuration introuvable</p>
             <p className="mt-1 text-brick-600">
-              La table <code>bank_settings</code> ne contient aucune ligne. Exécutez le script
-              <code>supabase/schema.sql</code> puis <code>supabase/seed.sql</code> dans le SQL
+              De tabel <code>bank_settings</code> bevat geen regels. Voer het script
+              <code>supabase/schema.sql</code> vervolgens <code>supabase/seed.sql</code> dans le SQL
               Editor de votre projet Supabase.
             </p>
           </div>
@@ -37,11 +37,11 @@ export default async function AdminBankSettingsPage() {
           Configuration bancaire
         </h1>
         <p className="mt-1 text-sm text-ink-500">
-          Ces coordonnées sont affichées au client lorsqu’il doit effectuer un virement de garantie.
-          Elles sont stockées dans Supabase et ne sont jamais codées en dur dans l’application.
+          Deze gegevens worden aan de klant getoond wanneer een waarborg moet worden overgemaakt.
+          Ze worden opgeslagen in Supabase en staan nooit hardgecodeerd in de applicatie.
         </p>
         <p className="mt-1 text-xs text-ink-400">
-          Dernière modification : {formatDateTime(settings.updated_at)}
+          Laatst gewijzigd: {formatDateTime(settings.updated_at)}
         </p>
       </div>
 

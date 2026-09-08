@@ -10,7 +10,7 @@ import { formatDateTime, formatPrice } from '@/lib/utils/format';
 import { REFUND_STATUS_LABELS } from '@/lib/utils/constants';
 import type { RefundStatus } from '@/types/database';
 
-export const metadata: Metadata = { title: 'Remboursements' };
+export const metadata: Metadata = { title: 'Terugbetalingen' };
 export const dynamic = 'force-dynamic';
 
 const STATUS_OPTIONS = Object.entries(REFUND_STATUS_LABELS).map(([value, label]) => ({
@@ -25,12 +25,12 @@ export default async function AdminRefundsPage({ searchParams }: { searchParams:
     <div>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-ink-900">Demandes de remboursement</h1>
+          <h1 className="text-2xl font-extrabold text-ink-900">Terugbetalingsaanvragen</h1>
           <p className="mt-1 text-sm text-ink-500">{refunds.length} demande(s).</p>
         </div>
         <form action="/admin/remboursements" method="get" className="w-full sm:w-auto">
           <AutoSubmitSelect name="status" defaultValue={searchParams.status} className="sm:w-56">
-            <option value="">Tous les statuts</option>
+            <option value="">Alle statussen</option>
             {STATUS_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
@@ -38,13 +38,13 @@ export default async function AdminRefundsPage({ searchParams }: { searchParams:
         </form>
         {searchParams.status && (
           <Link href="/admin/remboursements" className="text-sm font-medium text-canal-700 hover:text-canal-900">
-            Réinitialiser les filtres
+            Filters resetten
           </Link>
         )}
       </div>
 
       {refunds.length === 0 ? (
-        <EmptyState title="Aucune demande de remboursement" />
+        <EmptyState title="Geen terugbetalingsaanvragen" />
       ) : (
         <div className="space-y-3">
           {refunds.map((refund: any) => (
@@ -53,14 +53,14 @@ export default async function AdminRefundsPage({ searchParams }: { searchParams:
                 <div className="min-w-0">
                   <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">{refund.reference}</p>
                   <p className="font-bold text-ink-900">{refund.reservations?.properties?.title ?? '—'}</p>
-                  <p className="mt-0.5 text-sm text-ink-500">Réservation : {refund.reservations?.reference ?? '—'}</p>
+                  <p className="mt-0.5 text-sm text-ink-500">Reservering: {refund.reservations?.reference ?? '—'}</p>
                 </div>
                 <Badge variant="outline">{REFUND_STATUS_LABELS[refund.status as RefundStatus]}</Badge>
               </div>
 
               <div className="mt-3 grid grid-cols-1 gap-2 text-sm text-ink-600 sm:grid-cols-2">
-                <p className="break-words"><span className="text-ink-400">Client : </span>{refund.clients?.first_name} {refund.clients?.last_name} ({refund.clients?.email})</p>
-                <p><span className="text-ink-400">Montant : </span>{formatPrice(refund.amount)}</p>
+                <p className="break-words"><span className="text-ink-400">Klant : </span>{refund.clients?.first_name} {refund.clients?.last_name} ({refund.clients?.email})</p>
+                <p><span className="text-ink-400">Bedrag : </span>{formatPrice(refund.amount)}</p>
               </div>
 
               {refund.reason && (
@@ -70,7 +70,7 @@ export default async function AdminRefundsPage({ searchParams }: { searchParams:
               )}
 
               <div className="mt-3 flex flex-col gap-3 border-t border-ink-100 pt-3 sm:flex-row sm:items-center sm:justify-between">
-                <span className="text-xs text-ink-400">Demandée le {formatDateTime(refund.requested_at)}</span>
+                <span className="text-xs text-ink-400">Aangevraagd op {formatDateTime(refund.requested_at)}</span>
                 <StatusSelect
                   value={refund.status as RefundStatus}
                   options={STATUS_OPTIONS}

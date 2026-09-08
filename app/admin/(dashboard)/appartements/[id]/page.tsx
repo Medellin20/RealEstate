@@ -6,7 +6,7 @@ import { getPropertyByIdAdmin, getAllAmenities } from '@/lib/data/admin-properti
 import { PropertyForm } from '@/components/admin/property-form';
 import { ImageUploader } from '@/components/admin/image-uploader';
 
-export const metadata: Metadata = { title: 'Modifier un appartement' };
+export const metadata: Metadata = { title: 'bewerken een appartement' };
 export const dynamic = 'force-dynamic';
 
 export default async function EditPropertyPage({ params }: { params: { id: string } }) {
@@ -23,7 +23,7 @@ export default async function EditPropertyPage({ params }: { params: { id: strin
           className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-500 hover:text-ink-900"
         >
           <ArrowLeft className="h-4 w-4" />
-          Retour aux appartements
+          Terug naar appartementen
         </Link>
         {property.is_published && (
           <Link
@@ -41,7 +41,7 @@ export default async function EditPropertyPage({ params }: { params: { id: strin
 
       <div className="max-w-4xl space-y-8">
         <div className="rounded-2xl border border-ink-100 bg-white p-5 sm:p-6">
-          <h2 className="mb-4 font-bold text-ink-900">Photos</h2>
+          <h2 className="mb-4 font-bold text-ink-900">Foto’s</h2>
           <ImageUploader propertyId={property.id} initialImages={property.property_images ?? []} />
         </div>
 

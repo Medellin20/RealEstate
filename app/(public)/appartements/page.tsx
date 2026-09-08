@@ -10,9 +10,9 @@ import type { PropertyFilters as Filters } from '@/types';
 export const revalidate = 30;
 
 export const metadata: Metadata = {
-  title: 'Appartements à louer aux Pays-Bas',
+  title: 'Appartementen huren in Nederland',
   description:
-    'Parcourez nos appartements à louer, organisés par ville aux Pays-Bas. Filtrez par ville, budget et nombre de chambres.',
+    'Bekijk onze appartementen te huur, gesorteerd per stad in Nederland. Filter op stad, budget en aantal slaapkamers.',
 };
 
 interface PageProps {
@@ -33,8 +33,8 @@ export default async function AppartementsPage({ searchParams }: PageProps) {
     return (
       <div className="container-app py-10 sm:py-14">
         <div className="mb-8">
-          <h1 className="text-display-sm font-extrabold text-ink-900 sm:text-display-md">Choisissez une ville aux Pays-Bas</h1>
-          <p className="mt-2 max-w-2xl text-ink-500">Cliquez sur une ville pour afficher tous les appartements qui s’y trouvent.</p>
+          <h1 className="text-display-sm font-extrabold text-ink-900 sm:text-display-md">Kies een stad in Nederland</h1>
+          <p className="mt-2 max-w-2xl text-ink-500">Klik op een stad om alle beschikbare appartementen te bekijken.</p>
         </div>
         {cities.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -46,7 +46,7 @@ export default async function AppartementsPage({ searchParams }: PageProps) {
               </Link>
             ))}
           </div>
-        ) : <p className="rounded-2xl bg-sand-100 p-6 text-ink-500">Aucune ville ne contient encore d’appartement publié.</p>}
+        ) : <p className="rounded-2xl bg-sand-100 p-6 text-ink-500">Er zijn nog geen gepubliceerde appartementen in een stad.</p>}
       </div>
     );
   }
@@ -71,14 +71,14 @@ export default async function AppartementsPage({ searchParams }: PageProps) {
     <div className="container-app py-10 sm:py-14">
       <div className="mb-8">
         <h1 className="text-display-sm font-extrabold text-ink-900 sm:text-display-md">
-          Appartements à {filters.city}
+          Appartementen in {filters.city}
         </h1>
         <p className="mt-2 max-w-2xl text-ink-500">
-          Découvrez tous nos logements disponibles à {filters.city}, aux Pays-Bas.
+          Ontdek al onze beschikbare woningen in {filters.city}, Nederland.
         </p>
       </div>
 
-      <Link href="/appartements" className="mb-5 inline-flex items-center gap-1.5 text-sm font-semibold text-canal-700 hover:underline">← Changer de ville</Link>
+      <Link href="/appartements" className="mb-5 inline-flex items-center gap-1.5 text-sm font-semibold text-canal-700 hover:underline">← Andere stad kiezen</Link>
       <PropertyFilters resultCount={total} cities={cities} />
       <PropertyGrid properties={properties} />
       <Pagination

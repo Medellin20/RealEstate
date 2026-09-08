@@ -42,13 +42,13 @@ export default async function AdminDashboardPage() {
       <DashboardAutoRefresh />
       {dataLoadFailed && (
         <div role="alert" className="mb-6 rounded-2xl border border-brick-200 bg-brick-50 p-4 text-sm text-brick-700">
-          Certaines données ne peuvent pas être chargées. Vérifiez les variables Supabase du déploiement.
+          Sommige gegevens kunnen niet worden geladen. Controleer de Supabase-variabelen van de implementatie.
         </div>
       )}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-ink-900">Tableau de bord</h1>
-          <p className="mt-1 text-sm text-ink-500">Vue d’ensemble de l’activité de l’agence.</p>
+          <h1 className="text-2xl font-extrabold text-ink-900">Dashboard</h1>
+          <p className="mt-1 text-sm text-ink-500">Overzicht van de activiteiten van het agentschap.</p>
         </div>
         <Link href="/admin/appartements/nouveau" className="w-full sm:w-auto">
           <Button className="w-full sm:w-auto">
@@ -59,16 +59,16 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 min-[380px]:grid-cols-2 sm:grid-cols-3 xl:grid-cols-5">
-        <StatCard href="/admin/appartements" icon={Building2} label="Total appartements" value={stats.totalProperties} />
-        <StatCard href="/admin/appartements?status=available" icon={Home} label="Disponibles" value={stats.availableProperties} tone="positive" />
-        <StatCard href="/admin/appartements?status=reserved" icon={Clock} label="Réservés" value={stats.reservedProperties} tone="warning" />
-        <StatCard href="/admin/appartements?status=rented" icon={CheckCircle2} label="Loués" value={stats.rentedProperties} />
+        <StatCard href="/admin/appartements" icon={Building2} label="Total appartementen" value={stats.totalProperties} />
+        <StatCard href="/admin/appartements?status=available" icon={Home} label="beschikbare" value={stats.availableProperties} tone="positive" />
+        <StatCard href="/admin/appartements?status=reserved" icon={Clock} label="Gereserveerd" value={stats.reservedProperties} tone="warning" />
+        <StatCard href="/admin/appartements?status=rented" icon={CheckCircle2} label="Verhuurd" value={stats.rentedProperties} />
       </div>
 
       <div className="mt-8 rounded-2xl border border-ink-100 bg-white p-5 sm:p-6">
-        <h2 className="font-bold text-ink-900">Activité récente</h2>
+        <h2 className="font-bold text-ink-900">Recente activiteit</h2>
         {logs.length === 0 ? (
-          <p className="mt-3 text-sm text-ink-400">Aucune action enregistrée pour le moment.</p>
+          <p className="mt-3 text-sm text-ink-400">Momenteel zijn er geen geregistreerde activiteiten.</p>
         ) : (
           <ul className="mt-4 divide-y divide-ink-100">
             {logs.map((log) => (

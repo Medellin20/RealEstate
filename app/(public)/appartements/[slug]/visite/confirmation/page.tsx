@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { VIEWING_STATUS_LABELS } from '@/lib/utils/constants';
 import { formatDate } from '@/lib/utils/format';
 
-export const metadata = { title: 'Demande de visite envoyée' };
+export const metadata = { title: 'Bezichtigingsaanvraag verzonden' };
 
 export default async function ViewingConfirmationPage({
   searchParams,
@@ -26,22 +26,22 @@ export default async function ViewingConfirmationPage({
         </div>
 
         <h1 className="mt-5 rounded-2xl border border-canal-200 bg-canal-50 px-4 py-3 text-base font-bold text-canal-800">
-          Vous recevrez une notification par e-mail sous 10 minutes
+          U ontvangt binnen 10 minuten een e-mailmelding
         </h1>
 
         <p className="mt-2 text-sm text-ink-500">
-          Référence : <span className="font-semibold text-ink-700">{viewing.reference}</span>
+          Referentie: <span className="font-semibold text-ink-700">{viewing.reference}</span>
         </p>
 
         <div className="mt-6 space-y-2 rounded-xl bg-sand-100/60 p-4 text-left text-sm">
-          <Row label="Logement" value={property?.title ?? '—'} />
-          <Row label="Date" value={formatDate(viewing.requested_date)} />
-          <Row label="Créneau" value={viewing.requested_time_slot} />
+          <Row label="woning" value={property?.title ?? '—'} />
+          <Row label="Datum" value={formatDate(viewing.requested_date)} />
+          <Row label="tijdslot" value={viewing.requested_time_slot} />
           <Row label="Statut" value={VIEWING_STATUS_LABELS[viewing.status] ?? viewing.status} />
         </div>
 
         <p className="mt-4 rounded-xl border border-canal-200 bg-canal-50 p-4 text-sm leading-relaxed text-canal-800">
-          Vos informations ont bien été enregistrées et transmises à notre équipe. Aucune vérification supplémentaire, aucun code et aucun paiement ne vous seront demandés.
+          Uw gegevens zijn opgeslagen en aan ons team doorgegeven. Er wordt niet om extra verificatie, een code of betaling gevraagd.
         </p>
 
         <div className="mt-8 flex flex-col gap-2.5 sm:flex-row">
@@ -51,7 +51,7 @@ export default async function ViewingConfirmationPage({
           <Link href="/appartements" className="flex-1">
             <Button className="w-full">
               <Home className="h-4 w-4" />
-              Voir d’autres logements
+              Andere woningen bekijken
             </Button>
           </Link>
         </div>

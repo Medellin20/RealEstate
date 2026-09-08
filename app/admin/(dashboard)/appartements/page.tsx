@@ -13,7 +13,7 @@ import { EmptyState } from '@/components/ui/empty-state';
 import { DUTCH_CITIES, PROPERTY_STATUS_LABELS } from '@/lib/utils/constants';
 import { formatPrice } from '@/lib/utils/format';
 
-export const metadata: Metadata = { title: 'Appartements' };
+export const metadata: Metadata = { title: 'Appartementen' };
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 export const fetchCache = 'force-no-store';
@@ -47,13 +47,13 @@ export default async function AdminPropertiesPage({
     <div>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-ink-900">Appartements</h1>
-          <p className="mt-1 text-sm text-ink-500">{total} logement(s) au total.</p>
+          <h1 className="text-2xl font-extrabold text-ink-900">Appartementen</h1>
+          <p className="mt-1 text-sm text-ink-500">{total} woning(en) in totaal.</p>
         </div>
         <Link href="/admin/appartements/nouveau" className="w-full sm:w-auto">
           <Button className="w-full sm:w-auto">
             <PlusCircle className="h-4 w-4" />
-            Ajouter un appartement
+            Appartement toevoegen
           </Button>
         </Link>
       </div>
@@ -61,41 +61,41 @@ export default async function AdminPropertiesPage({
       <form role="search" className="mb-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap" action="/admin/appartements" method="get">
         <div className="relative flex-1">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-300" />
-          <Input name="search" placeholder="Rechercher par titre ou ville..." defaultValue={searchParams.search} className="pl-10" />
+          <Input name="search" placeholder="Zoeken par titre of ville..." defaultValue={searchParams.search} className="pl-10" />
         </div>
         <div className="relative sm:w-48">
           <MapPin className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-300" />
-          <Input name="postalCode" placeholder="Code postal" defaultValue={postalCode} className="pl-10" />
+          <Input name="postalCode" placeholder="Postcode" defaultValue={postalCode} className="pl-10" />
         </div>
-        <Input name="minPrice" type="number" min="0" step="0.01" placeholder="Prix min." defaultValue={searchParams.minPrice} className="sm:w-36" />
-        <Input name="maxPrice" type="number" min="0" step="0.01" placeholder="Prix max." defaultValue={searchParams.maxPrice} className="sm:w-36" />
+        <Input name="minPrice" type="number" min="0" step="0.01" placeholder="prijs min." defaultValue={searchParams.minPrice} className="sm:w-36" />
+        <Input name="maxPrice" type="number" min="0" step="0.01" placeholder="prijs max." defaultValue={searchParams.maxPrice} className="sm:w-36" />
         <AutoSubmitSelect name="status" defaultValue={status} className="sm:w-52">
-          <option value="">Tous les statuts</option>
-          <option value="draft">Brouillon</option>
-          <option value="available">Disponible</option>
-          <option value="reserved">Réservé</option>
-          <option value="rented">Loué</option>
-          <option value="unavailable">Indisponible</option>
+          <option value="">alle de statuts</option>
+          <option value="draft">Concept</option>
+          <option value="available">Beschikbaar</option>
+          <option value="reserved">Gereserveerd</option>
+          <option value="rented">Verhuurd</option>
+          <option value="unavailable">Niet beschikbaar</option>
         </AutoSubmitSelect>
         <AutoSubmitSelect name="city" defaultValue={city} className="sm:w-52">
-          <option value="">Toutes les villes</option>
+          <option value="">Alle steden</option>
           {DUTCH_CITIES.map((city) => (
             <option key={city} value={city}>{city}</option>
           ))}
         </AutoSubmitSelect>
         <Button type="submit" className="w-full sm:w-auto">
           <Search className="h-4 w-4" />
-          Rechercher
+          Zoeken
         </Button>
         {hasActiveFilters && (
           <Link href="/admin/appartements" className="inline-flex h-11 items-center justify-center rounded-xl px-3.5 text-sm font-medium text-ink-500 hover:bg-sand-100 hover:text-ink-900">
-            Réinitialiser
+            Resetten
           </Link>
         )}
       </form>
 
       {properties.length === 0 ? (
-        <EmptyState title="Aucun appartement trouvé" description="Ajoutez votre premier logement pour commencer." />
+        <EmptyState title="Geen appartementen gevonden" description="Ajoutez uw premier woning voor commencer." />
       ) : (
         <>
           {/* Vue tableau — desktop */}
@@ -103,11 +103,11 @@ export default async function AdminPropertiesPage({
             <table className="w-full text-sm">
               <thead className="border-b border-ink-100 bg-sand-100/50 text-left text-xs font-semibold uppercase tracking-wide text-ink-400">
                 <tr>
-                  <th className="px-4 py-3">Logement</th>
-                  <th className="px-4 py-3">Ville</th>
-                  <th className="px-4 py-3">Prix</th>
-                  <th className="px-4 py-3">Publié</th>
-                  <th className="px-4 py-3">Actions</th>
+                  <th className="px-4 py-3">woning</th>
+                  <th className="px-4 py-3">Stad</th>
+                  <th className="px-4 py-3">Prijs</th>
+                  <th className="px-4 py-3">Gepubliceerd</th>
+                  <th className="px-4 py-3">Acties</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-ink-100">
@@ -137,7 +137,7 @@ export default async function AdminPropertiesPage({
                       <td className="px-4 py-3 font-medium text-ink-800">{formatPrice(property.monthly_price)}</td>
                       <td className="px-4 py-3">
                         <Badge variant={property.is_published ? 'available' : 'default'}>
-                          {property.is_published ? 'Publié' : 'Brouillon'}
+                          {property.is_published ? 'Gepubliceerd' : 'Concept'}
                         </Badge>
                       </td>
                       <td className="px-4 py-3">
@@ -168,7 +168,7 @@ export default async function AdminPropertiesPage({
                       <p className="mt-0.5 text-sm font-medium text-ink-700">{formatPrice(property.monthly_price)}</p>
                     </div>
                     <Badge className="shrink-0" variant={property.is_published ? 'available' : 'default'}>
-                      {property.is_published ? 'Publié' : 'Brouillon'}
+                      {property.is_published ? 'Gepubliceerd' : 'Concept'}
                     </Badge>
                   </div>
                   <div className="mt-3 border-t border-ink-100 pt-3">

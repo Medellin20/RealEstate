@@ -20,10 +20,10 @@ import { cn } from '@/lib/utils/cn';
 import { Button } from '@/components/ui/button';
 
 const NAV_LINKS = [
-  { href: '/', label: 'Accueil', icon: Home },
-  { href: '/appartements', label: 'Appartements', icon: Building2 },
-  { href: '/comment-ca-marche', label: 'Comment ça marche', icon: Workflow },
-  { href: '/a-propos', label: 'À propos', icon: Info },
+  { href: '/', label: 'Home', icon: Home },
+  { href: '/appartements', label: 'Appartementen', icon: Building2 },
+  { href: '/comment-ca-marche', label: 'Hoe werkt het', icon: Workflow },
+  { href: '/a-propos', label: 'Over ons', icon: Info },
   { href: '/contact', label: 'Contact', icon: Mail },
 ];
 
@@ -96,12 +96,12 @@ export function Navbar() {
             className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-ink-500 transition-colors hover:text-ink-900"
           >
             <User className="h-4 w-4" />
-            Mon compte
+            Mijn account
           </Link>
           <Link href="/appartements">
             <Button size="md">
               <Search className="h-4 w-4" />
-              Trouver un logement
+              Een woning zoeken
             </Button>
           </Link>
           <div ref={tabletMenuRef} className="relative">
@@ -122,7 +122,7 @@ export function Navbar() {
                       <link.icon className="h-4.5 w-4.5 text-canal-600" /> {link.label}
                     </Link>
                   ))}
-                  <Link href="/faq" className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-ink-600 hover:bg-sand-100"><CircleHelp className="h-4.5 w-4.5 text-canal-600" /> Questions fréquentes</Link>
+                  <Link href="/faq" className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-ink-600 hover:bg-sand-100"><CircleHelp className="h-4.5 w-4.5 text-canal-600" /> Veelgestelde vragen</Link>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -133,7 +133,7 @@ export function Navbar() {
           <button
             onClick={() => setMobileOpen((open) => !open)}
             className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl text-ink-700 hover:bg-sand-100"
-            aria-label={mobileOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+            aria-label={mobileOpen ? 'Menu sluiten' : 'Menu openen'}
             aria-expanded={mobileOpen}
           >
             {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -180,7 +180,7 @@ export function Navbar() {
                   className="flex min-h-11 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-ink-600 hover:bg-sand-100"
                 >
                   <CircleHelp className="h-5 w-5" />
-                  Questions fréquentes
+                  Veelgestelde vragen
                 </Link>
                 <Link
                   href="/mon-compte"

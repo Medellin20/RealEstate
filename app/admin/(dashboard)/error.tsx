@@ -17,18 +17,18 @@ export default function AdminError({
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-brick-50 text-brick-600">
           <AlertTriangle className="h-7 w-7" />
         </div>
-        <h1 className="mt-4 text-xl font-extrabold text-ink-900">Impossible de charger cette page</h1>
+        <h1 className="mt-4 text-xl font-extrabold text-ink-900">Deze pagina kan niet worden geladen</h1>
         <p className="mt-2 text-sm text-ink-500">
-          L’espace administrateur reste disponible. Vous pouvez ouvrir directement les demandes de visite ou réessayer.
+          De beheeromgeving blijft beschikbaar. U kunt rechtstreeks de bezichtigingsaanvragen openen of het opnieuw proberen.
         </p>
-        {error.digest && <p className="mt-3 text-xs text-ink-400">Référence technique : {error.digest}</p>}
+        {error.digest && <p className="mt-3 text-xs text-ink-400">Technische referentie: {error.digest}</p>}
         <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
           <Button type="button" onClick={reset}>
             <RefreshCcw className="h-4 w-4" />
-            Réessayer
+            Opnieuw proberen
           </Button>
           <Link href="/admin/visites">
-            <Button variant="outline" className="w-full">Voir les visites</Button>
+            <Button variant="outline" className="w-full">Bezichtigingen bekijken</Button>
           </Link>
         </div>
       </div>

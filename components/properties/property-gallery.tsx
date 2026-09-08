@@ -37,7 +37,7 @@ export function PropertyGallery({ images, title }: { images: PropertyImage[]; ti
   if (images.length === 0) {
     return (
       <div className="flex aspect-[16/10] w-full items-center justify-center rounded-2xl bg-ink-100 text-ink-300">
-        Aucune photo disponible
+        Geen foto’s beschikbaar
       </div>
     );
   }
@@ -69,14 +69,14 @@ export function PropertyGallery({ images, title }: { images: PropertyImage[]; ti
           <>
             <button
               onClick={prev}
-              aria-label="Image précédente"
+              aria-label="Vorige afbeelding"
               className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-ink-700 shadow-soft transition-transform hover:scale-105"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
             <button
               onClick={next}
-              aria-label="Image suivante"
+              aria-label="Volgende afbeelding"
               className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-ink-700 shadow-soft transition-transform hover:scale-105"
             >
               <ChevronRight className="h-5 w-5" />
@@ -120,14 +120,14 @@ export function PropertyGallery({ images, title }: { images: PropertyImage[]; ti
           >
             <button
               onClick={() => setFullscreen(false)}
-              aria-label="Fermer"
+              aria-label="Sluiten"
               className="absolute right-5 top-5 rounded-full bg-white/10 p-2.5 text-white hover:bg-white/20"
             >
               <X className="h-5 w-5" />
             </button>
             <button
               onClick={prev}
-              aria-label="Image précédente"
+              aria-label="Vorige afbeelding"
               className="absolute left-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
             >
               <ChevronLeft className="h-5 w-5" />
@@ -143,7 +143,7 @@ export function PropertyGallery({ images, title }: { images: PropertyImage[]; ti
             </div>
             <button
               onClick={next}
-              aria-label="Image suivante"
+              aria-label="Volgende afbeelding"
               className="absolute right-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
             >
               <ChevronRight className="h-5 w-5" />

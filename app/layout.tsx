@@ -22,31 +22,31 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Real Estate NL — Location d’appartements aux Pays-Bas',
+    default: 'Real Estate NL — Appartementen huren in Nederland',
     template: '%s | Real Estate NL',
   },
   description:
-    'Real Estate NL vous accompagne dans la recherche, la visite et la réservation d’appartements à louer aux Pays-Bas : Amsterdam, Rotterdam, Utrecht, Eindhoven, La Haye et Groningue.',
+    'Real Estate NL begeleidt u bij het zoeken, bezichtigen en reserveren van huurappartementen in Nederland: Amsterdam, Rotterdam, Utrecht, Eindhoven, Den Haag en Groningen.',
   keywords: [
-    'location appartement Pays-Bas',
+    'appartement huren Nederland',
     'appartement Amsterdam',
-    'louer Rotterdam',
-    'expat housing Netherlands',
+    'appartement huren Rotterdam',
+    'huisvesting voor expats in Nederland',
     'real estate NL',
   ],
   openGraph: {
     type: 'website',
-    locale: 'fr_FR',
+    locale: 'nl_NL',
     siteName: 'Real Estate NL',
-    title: 'Real Estate NL — Location d’appartements aux Pays-Bas',
+    title: 'Real Estate NL — Appartementen huren in Nederland',
     description:
-      'Recherchez, visitez et réservez votre prochain logement aux Pays-Bas en toute confiance.',
+      'Zoek, bezichtig en reserveer uw volgende woning in Nederland met vertrouwen.',
     url: siteUrl,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Real Estate NL — Location d’appartements aux Pays-Bas',
-    description: 'Trouvez votre prochain logement aux Pays-Bas.',
+    title: 'Real Estate NL — Appartementen huren in Nederland',
+    description: 'Vind uw volgende woning in Nederland.',
   },
   robots: {
     index: true,

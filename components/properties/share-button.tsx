@@ -17,16 +17,16 @@ export function ShareButton({ title }: { title: string }) {
     }
     try {
       await navigator.clipboard.writeText(url);
-      toast.success('Lien copié dans le presse-papiers');
+      toast.success('Link gekopieerd naar klembord');
     } catch {
-      toast.error('Impossible de copier le lien');
+      toast.error('Link kopiëren mislukt');
     }
   }
 
   return (
     <Button variant="outline" size="sm" onClick={handleShare}>
       <Share2 className="h-3.5 w-3.5" />
-      Partager
+      Delen
     </Button>
   );
 }

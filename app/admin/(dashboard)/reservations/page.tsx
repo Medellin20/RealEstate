@@ -12,7 +12,7 @@ import { formatDate, formatDateTime } from '@/lib/utils/format';
 import { RESERVATION_STATUS_LABELS } from '@/lib/utils/constants';
 import type { ReservationStatus } from '@/types/database';
 
-export const metadata: Metadata = { title: 'Réservations' };
+export const metadata: Metadata = { title: 'Reserveringen' };
 export const dynamic = 'force-dynamic';
 
 const STATUS_OPTIONS = Object.entries(RESERVATION_STATUS_LABELS).map(([value, label]) => ({
@@ -32,9 +32,9 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
     <div>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-ink-900">Réservations</h1>
+          <h1 className="text-2xl font-extrabold text-ink-900">Reserveringen</h1>
           <p className="mt-1 text-sm text-ink-500">
-            {reservations.length} réservation(s){searchParams.scope === 'pending' ? ' en attente' : ''}.
+            {reservations.length} reservering(en){searchParams.scope === 'pending' ? ' in afwachting' : ''}.
           </p>
         </div>
         <div className="grid w-full grid-cols-1 gap-2 sm:flex sm:w-auto sm:items-center">
@@ -46,7 +46,7 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
           </a>
           <form action="/admin/reservations" method="get" className="w-full sm:w-auto">
             <AutoSubmitSelect name="status" defaultValue={searchParams.status} className="sm:w-56">
-              <option value="">{searchParams.scope === 'pending' ? 'Toutes les réservations en attente' : 'Tous les statuts'}</option>
+              <option value="">{searchParams.scope === 'pending' ? 'Alle reserveringen in afwachting' : 'Alle statussen'}</option>
               {(searchParams.scope === 'pending' ? PENDING_STATUS_OPTIONS : STATUS_OPTIONS).map((opt) => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
@@ -55,7 +55,7 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
           </form>
           {(searchParams.status || searchParams.scope === 'pending') && (
             <Link href="/admin/reservations" className="inline-flex h-9 items-center justify-center rounded-xl px-3 text-sm font-medium text-canal-700 hover:bg-canal-50 hover:text-canal-900">
-              Réinitialiser
+              Resetten
             </Link>
           )}
         </div>
@@ -63,10 +63,10 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
 
       {error ? (
         <div role="alert" className="rounded-2xl border border-brick-200 bg-brick-50 p-5 text-sm text-brick-700">
-          Impossible de charger les réservations : {error}
+          Reserveringen laden mislukt: {error}
         </div>
       ) : reservations.length === 0 ? (
-        <EmptyState title="Aucune réservation" />
+        <EmptyState title="Geen reserveringen" />
       ) : (
         <div className="space-y-3">
           {reservations.map((reservation: any) => (
@@ -83,11 +83,11 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
               </div>
 
               <div className="mt-3 grid grid-cols-1 gap-2 text-sm text-ink-600 sm:grid-cols-2 lg:grid-cols-4">
-                <p><span className="text-ink-400">Client : </span>{reservation.clients?.first_name} {reservation.clients?.last_name}</p>
-                <p className="break-all"><span className="text-ink-400">E-mail : </span>{reservation.clients?.email}</p>
-                <p><span className="text-ink-400">Entrée : </span>{formatDate(reservation.desired_move_in_date)}</p>
-                <p><span className="text-ink-400">Durée : </span>{reservation.duration_months} mois · {reservation.occupants_count} occupant(s)</p>
-                <p><span className="text-ink-400">Animaux de compagnie : </span>{reservation.has_pets ? 'Oui' : 'Non'}</p>
+                <p><span className="text-ink-400">Klant: </span>{reservation.clients?.first_name} {reservation.clients?.last_name}</p>
+                <p className="break-all"><span className="text-ink-400">E-mail: </span>{reservation.clients?.email}</p>
+                <p><span className="text-ink-400">Intrek: </span>{formatDate(reservation.desired_move_in_date)}</p>
+                <p><span className="text-ink-400">duur : </span>{reservation.duration_months} mois · {reservation.occupants_count} occupant(s)</p>
+                <p><span className="text-ink-400">Huisdieren: </span>{reservation.has_pets ? 'Ja' : 'Nee'}</p>
               </div>
 
               {reservation.message && (
@@ -98,13 +98,13 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 text-sm font-semibold text-ink-700">
                   <span className="flex items-center gap-2">
                     <History className="h-4 w-4 text-canal-600" />
-                    Historique de la réservation
+                    Reserveringsgeschiedenis
                   </span>
                   <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
                 </summary>
                 <div className="border-t border-ink-100 px-3 py-2">
                   {(statusHistory[reservation.id] ?? []).length === 0 ? (
-                    <p className="py-2 text-xs text-ink-400">Aucun changement enregistré.</p>
+                    <p className="py-2 text-xs text-ink-400">Geen wijzigingen geregistreerd.</p>
                   ) : (
                     <ol className="space-y-2 py-1">
                       {(statusHistory[reservation.id] ?? []).map((entry) => (
@@ -123,7 +123,7 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
               </details>
 
               <div className="mt-3 flex flex-col gap-3 border-t border-ink-100 pt-3 sm:flex-row sm:items-center sm:justify-between">
-                <span className="text-xs text-ink-400">Reçue le {formatDateTime(reservation.created_at)}</span>
+                <span className="text-xs text-ink-400">Ontvangen op {formatDateTime(reservation.created_at)}</span>
                 <StatusSelect
                   value={reservation.status as ReservationStatus}
                   options={STATUS_OPTIONS}

@@ -28,7 +28,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const property = await getPropertyBySlug(params.slug);
-  if (!property) return { title: 'Logement introuvable' };
+  if (!property) return { title: 'woning introuvable' };
 
   const primaryImage = property.property_images.find((i) => i.is_primary) ?? property.property_images[0];
 
@@ -75,9 +75,9 @@ export default async function PropertyDetailPage({ params }: PageProps) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <nav className="mb-5 flex items-center gap-1.5 text-sm text-ink-400">
-        <Link href="/" className="hover:text-ink-700">Accueil</Link>
+        <Link href="/" className="hover:text-ink-700">Home</Link>
         <span>/</span>
-        <Link href="/appartements" className="hover:text-ink-700">Appartements</Link>
+        <Link href="/appartements" className="hover:text-ink-700">Appartementen</Link>
         <span>/</span>
         <span className="truncate text-ink-600">{property.title}</span>
       </nav>
@@ -116,48 +116,48 @@ export default async function PropertyDetailPage({ params }: PageProps) {
             </div>
 
             <div className="mt-6 grid grid-cols-2 gap-4 rounded-2xl border border-ink-100 bg-white p-5 sm:grid-cols-4">
-              <Feature icon={BedDouble} label="Chambres" value={String(property.bedrooms)} />
+              <Feature icon={BedDouble} label="Slaapkamers" value={String(property.bedrooms)} />
               <Feature icon={Bath} label="Salles de bain" value={String(property.bathrooms)} />
-              <Feature icon={Ruler} label="Surface" value={formatSurface(property.surface_m2)} />
+              <Feature icon={Ruler} label="Oppervlakte" value={formatSurface(property.surface_m2)} />
               <Feature
                 icon={Building}
-                label="Étage"
+                label="Verdieping"
                 value={property.floor != null ? `${property.floor}${property.floor === 0 ? ' (RDC)' : ''}` : '—'}
               />
             </div>
 
             <div className="mt-10">
-              <h2 className="text-lg font-bold text-ink-900">Description</h2>
+              <h2 className="text-lg font-bold text-ink-900">Beschrijving</h2>
               <p className="mt-3 whitespace-pre-line leading-relaxed text-ink-600">
                 {property.description}
               </p>
             </div>
 
             <div className="mt-10">
-              <h2 className="text-lg font-bold text-ink-900">Détails du logement</h2>
+              <h2 className="text-lg font-bold text-ink-900">Details van de woning</h2>
               <dl className="mt-4 grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
-                <DetailRow label="Offert depuis" value={formatDate(property.created_at)} />
+                <DetailRow label="Offert vanaf" value={formatDate(property.created_at)} />
                 <DetailRow label="Caution" value={formatPrice(property.deposit_amount)} />
                 <DetailRow label="Type de contrat" value={property.contract_type} />
-                <DetailRow label="Intérieur" value={property.interior_type} />
-                <DetailRow label="État d’entretien" value={property.maintenance_condition} />
+                <DetailRow label="Interieur" value={property.interior_type} />
+                <DetailRow label="Onderhoudstoestand" value={property.maintenance_condition} />
                 <DetailRow
                   label="Ameublement"
                   value={property.is_furnished ? 'Meublé' : 'Non meublé'}
                 />
                 <DetailRow
-                  label="Disponible à partir du"
+                  label="beschikbaar aan partir van de"
                   value={property.available_from ? formatDate(property.available_from) : 'Nous consulter'}
                 />
                 <DetailRow
-                  label="Durée minimale de location"
+                  label="duur minimale de verhuur"
                   value={`${property.minimum_stay_months ?? 12} mois`}
                 />
                 <DetailRow label="Volume" value={property.volume_m3 ? `${property.volume_m3} m³` : '—'} />
-                <DetailRow label="Nombre d’étages" value={property.floors_count ? String(property.floors_count) : '—'} />
-                <DetailRow label="Type de construction" value={property.construction_type} />
-                <DetailRow label="Année de construction" value={property.construction_year ? String(property.construction_year) : '—'} />
-                <DetailRow label="Étiquette énergétique" value={property.energy_label || '—'} />
+                <DetailRow label="Aantal verdiepingen" value={property.floors_count ? String(property.floors_count) : '—'} />
+                <DetailRow label="Bouwtype" value={property.construction_type} />
+                <DetailRow label="Bouwjaar" value={property.construction_year ? String(property.construction_year) : '—'} />
+                <DetailRow label="Energielabel" value={property.energy_label || '—'} />
                 <DetailRow label="Parking" value={property.has_parking ? 'Oui' : 'Non'} />
                 <DetailRow label="Garage" value={property.has_garage ? 'Oui' : 'Non'} />
               </dl>
@@ -165,7 +165,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
 
             {property.amenities.length > 0 && (
               <div className="mt-10">
-                <h2 className="text-lg font-bold text-ink-900">Équipements</h2>
+                <h2 className="text-lg font-bold text-ink-900">Voorzieningen</h2>
                 <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
                   {property.amenities.map((a) => (
                     <div
@@ -191,30 +191,30 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                 <span className="text-3xl font-extrabold text-ink-900">
                   {formatPrice(property.monthly_price)}
                 </span>
-                <span className="text-ink-400">/ mois</span>
+                <span className="text-ink-400">/ maand</span>
               </div>
               {isBookable ? (
                 <div className="mt-5 space-y-2.5">
                   <Link href={`/appartements/${property.slug}/reagir`} className="block">
                     <Button className="w-full" size="lg">
                       <MessageCircle className="h-4.5 w-4.5" />
-                      Réagir
+                      Reageren
                     </Button>
                   </Link>
                 </div>
               ) : (
                 <div className="mt-5 rounded-xl bg-sand-100 p-4 text-sm text-ink-500">
-                  Ce logement n’est plus disponible à la réservation pour le moment.
+                  Deze woning is momenteel niet meer beschikbaar voor reservering.
                 </div>
               )}
 
               <div className="mt-5 space-y-2 border-t border-ink-100 pt-5 text-sm text-ink-500">
                 <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-1.5"><Sofa className="h-3.5 w-3.5" /> Meublé</span>
+                  <span className="flex items-center gap-1.5"><Sofa className="h-3.5 w-3.5" /> Gemeubileerd</span>
                   <span className="font-medium text-ink-700">{property.is_furnished ? 'Oui' : 'Non'}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-1.5"><ArrowUpDown className="h-3.5 w-3.5" /> Ascenseur</span>
+                  <span className="flex items-center gap-1.5"><ArrowUpDown className="h-3.5 w-3.5" /> Lift</span>
                   <span className="font-medium text-ink-700">{property.has_elevator ? 'Oui' : 'Non'}</span>
                 </div>
               </div>
@@ -225,7 +225,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
 
       {similar.length > 0 && (
         <div className="mt-16">
-          <h2 className="text-lg font-bold text-ink-900">Logements similaires</h2>
+          <h2 className="text-lg font-bold text-ink-900">woningen similaires</h2>
           <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {similar.map((p) => (
               <PropertyCard key={p.id} property={p} />

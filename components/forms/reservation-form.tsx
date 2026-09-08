@@ -18,7 +18,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils/cn';
 import { formatDutchPhoneInput } from '@/lib/utils/phone';
 
-const STEPS = ['Vos coordonnées', 'Votre projet de location', 'Récapitulatif'] as const;
+const STEPS = ['Uw gegevens', 'Uw huurplan', 'Overzicht'] as const;
 
 export function ReservationForm({
   propertyId,
@@ -110,16 +110,16 @@ export function ReservationForm({
             >
               <div className="flex items-center gap-2 text-ink-700">
                 <User className="h-5 w-5 text-canal-600" />
-                <h3 className="font-bold">Vos coordonnées</h3>
+                <h3 className="font-bold">Uw gegevens</h3>
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
-                  <Label htmlFor="firstName">Prénom</Label>
+                  <Label htmlFor="firstName">Voornaam</Label>
                   <Input id="firstName" {...register('firstName')} />
                   <FieldError message={errors.firstName?.message} />
                 </div>
                 <div>
-                  <Label htmlFor="lastName">Nom</Label>
+                  <Label htmlFor="lastName">Achternaam</Label>
                   <Input id="lastName" {...register('lastName')} />
                   <FieldError message={errors.lastName?.message} />
                 </div>
@@ -130,7 +130,7 @@ export function ReservationForm({
                 <FieldError message={errors.email?.message} />
               </div>
               <div>
-                <Label htmlFor="phone">Téléphone</Label>
+                <Label htmlFor="phone">Telefoon</Label>
                 <Input
                   id="phone"
                   type="tel"
@@ -155,23 +155,23 @@ export function ReservationForm({
             >
               <div className="flex items-center gap-2 text-ink-700">
                 <ClipboardList className="h-5 w-5 text-canal-600" />
-                <h3 className="font-bold">Votre projet de location</h3>
+                <h3 className="font-bold">Uw huurplan</h3>
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
-                  <Label htmlFor="desiredMoveInDate">Date de réservation</Label>
+                  <Label htmlFor="desiredMoveInDate">Gewenste verhuisdatum</Label>
                   <Input id="desiredMoveInDate" type="date" min={minDate} {...register('desiredMoveInDate')} />
                   <FieldError message={errors.desiredMoveInDate?.message} />
                 </div>
                 <div>
-                  <Label htmlFor="durationMonths">Durée de location (mois)</Label>
+                  <Label htmlFor="durationMonths">Huurperiode (maanden)</Label>
                   <Input id="durationMonths" type="number" min={1} max={60} {...register('durationMonths')} />
                   <FieldError message={errors.durationMonths?.message} />
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
-                  <Label htmlFor="occupantsCount">Nombre d’occupants</Label>
+                  <Label htmlFor="occupantsCount">Aantal bewoners</Label>
                   <Select id="occupantsCount" {...register('occupantsCount')}>
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number) => (
                       <option key={number} value={number}>{number}</option>
@@ -186,14 +186,14 @@ export function ReservationForm({
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
-                  <Label htmlFor="monthlyIncome">Revenu mensuel approximatif (€)</Label>
+                  <Label htmlFor="monthlyIncome">Geschat maandelijks inkomen (€)</Label>
                   <Input id="monthlyIncome" type="number" min={0} step="50" {...register('monthlyIncome')} />
                   <FieldError message={errors.monthlyIncome?.message} />
                 </div>
                 <div>
-                  <Label htmlFor="employmentContract">Contrat de travail</Label>
+                  <Label htmlFor="employmentContract">Arbeidscontract</Label>
                   <Select id="employmentContract" {...register('employmentContract')}>
-                    <option value="">Sélectionnez votre contrat</option>
+                    <option value="">Selecteer uw contract</option>
                     <option value="CDI">CDI</option><option value="CDD">CDD</option>
                     <option value="Indépendant">Indépendant</option><option value="Intérim">Intérim</option>
                     <option value="Étudiant">Etudiant</option><option value="Autre">Autre</option>
@@ -202,12 +202,12 @@ export function ReservationForm({
                 </div>
               </div>
               <div>
-                <Label htmlFor="originCity">Ville d’origine</Label>
+                <Label htmlFor="originCity">Plaats van herkomst</Label>
                 <Input id="originCity" {...register('originCity')} />
                 <FieldError message={errors.originCity?.message} />
               </div>
               <div>
-                <Label htmlFor="message">Message complémentaire (facultatif)</Label>
+                <Label htmlFor="message">Aanvullend bericht (optioneel)</Label>
                 <Textarea id="message" rows={4} {...register('message')} />
                 <FieldError message={errors.message?.message} />
               </div>
@@ -225,24 +225,24 @@ export function ReservationForm({
             >
               <div className="flex items-center gap-2 text-ink-700">
                 <FileCheck2 className="h-5 w-5 text-canal-600" />
-                <h3 className="font-bold">Récapitulatif de votre demande</h3>
+                <h3 className="font-bold">Overzicht van uw aanvraag</h3>
               </div>
               <div className="space-y-2 rounded-xl border border-ink-100 bg-sand-100/60 p-4 text-sm">
-                <Row label="Logement" value={propertyTitle} />
-                <Row label="Frais de réservation (1 mois de loyer)" value={reservationFee} />
-                <Row label="Nom" value={`${values.firstName || ''} ${values.lastName || ''}`.trim() || '—'} />
+                <Row label="woning" value={propertyTitle} />
+                <Row label="Reserveringskosten (1 maand huur)" value={reservationFee} />
+                <Row label="Naam" value={`${values.firstName || ''} ${values.lastName || ''}`.trim() || '—'} />
                 <Row label="E-mail" value={values.email || '—'} />
-                <Row label="Date de réservation" value={values.desiredMoveInDate || '—'} />
-                <Row label="Durée" value={values.durationMonths ? `${values.durationMonths} mois` : '—'} />
-                <Row label="Nombre d’occupants" value={String(values.occupantsCount || '—')} />
-                <Row label="Animaux de compagnie" value={values.hasPets ? 'Oui' : 'Non'} />
-                <Row label="Contrat de travail" value={values.employmentContract || '—'} />
+                <Row label="Gewenste verhuisdatum" value={values.desiredMoveInDate || '—'} />
+                <Row label="Duur" value={values.durationMonths ? `${values.durationMonths} maanden` : '—'} />
+                <Row label="Aantal bewoners" value={String(values.occupantsCount || '—')} />
+                <Row label="Huisdieren" value={values.hasPets ? 'Ja' : 'Nee'} />
+                <Row label="Arbeidscontract" value={values.employmentContract || '—'} />
                 <Row label="Revenu mensuel" value={values.monthlyIncome != null ? `${values.monthlyIncome} €` : '—'} />
-                <Row label="Ville d’origine" value={values.originCity || '—'} />
+                <Row label="Plaats van herkomst" value={values.originCity || '—'} />
               </div>
               <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-                Les frais de réservation correspondent à un mois de loyer ({reservationFee}). Après
-                vérification de votre dossier, l’agence vous transmettra les modalités de paiement.
+                De reserveringskosten bedragen één maand huur ({reservationFee}). Na controle van uw
+                dossier stuurt het agentschap u de betaalinstructies.
               </p>
             </motion.div>
           )}

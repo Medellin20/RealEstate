@@ -40,7 +40,7 @@ export function ContactForm() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <Label htmlFor="name">Nom</Label>
+          <Label htmlFor="name">naam</Label>
           <Input id="name" {...register('name')} />
           <FieldError message={errors.name?.message} />
         </div>
@@ -53,7 +53,7 @@ export function ContactForm() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <Label htmlFor="phone">Téléphone (facultatif)</Label>
+          <Label htmlFor="phone">Telefoon (optioneel)</Label>
           <Input
             id="phone"
             type="tel"
@@ -65,14 +65,14 @@ export function ContactForm() {
           <FieldError message={errors.phone?.message} />
         </div>
         <div>
-          <Label htmlFor="subject">Sujet</Label>
+          <Label htmlFor="subject">onderwerp</Label>
           <Input id="subject" {...register('subject')} />
           <FieldError message={errors.subject?.message} />
         </div>
       </div>
 
       <div>
-        <Label htmlFor="message">Message</Label>
+        <Label htmlFor="message">bericht</Label>
         <Textarea id="message" rows={5} {...register('message')} />
         <FieldError message={errors.message?.message} />
       </div>

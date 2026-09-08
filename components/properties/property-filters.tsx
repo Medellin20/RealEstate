@@ -83,9 +83,9 @@ export function PropertyFilters({ resultCount, cities }: { resultCount: number; 
   const filterFields = (
     <div className="space-y-4">
       <div>
-        <label className="mb-1.5 block text-xs font-semibold text-ink-500">Ville</label>
+        <label className="mb-1.5 block text-xs font-semibold text-ink-500">Stad</label>
         <Select value={filters.city} onChange={(e) => update('city', e.target.value)}>
-          <option value="">Toutes les villes</option>
+          <option value="">Alle steden</option>
           {cities.map((c) => (
             <option key={c} value={c}>
               {c}
@@ -96,7 +96,7 @@ export function PropertyFilters({ resultCount, cities }: { resultCount: number; 
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="mb-1.5 block text-xs font-semibold text-ink-500">Prix min.</label>
+          <label className="mb-1.5 block text-xs font-semibold text-ink-500">Prijs min.</label>
           <Select value={filters.minPrice} onChange={(e) => update('minPrice', e.target.value)}>
             <option value="">—</option>
             {[500, 750, 1000, 1250, 1500, 2000].map((v) => (
@@ -107,7 +107,7 @@ export function PropertyFilters({ resultCount, cities }: { resultCount: number; 
           </Select>
         </div>
         <div>
-          <label className="mb-1.5 block text-xs font-semibold text-ink-500">Prix max.</label>
+          <label className="mb-1.5 block text-xs font-semibold text-ink-500">Prijs max.</label>
           <Select value={filters.maxPrice} onChange={(e) => update('maxPrice', e.target.value)}>
             <option value="">—</option>
             {[1000, 1500, 2000, 2500, 3000, 4000, 5000].map((v) => (
@@ -120,9 +120,9 @@ export function PropertyFilters({ resultCount, cities }: { resultCount: number; 
       </div>
 
       <div>
-        <label className="mb-1.5 block text-xs font-semibold text-ink-500">Chambres minimum</label>
+        <label className="mb-1.5 block text-xs font-semibold text-ink-500">Slaapkamers minimum</label>
         <Select value={filters.bedrooms} onChange={(e) => update('bedrooms', e.target.value)}>
-          <option value="">Indifférent</option>
+          <option value="">Geen voorkeur</option>
           {[1, 2, 3, 4].map((v) => (
             <option key={v} value={v}>
               {v}+
@@ -132,9 +132,9 @@ export function PropertyFilters({ resultCount, cities }: { resultCount: number; 
       </div>
 
       <div>
-        <label className="mb-1.5 block text-xs font-semibold text-ink-500">Type de logement</label>
+        <label className="mb-1.5 block text-xs font-semibold text-ink-500">Woningtype</label>
         <Select value={filters.type} onChange={(e) => update('type', e.target.value)}>
-          <option value="">Tous types</option>
+          <option value="">alle types</option>
           {PROPERTY_TYPES.map((t) => (
             <option key={t.value} value={t.value}>
               {t.label}
@@ -145,7 +145,7 @@ export function PropertyFilters({ resultCount, cities }: { resultCount: number; 
 
       <div className="flex gap-2 pt-2">
         <Button type="button" variant="outline" className="flex-1" onClick={reset}>
-          Réinitialiser
+          Resetten
         </Button>
         <Button type="button" className="flex-1" onClick={() => apply(filters)}>
           Appliquer
@@ -158,7 +158,7 @@ export function PropertyFilters({ resultCount, cities }: { resultCount: number; 
     <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <p className="text-sm text-ink-500">
         <span className="font-semibold text-ink-900">{resultCount}</span>{' '}
-        {resultCount > 1 ? 'logements trouvés' : 'logement trouvé'}
+        {resultCount > 1 ? 'woningen gevonden' : 'woning gevonden'}
       </p>
 
       <div className="flex w-full items-center gap-2 sm:w-auto">
@@ -167,10 +167,10 @@ export function PropertyFilters({ resultCount, cities }: { resultCount: number; 
           onChange={(e) => update('sort', e.target.value)}
           className="!h-10 min-w-0 flex-1 text-xs sm:w-auto sm:min-w-[9.5rem]"
         >
-          <option value="recent">Plus récents</option>
-          <option value="price_asc">Prix croissant</option>
-          <option value="price_desc">Prix décroissant</option>
-          <option value="surface">Surface</option>
+          <option value="recent">Nieuwstes</option>
+          <option value="price_asc">Prijs oplopend</option>
+          <option value="price_desc">Prijs aflopend</option>
+          <option value="surface">Oppervlakte</option>
         </Select>
 
         <Button variant="outline" size="sm" onClick={() => setDrawerOpen(true)} className="shrink-0">
@@ -184,7 +184,7 @@ export function PropertyFilters({ resultCount, cities }: { resultCount: number; 
         </Button>
       </div>
 
-      <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} title="Filtrer les logements">
+      <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} title="Woningen filteren">
         {filterFields}
       </Drawer>
     </div>

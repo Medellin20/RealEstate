@@ -12,7 +12,7 @@ export function ConfirmDeleteButton({
   action,
   confirmTitle,
   confirmDescription,
-  label = 'Supprimer',
+  label = 'Verwijderen',
   size = 'sm',
 }: {
   action: () => Promise<ActionResult>;
@@ -35,7 +35,7 @@ export function ConfirmDeleteButton({
           router.refresh();
         } else toast.error(result.message);
       } catch {
-        toast.error('Connexion impossible. Merci de réessayer.');
+        toast.error('Verbinding mislukt. Probeer het opnieuw.');
       }
     });
   }

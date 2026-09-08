@@ -30,9 +30,9 @@ import { cn } from '@/lib/utils/cn';
 import { formatDutchPhoneInput } from '@/lib/utils/phone';
 
 const STEPS = [
-  'Date & créneau',
-  'Vos coordonnées',
-  'Récapitulatif',
+  'Datum en tijdstip',
+  'Uw gegevens',
+  'Overzicht',
 ] as const;
 
 export function ViewingRequestForm({
@@ -98,7 +98,7 @@ export function ViewingRequestForm({
    */
   async function goNext() {
     /*
-     * Étape 0
+     * Stap 0
      * -------
      * Vérification de la date et du créneau.
      */
@@ -117,7 +117,7 @@ export function ViewingRequestForm({
     }
 
     /*
-     * Étape 1
+     * Stap 1
      * -------
      * On formate le téléphone avant de valider.
      */
@@ -166,7 +166,7 @@ export function ViewingRequestForm({
       if (!result.success || !result.data) {
         toast.error(
           result.message ||
-            'La demande de visite n’a pas pu être envoyée.'
+            'De bezichtigingsaanvraag kon niet worden verzonden.'
         );
 
         return;
@@ -246,7 +246,7 @@ export function ViewingRequestForm({
               <CalendarClock className="h-5 w-5 text-canal-600" />
 
               <h3 className="font-bold">
-                Choisissez une date et un créneau
+                Kies een datum en tijdstip
               </h3>
             </div>
 
@@ -254,7 +254,7 @@ export function ViewingRequestForm({
 
             <div>
               <Label htmlFor="requestedDate">
-                Date souhaitée
+                Gewenste datum
               </Label>
 
               <Input
@@ -273,7 +273,7 @@ export function ViewingRequestForm({
 
             <div>
               <Label htmlFor="requestedTimeSlot">
-                Créneau horaire
+                Tijdstip
               </Label>
 
               <Select
@@ -281,7 +281,7 @@ export function ViewingRequestForm({
                 {...register('requestedTimeSlot')}
               >
                 <option value="">
-                  Sélectionnez un créneau
+                  Selecteer een tijdstip
                 </option>
 
                 {TIME_SLOTS.map((slot) => (
@@ -313,7 +313,7 @@ export function ViewingRequestForm({
               <User className="h-5 w-5 text-canal-600" />
 
               <h3 className="font-bold">
-                Vos coordonnées
+                Uw gegevens
               </h3>
             </div>
 
@@ -322,7 +322,7 @@ export function ViewingRequestForm({
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div>
                 <Label htmlFor="firstName">
-                  Prénom
+                  Voornaam
                 </Label>
 
                 <Input
@@ -338,7 +338,7 @@ export function ViewingRequestForm({
 
               <div>
                 <Label htmlFor="lastName">
-                  Nom
+                  Achternaam
                 </Label>
 
                 <Input
@@ -376,7 +376,7 @@ export function ViewingRequestForm({
 
             <div>
               <Label htmlFor="phone">
-                Téléphone
+                Telefoon
               </Label>
 
               <Input
@@ -422,32 +422,32 @@ export function ViewingRequestForm({
               <FileCheck2 className="h-5 w-5 text-canal-600" />
 
               <h3 className="font-bold">
-                Récapitulatif de votre demande
+                Overzicht van uw aanvraag
               </h3>
             </div>
 
             <div className="space-y-2 rounded-xl border border-ink-100 bg-sand-100/60 p-4 text-sm">
               <Row
-                label="Logement"
+                label="woning"
                 value={propertyTitle}
               />
 
               <Row
-                label="Date"
+                label="Datum"
                 value={
                   values.requestedDate || '—'
                 }
               />
 
               <Row
-                label="Créneau"
+                label="tijdslot"
                 value={
                   values.requestedTimeSlot || '—'
                 }
               />
 
               <Row
-                label="Nom"
+                label="naam"
                 value={
                   `${values.firstName || ''} ${
                     values.lastName || ''
@@ -463,7 +463,7 @@ export function ViewingRequestForm({
               />
 
               <Row
-                label="Téléphone"
+                label="Telefoon"
                 value={
                   values.phone || '—'
                 }
@@ -471,10 +471,9 @@ export function ViewingRequestForm({
             </div>
 
             <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-              Les frais de visite, d’un montant de 100 €,
-              sont exigibles avant la visite de l’appartement.
-              Ils sont intégralement remboursables si, à l’issue
-              de la visite, le bien ne correspond pas à vos attentes.
+              De bezichtigingskosten van € 100 moeten vóór de bezichtiging van het
+              appartement worden betaald. Ze worden volledig terugbetaald als de woning
+              na de bezichtiging niet aan uw verwachtingen voldoet.
             </p>
           </div>
         )}
@@ -498,7 +497,7 @@ export function ViewingRequestForm({
           >
             <ArrowLeft className="h-4 w-4" />
 
-            Retour
+            Terug
           </Button>
 
           {/* CONTINUER */}
@@ -509,7 +508,7 @@ export function ViewingRequestForm({
               onClick={() => void goNext()}
               className="w-full sm:w-auto"
             >
-              Continuer
+              Doorgaan
 
               <ArrowRight className="h-4 w-4" />
             </Button>
@@ -526,7 +525,7 @@ export function ViewingRequestForm({
               isLoading={isPending}
               className="w-full sm:w-auto"
             >
-              Confirmer la visite
+              Bezichtiging bevestigen
             </Button>
           )}
         </div>

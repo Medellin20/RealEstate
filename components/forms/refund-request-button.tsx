@@ -36,29 +36,29 @@ export function RefundRequestButton({ guaranteePaymentId }: { guaranteePaymentId
     <>
       <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
         <RotateCcw className="h-3.5 w-3.5" />
-        Demander un remboursement
+        Terugbetaling aanvragen
       </Button>
 
-      <Modal open={open} onClose={() => setOpen(false)} title="Demander le remboursement de votre garantie">
+      <Modal open={open} onClose={() => setOpen(false)} title="Terugbetaling van uw waarborg aanvragen">
         <p className="text-sm text-ink-500">
-          Si vous renoncez finalement à ce logement, vous pouvez demander le remboursement de votre
-          garantie. Notre équipe traitera votre demande et vous tiendra informé de son avancement.
+          Als u uiteindelijk afziet van deze woning, kunt u de terugbetaling van uw waarborg
+          aanvragen. Ons team verwerkt uw aanvraag en houdt u op de hoogte van de voortgang.
         </p>
 
         <div className="mt-4">
-          <Label htmlFor="reason">Raison (facultatif)</Label>
+          <Label htmlFor="reason">Reden (optioneel)</Label>
           <Textarea
             id="reason"
             rows={3}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
-            placeholder="Expliquez brièvement votre décision..."
+            placeholder="Licht uw beslissing kort toe..."
           />
         </div>
 
         <label className="mt-4 flex cursor-pointer items-start gap-2.5 text-sm text-ink-600">
           <Checkbox checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} className="mt-0.5" />
-          Je confirme vouloir annuler ma réservation et demander le remboursement de ma garantie.
+          Ik bevestig dat ik mijn reservering wil annuleren en de terugbetaling van mijn waarborg wil aanvragen.
         </label>
 
         <div className="mt-6 flex gap-2.5">
@@ -72,7 +72,7 @@ export function RefundRequestButton({ guaranteePaymentId }: { guaranteePaymentId
             isLoading={isPending}
             onClick={handleSubmit}
           >
-            Confirmer la demande
+            Aanvraag bevestigen
           </Button>
         </div>
       </Modal>

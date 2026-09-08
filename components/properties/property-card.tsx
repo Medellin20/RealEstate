@@ -35,13 +35,13 @@ export function PropertyCard({ property }: { property: PropertyWithRelations }) 
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-ink-300">Pas de photo</div>
+          <div className="flex h-full items-center justify-center text-ink-300">Geen foto</div>
         )}
 
         <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
-          {isNew(property.created_at) && <Badge variant="new">Nouveau</Badge>}
+          {isNew(property.created_at) && <Badge variant="new">nieuw</Badge>}
           {availableNow && property.status === 'available' && (
-            <Badge variant="available">Disponible immédiatement</Badge>
+            <Badge variant="available">Direct beschikbaar</Badge>
           )}
         </div>
 
@@ -69,7 +69,7 @@ export function PropertyCard({ property }: { property: PropertyWithRelations }) 
           <span className="text-xl font-extrabold text-ink-900">
             {formatPrice(property.monthly_price)}
           </span>
-          <span className="text-sm text-ink-400">/ mois</span>
+          <span className="text-sm text-ink-400">/ maand</span>
         </div>
 
         <div className="mt-3 flex items-center gap-4 border-t border-ink-100 pt-3 text-sm text-ink-500">
@@ -89,7 +89,7 @@ export function PropertyCard({ property }: { property: PropertyWithRelations }) 
 
         {property.available_from && (
           <p className={cn('mt-2.5 text-xs text-ink-400')}>
-            Disponible à partir du {formatDate(property.available_from)}
+            Beschikbaar vanaf {formatDate(property.available_from)}
           </p>
         )}
       </div>

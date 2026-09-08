@@ -14,38 +14,38 @@ import { DUTCH_TESTIMONIALS } from '@/lib/data/testimonials';
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: 'Real Estate NL — Location d’appartements aux Pays-Bas',
+  title: 'Real Estate NL — Appartementen huren in Nederland',
   description:
-    'Trouvez votre prochain logement aux Pays-Bas. Real Estate NL facilite la recherche, les visites et la réservation d’appartements à Amsterdam, Rotterdam, Utrecht et plus encore.',
+    'Vind uw volgende woning in Nederland. Real Estate NL maakt het zoeken, bezichtigen en reserveren van appartementen in Amsterdam, Rotterdam, Utrecht en daarbuiten eenvoudig.',
 };
 
 const STEPS = [
   {
     icon: Building2,
-    title: 'Recherchez un logement',
-    description: 'Filtrez par ville, budget et nombre de chambres parmi nos annonces vérifiées.',
+    title: 'Zoek een woning',
+    description: 'Filter op stad, budget en aantal slaapkamers uit onze geverifieerde advertenties.',
   },
   {
     icon: CalendarCheck,
-    title: 'Réservez une visite',
-    description: 'Choisissez une date et un créneau, puis envoyez gratuitement votre demande à l’agence.',
+    title: 'Plan een bezichtiging',
+    description: 'Kies een datum en tijdstip en verstuur uw aanvraag gratis naar het agentschap.',
   },
   {
     icon: ShieldCheck,
-    title: 'Envoyez votre réservation',
-    description: 'Transmettez votre projet de location ; notre équipe examine ensuite votre dossier.',
+    title: 'Verstuur uw reservering',
+    description: 'Deel uw huurplannen; ons team beoordeelt daarna uw dossier.',
   },
   {
     icon: KeyRound,
-    title: 'Emménagez',
-    description: 'Votre dossier validé, récupérez les clés de votre nouveau logement.',
+    title: 'Verhuis',
+    description: 'Na goedkeuring van uw dossier ontvangt u de sleutels van uw nieuwe woning.',
   },
 ];
 
 const TRUST_POINTS = [
-  { value: '6', label: 'villes couvertes aux Pays-Bas' },
-  { value: '100%', label: 'annonces vérifiées par l’agence' },
-  { value: '48h', label: 'délai moyen de réponse à une demande' },
+  { value: '6', label: 'steden in Nederland' },
+  { value: '100%', label: 'geverifieerde advertenties van het agentschap' },
+  { value: '48h', label: 'gemiddelde reactietermijn op een aanvraag' },
 ];
 
 export default async function HomePage() {
@@ -58,14 +58,14 @@ export default async function HomePage() {
         <div className="container-app relative pb-16 pt-20 sm:pb-24 sm:pt-28 lg:pt-32">
           <div>
             <span className="text-eyebrow inline-block rounded-full bg-white/10 px-3 py-1.5 uppercase text-sand-200">
-              Agence spécialisée — Pays-Bas
+              Gespecialiseerd agentschap — Nederland
             </span>
             <h1 className="mt-5 max-w-2xl text-display-md font-extrabold text-white sm:text-display-lg">
-              Trouvez votre prochain logement aux Pays-Bas
+              Vind uw volgende woning in Nederland
             </h1>
             <p className="mt-4 max-w-xl text-base text-sand-200 sm:text-lg">
-              Real Estate NL facilite la recherche, les visites et la réservation d’appartements
-              aux Pays-Bas — un accompagnement clair, sécurisé et sans mauvaise surprise.
+              Real Estate NL maakt het zoeken, bezichtigen en reserveren van appartementen eenvoudig
+              in Nederland — met duidelijke, veilige begeleiding zonder verrassingen.
             </p>
           </div>
 
@@ -74,7 +74,7 @@ export default async function HomePage() {
           </FadeIn>
 
           <FadeIn delay={0.25} className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-sand-300">
-            <span>Villes populaires :</span>
+            <span>Populaire steden:</span>
             {DUTCH_CITIES.map((city) => (
               <Link
                 key={city}
@@ -106,13 +106,13 @@ export default async function HomePage() {
           <FadeIn>
             <div className="flex flex-wrap items-end justify-between gap-4">
               <SectionHeading
-                eyebrow="Pays-Bas"
-                title="Villes populaires"
-                description="Choisissez une ville pour voir tous les appartements disponibles."
+                eyebrow="Nederland"
+                title="Populaire steden"
+                description="Kies een stad om alle beschikbare appartementen te bekijken."
               />
               <Link href="/appartements">
                 <Button variant="outline">
-                  Voir tous les appartements
+                  Alle appartementen bekijken
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
@@ -128,7 +128,7 @@ export default async function HomePage() {
                 >
                   <div className="relative h-24 w-28 shrink-0 overflow-hidden rounded-xl bg-sand-200 sm:h-28 sm:w-44">
                     {summary.imageUrl ? (
-                      <Image src={summary.imageUrl} alt={`Appartement à ${summary.city}`} fill sizes="(max-width: 640px) 112px, 176px" className="object-cover transition-transform duration-300 group-hover:scale-105" />
+                      <Image src={summary.imageUrl} alt={`Appartement in ${summary.city}`} fill sizes="(max-width: 640px) 112px, 176px" className="object-cover transition-transform duration-300 group-hover:scale-105" />
                     ) : (
                       <span className="flex h-full items-center justify-center text-canal-500"><MapPin className="h-7 w-7" /></span>
                     )}
@@ -136,7 +136,7 @@ export default async function HomePage() {
                   <div className="min-w-0 flex-1">
                     <h3 className="truncate text-xl font-extrabold text-canal-700 sm:text-2xl">{summary.city}</h3>
                     <p className="mt-1 text-sm text-ink-600 sm:text-base">{summary.count} appartement{summary.count > 1 ? 's' : ''}</p>
-                    <p className="mt-0.5 text-sm text-ink-500 sm:text-base">Moy. {formatPrice(summary.averagePrice)} / mois</p>
+                    <p className="mt-0.5 text-sm text-ink-500 sm:text-base">Gem. {formatPrice(summary.averagePrice)} / maand</p>
                   </div>
                   <ArrowRight className="h-7 w-7 shrink-0 text-canal-500 transition-transform group-hover:translate-x-1 sm:h-8 sm:w-8" />
                 </Link>
@@ -156,8 +156,8 @@ export default async function HomePage() {
           <FadeIn>
             <SectionHeading
               eyebrow="Processus"
-              title="Comment ça marche"
-              description="De la recherche à l’emménagement, un parcours pensé pour vous simplifier la vie."
+              title="Hoe werkt het"
+              description="Van zoeken tot verhuizen: een traject dat uw leven eenvoudiger maakt."
               align="center"
               className="mx-auto"
             />
@@ -167,7 +167,7 @@ export default async function HomePage() {
             {STEPS.map((step, i) => (
               <FadeIn key={step.title} delay={i * 0.08}>
                 <div className="relative rounded-2xl border border-ink-100 bg-white p-6 shadow-soft">
-                  <span className="text-eyebrow text-ink-300">Étape {i + 1}</span>
+                  <span className="text-eyebrow text-ink-300">Stap {i + 1}</span>
                   <div className="mt-3 flex h-11 w-11 items-center justify-center rounded-xl bg-canal-50 text-canal-700">
                     <step.icon className="h-5 w-5" />
                   </div>
@@ -181,7 +181,7 @@ export default async function HomePage() {
           <FadeIn delay={0.3} className="mt-10 text-center">
             <Link href="/comment-ca-marche">
               <Button variant="ghost">
-                En savoir plus sur notre processus
+                Meer over ons proces
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -194,9 +194,9 @@ export default async function HomePage() {
         <div className="container-app">
           <FadeIn>
             <SectionHeading
-              eyebrow="Témoignages"
-              title="Ce que nos clients disent de RealEstate"
-              description="Des retours de clients accompagnés dans leur recherche de logement aux Pays-Bas. Faites défiler pour consulter les 50 témoignages."
+              eyebrow="Ervaringen"
+              title="Wat onze klanten over RealEstate zeggen"
+              description="Feedback van klanten die zijn begeleid bij hun zoektocht naar een woning in Nederland. Blader door 50 ervaringen."
             />
           </FadeIn>
 
@@ -208,7 +208,7 @@ export default async function HomePage() {
               >
                 <div className="flex items-center justify-between gap-3">
                   <Quote className="h-7 w-7 text-canal-500" aria-hidden="true" />
-                  <div className="flex gap-0.5 text-amber-400" aria-label="5 étoiles sur 5">
+                  <div className="flex gap-0.5 text-amber-400" aria-label="5 sterren op 5">
                     {[1, 2, 3, 4, 5].map((star) => <Star key={star} className="h-3.5 w-3.5 fill-current" />)}
                   </div>
                 </div>
@@ -216,7 +216,7 @@ export default async function HomePage() {
                   “{testimonial}”
                 </blockquote>
                 <p className="mt-5 border-t border-ink-100 pt-4 text-xs font-semibold uppercase tracking-wide text-ink-400">
-                  Klant van RealEstate · Avis {index + 1}
+                  Klant van RealEstate · Ervaring {index + 1}
                 </p>
               </article>
             ))}
@@ -230,14 +230,14 @@ export default async function HomePage() {
           <FadeIn>
             <div className="overflow-hidden rounded-3xl bg-ink-700 px-6 py-14 text-center sm:px-16">
               <h2 className="text-display-sm font-extrabold text-white sm:text-display-md">
-                Prêt à trouver votre nouveau logement ?
+                Klaar om uw nieuwe woning te vinden?
               </h2>
               <p className="mx-auto mt-3 max-w-xl text-sand-200">
-                Parcourez nos annonces vérifiées et réservez une visite en quelques minutes.
+                Bekijk onze geverifieerde advertenties en plan in enkele minuten een bezichtiging.
               </p>
               <Link href="/appartements" className="mt-7 inline-block">
                 <Button variant="secondary" size="lg">
-                  Voir les appartements disponibles
+                  Bekijk beschikbare appartementen
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>

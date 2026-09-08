@@ -22,13 +22,13 @@ import { logoutAdmin } from '@/actions/admin-auth';
 
 const NAV_ITEMS = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
-  { href: '/admin/appartements', label: 'Appartements', icon: Building2 },
-  { href: '/admin/appartements/nouveau', label: 'Ajouter un appartement', icon: PlusCircle },
-  { href: '/admin/garanties', label: 'Garanties', icon: ShieldCheck },
-  { href: '/admin/remboursements', label: 'Remboursements', icon: RefreshCcw },
-  { href: '/admin/clients', label: 'Clients', icon: Users },
-  { href: '/admin/configuration-bancaire', label: 'Coordonnées bancaires', icon: Landmark },
-  { href: '/admin/parametres', label: 'Paramètres', icon: Settings },
+  { href: '/admin/appartements', label: 'Appartementen', icon: Building2 },
+  { href: '/admin/appartements/nouveau', label: 'appartement toevoegen', icon: PlusCircle },
+  { href: '/admin/garanties', label: 'Waarborgen', icon: ShieldCheck },
+  { href: '/admin/remboursements', label: 'Terugbetalingen', icon: RefreshCcw },
+  { href: '/admin/clients', label: 'Klanten', icon: Users },
+  { href: '/admin/configuration-bancaire', label: 'Bankgegevens', icon: Landmark },
+  { href: '/admin/parametres', label: 'Instellingen', icon: Settings },
 ];
 
 function NavLinks({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
@@ -79,7 +79,7 @@ export function AdminSidebar() {
         <button
           onClick={() => setMobileOpen(true)}
           className="rounded-lg p-2 text-ink-700"
-          aria-label="Ouvrir le menu admin"
+          aria-label="Ouvrir de menu admin"
         >
           <Menu className="h-5.5 w-5.5" />
         </button>
@@ -94,7 +94,7 @@ export function AdminSidebar() {
               <button
                 onClick={() => setMobileOpen(false)}
                 className="rounded-lg p-1.5 text-sand-300 hover:bg-white/10"
-                aria-label="Fermer le menu"
+                aria-label="Fermer de menu"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -131,7 +131,7 @@ function LogoutSection() {
           className="flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-sand-300 transition-colors hover:bg-white/5 hover:text-white"
         >
           <LogOut className="h-4.5 w-4.5" />
-          Déconnexion
+          Uitloggen
         </button>
       </form>
     </div>

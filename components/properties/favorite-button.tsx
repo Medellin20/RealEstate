@@ -15,7 +15,7 @@ export function FavoriteButton({ propertyId, className }: { propertyId: string; 
         e.stopPropagation();
         toggleFavorite(propertyId);
       }}
-      aria-label={active ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+      aria-label={active ? 'Uit favorieten verwijderen' : 'Aan favorieten toevoegen'}
       aria-pressed={active}
       className={cn(
         'flex h-9 w-9 items-center justify-center rounded-full bg-white/90 shadow-soft backdrop-blur-sm transition-transform duration-150 hover:scale-110 active:scale-95',

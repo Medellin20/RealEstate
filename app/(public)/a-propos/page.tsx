@@ -4,30 +4,30 @@ import { FadeIn } from '@/components/ui/fade-in';
 import { SectionHeading } from '@/components/ui/section-heading';
 
 export const metadata: Metadata = {
-  title: 'À propos',
-  description: 'Real Estate NL est une agence spécialisée dans la location d’appartements aux Pays-Bas.',
+  title: 'Over ons',
+  description: 'Real Estate NL is gespecialiseerd in de verhuur van appartementen in Nederland.',
 };
 
 const VALUES = [
   {
     icon: ShieldCheck,
-    title: 'Confiance',
-    description: 'Chaque annonce est vérifiée par notre équipe avant publication.',
+    title: 'Vertrouwen',
+    description: 'Elke advertentie wordt vóór publicatie door ons team gecontroleerd.',
   },
   {
     icon: MapPinned,
     title: 'Expertise locale',
-    description: 'Une connaissance fine des quartiers d’Amsterdam, Rotterdam, Utrecht et au-delà.',
+    description: 'Uitgebreide kennis van de wijken van Amsterdam, Rotterdam, Utrecht en daarbuiten.',
   },
   {
     icon: Users,
     title: 'Accompagnement',
-    description: 'Un suivi personnalisé de la recherche jusqu’à l’emménagement.',
+    description: 'Persoonlijke begeleiding van de zoektocht tot aan de verhuizing.',
   },
   {
     icon: Clock,
-    title: 'Réactivité',
-    description: 'Des délais de réponse rapides pour ne pas manquer le bon logement.',
+    title: 'Snelheid',
+    description: 'Snelle reacties, zodat u geen geschikte woning misloopt.',
   },
 ];
 
@@ -37,13 +37,13 @@ export default function AProposPage() {
       <section className="relative overflow-hidden bg-ink-950 py-20 sm:py-28">
         <div className="container-app relative">
           <FadeIn>
-            <span className="text-eyebrow uppercase text-sand-300">Notre agence</span>
+            <span className="text-eyebrow uppercase text-sand-300">Ons agentschap</span>
             <h1 className="mt-3 max-w-2xl text-display-md font-extrabold text-white sm:text-display-lg">
-              Votre partenaire de confiance pour louer aux Pays-Bas
+              Uw betrouwbare partner voor huren in Nederland
             </h1>
             <p className="mt-4 max-w-xl text-sand-200">
-              Real Estate NL accompagne particuliers, professionnels et expatriés dans la recherche
-              d’un logement à louer, partout aux Pays-Bas.
+              Real Estate NL begeleidt particulieren, professionals en expats bij het vinden
+              van een huurwoning in heel Nederland.
             </p>
           </FadeIn>
         </div>
@@ -53,19 +53,19 @@ export default function AProposPage() {
         <div className="container-app max-w-3xl">
           <FadeIn>
             <SectionHeading
-              eyebrow="Notre mission"
-              title="Simplifier la location d’appartements aux Pays-Bas"
+              eyebrow="Onze missie"
+              title="Appartementen huren in Nederland eenvoudig maken"
             />
             <p className="mt-4 leading-relaxed text-ink-500">
-              Le marché locatif néerlandais peut être complexe, en particulier pour les nouveaux
-              arrivants. Real Estate NL a été créée pour offrir un parcours clair et transparent :
-              des annonces vérifiées, un processus de visite structuré, et un suivi rigoureux de
-              chaque dossier de réservation, de la demande initiale jusqu’à la remise des clés.
+              De Nederlandse huurmarkt kan complex zijn, vooral voor nieuwkomers. Real Estate NL
+              is opgericht om een duidelijk en transparant traject te bieden: gecontroleerde
+              advertenties, een gestructureerd bezichtigingsproces en een zorgvuldige opvolging
+              van elk reserveringsdossier, van de eerste aanvraag tot de sleuteloverdracht.
             </p>
             <p className="mt-4 leading-relaxed text-ink-500">
-              Nous travaillons avec des propriétaires et gestionnaires dans les principales villes
-              du pays — Amsterdam, Rotterdam, Utrecht, Eindhoven, La Haye et Groningue — pour
-              proposer une sélection de logements adaptés à chaque profil de locataire.
+              We werken samen met eigenaren en beheerders in de belangrijkste steden van het land —
+              Amsterdam, Rotterdam, Utrecht, Eindhoven, Den Haag en Groningen — om een selectie
+              woningen aan te bieden die bij elk huurdersprofiel passen.
             </p>
           </FadeIn>
         </div>
@@ -74,7 +74,7 @@ export default function AProposPage() {
       <section className="border-t border-ink-100 bg-white py-16 sm:py-20">
         <div className="container-app">
           <FadeIn>
-            <SectionHeading eyebrow="Nos valeurs" title="Ce qui nous guide au quotidien" align="center" className="mx-auto" />
+            <SectionHeading eyebrow="Onze waarden" title="Wat ons dagelijks leidt" align="center" className="mx-auto" />
           </FadeIn>
           <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {VALUES.map((value, i) => (

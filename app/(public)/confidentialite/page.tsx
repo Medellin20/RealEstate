@@ -1,42 +1,41 @@
 import type { Metadata } from 'next';
 import { LegalPage } from '@/components/shared/legal-page';
 
-export const metadata: Metadata = { title: 'Politique de confidentialité' };
+export const metadata: Metadata = { title: 'Privacybeleid' };
 
 export default function ConfidentialitePage() {
   return (
-    <LegalPage title="Politique de confidentialité" updatedAt="21 août 2026">
-      <h2>Données collectées</h2>
+    <LegalPage title="Privacybeleid" updatedAt="21 augustus 2026">
+      <h2>Verzamelde gegevens</h2>
       <p>
-        Dans le cadre de vos démarches (demande de visite, réservation, contact), nous collectons :
-        nom, prénom, e-mail, téléphone, et, le cas échéant, profession et revenus mensuels
-        approximatifs et les informations complémentaires que vous choisissez de nous transmettre.
+        In het kader van uw aanvragen (bezichtiging, reservering of contact) verzamelen wij uw naam,
+        voornaam, e-mailadres, telefoonnummer en, indien van toepassing, beroep, geschat maandelijks
+        inkomen en aanvullende informatie die u met ons deelt.
       </p>
 
-      <h2>Finalités du traitement</h2>
+      <h2>Doeleinden van verwerking</h2>
       <p>
-        Ces données sont utilisées exclusivement pour traiter vos demandes de visite et de
-        réservation, assurer le suivi de votre dossier locataire, et vous contacter dans le cadre de
-        ces démarches.
+        Deze gegevens worden uitsluitend gebruikt om uw bezichtigings- en reserveringsaanvragen te
+        verwerken, uw huurdersdossier op te volgen en in dit kader contact met u op te nemen.
       </p>
 
-      <h2>Conservation des données</h2>
+      <h2>Bewaren van gegevens</h2>
       <p>
-        Vos données sont conservées pour la durée nécessaire au traitement de votre dossier, puis
-        archivées conformément aux obligations légales applicables.
+        Uw gegevens worden bewaard zolang dat nodig is voor de behandeling van uw dossier en daarna
+        gearchiveerd volgens de toepasselijke wettelijke verplichtingen.
       </p>
 
-      <h2>Vos droits</h2>
+      <h2>Uw rechten</h2>
       <p>
-        Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez d’un
-        droit d’accès, de rectification et de suppression de vos données. Pour exercer ces droits,
-        contactez-nous à contacts@realestatenl.agency.
+        Volgens de Algemene Verordening Gegevensbescherming (AVG) heeft u recht op inzage, correctie
+        en verwijdering van uw gegevens. Neem voor het uitoefenen van deze rechten contact op via
+        contacts@realestatenl.agency.
       </p>
 
       <h2>Cookies</h2>
       <p>
-        Ce site utilise le stockage local de votre navigateur uniquement pour mémoriser vos favoris ;
-        aucun cookie de suivi publicitaire n’est utilisé.
+        Deze website gebruikt alleen lokale browseropslag om uw favorieten te onthouden; er worden
+        geen cookies voor advertentietracking gebruikt.
       </p>
     </LegalPage>
   );

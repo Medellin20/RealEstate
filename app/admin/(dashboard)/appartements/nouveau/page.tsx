@@ -4,7 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { PropertyForm } from '@/components/admin/property-form';
 import { getAllAmenities } from '@/lib/data/admin-properties';
 
-export const metadata: Metadata = { title: 'Ajouter un appartement' };
+export const metadata: Metadata = { title: 'appartement toevoegen' };
 
 export default async function NewPropertyPage() {
   const amenities = await getAllAmenities();
@@ -16,14 +16,14 @@ export default async function NewPropertyPage() {
         className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-ink-500 hover:text-ink-900"
       >
         <ArrowLeft className="h-4 w-4" />
-        Retour aux appartements
+        Terug naar appartementen
       </Link>
-      <h1 className="mb-6 text-2xl font-extrabold text-ink-900">Ajouter un appartement</h1>
+      <h1 className="mb-6 text-2xl font-extrabold text-ink-900">appartement toevoegen</h1>
 
       <div className="max-w-4xl">
         <PropertyForm mode="create" amenities={amenities} />
         <p className="mt-4 text-xs text-ink-400">
-          Vous pourrez ajouter des photos une fois le logement créé.
+          U kunt foto’s toevoegen zodra de woning is aangemaakt.
         </p>
       </div>
     </div>

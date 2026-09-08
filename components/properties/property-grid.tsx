@@ -10,8 +10,8 @@ export function PropertyGrid({ properties }: { properties: PropertyWithRelations
     return (
       <EmptyState
         icon={<SearchX className="h-10 w-10" />}
-        title="Aucun logement ne correspond à votre recherche"
-        description="Essayez d’élargir vos critères : budget, ville ou nombre de chambres."
+        title="geen woning ne correspond aan uw zoektocht"
+        description="Probeer uw criteria te verruimen: budget, stad of aantal slaapkamers."
       />
     );
   }
@@ -44,7 +44,7 @@ export function PropertyGrid({ properties }: { properties: PropertyWithRelations
               {city}
             </h2>
             <span className="text-sm text-ink-400">
-              {cityProperties.length} logement{cityProperties.length > 1 ? 's' : ''}
+              {cityProperties.length} woning{cityProperties.length > 1 ? 'en' : ''}
             </span>
           </div>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">

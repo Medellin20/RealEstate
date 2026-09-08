@@ -18,27 +18,27 @@ export function BankTransferInstructions({
     <div className="rounded-2xl border border-ink-100 bg-white p-4 sm:p-6">
       <div className="flex items-center gap-2 text-ink-700">
         <Landmark className="h-5 w-5 text-canal-600" />
-        <h3 className="font-bold">Coordonnées bancaires pour votre virement</h3>
+        <h3 className="font-bold">Contactgegevens bancaires voor uw virement</h3>
       </div>
 
       {isExample && (
         <div className="mt-4 flex items-start gap-2 rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm font-semibold text-amber-800">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
-          RIB de démonstration : ne pas effectuer de virement. Remplacez-le dans l’espace administrateur.
+          Demo-bankgegevens: voer geen overschrijving uit. Vervang deze in de beheeromgeving.
         </div>
       )}
 
       <div className="mt-4 flex flex-col gap-1 rounded-xl bg-ink-700 px-4 py-3.5 text-white min-[380px]:flex-row min-[380px]:items-center min-[380px]:justify-between">
-        <span className="text-sm font-medium">Montant à verser</span>
+        <span className="text-sm font-medium">Bedrag aan verser</span>
         <span className="text-lg font-extrabold">{formatPrice(amount)}</span>
       </div>
 
       <div className="mt-4 space-y-3">
-        <CopyableField label="Bénéficiaire" value={bankSettings.beneficiary_name} />
+        <CopyableField label="Begunstigde" value={bankSettings.beneficiary_name} />
         <CopyableField label="IBAN" value={bankSettings.iban} mono />
         <CopyableField label="BIC" value={bankSettings.bic} mono />
         <CopyableField label="Banque" value={bankSettings.bank_name} />
-        <CopyableField label="Référence à indiquer" value={reference} mono highlight />
+        <CopyableField label="Op te geven referentie" value={reference} mono highlight />
       </div>
 
       {bankSettings.payment_instructions && (
