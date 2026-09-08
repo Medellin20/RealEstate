@@ -11,6 +11,7 @@ import {
 } from '@/lib/validations/viewing';
 import { generateReference } from '@/lib/utils/reference';
 import { sendAdminAlert } from '@/lib/notifications/email';
+import { getPropertyEmailDetails } from '@/lib/notifications/property-details';
 import { recordRequestSubmission } from '@/lib/data/request-submissions';
 import type { ActionResult } from '@/types';
 
@@ -47,9 +48,7 @@ export async function createViewingRequest(
     error: propertyError,
   } = await supabase
     .from('properties')
-    .select(
-      'id, title, status, is_published'
-    )
+    .select('*')
     .eq('id', parsed.data.propertyId)
     .maybeSingle();
 
@@ -221,8 +220,10 @@ export async function createViewingRequest(
         Référence:
           reference,
 
-        Logement:
-          property.title,
+        ...getPropertyEmailDetails(
+          property,
+          await getAmenityLabels(property.id)
+        ),
 
         Client:
           `${parsed.data.firstName} ${parsed.data.lastName}`,
@@ -284,4 +285,16 @@ export async function createViewingRequest(
       reference,
     },
   };
+}
+
+async function getAmenityLabels(propertyId: string): Promise<string[]> {
+  const supabase = createAdminClient();
+  const { data } = await supabase
+    .from('property_amenities')
+    .select('amenities(label_fr)')
+    .eq('property_id', propertyId);
+
+  return (data ?? [])
+    .map((item) => item.amenities?.label_fr)
+    .filter((label): label is string => Boolean(label));
 }

@@ -6,6 +6,7 @@ import {
   type ReservationInput,
 } from '@/lib/validations/reservation';
 import { sendAdminAlert } from '@/lib/notifications/email';
+import { getPropertyEmailDetails } from '@/lib/notifications/property-details';
 import type { ActionResult } from '@/types';
 
 /**
@@ -29,7 +30,7 @@ export async function createReservation(
   const supabase = createAdminClient();
   const { data: property, error: propertyError } = await supabase
     .from('properties')
-    .select('title, monthly_price, is_published')
+    .select('*')
     .eq('id', parsed.data.propertyId)
     .maybeSingle();
 
@@ -44,7 +45,10 @@ export async function createReservation(
   const emailResult = await sendAdminAlert(
     `Nouvelle demande de réservation — ${property.title}`,
     {
-      Logement: property.title,
+      ...getPropertyEmailDetails(
+        property,
+        await getAmenityLabels(property.id)
+      ),
       'Frais de réservation (1 mois de loyer)': `${property.monthly_price} €`,
       Client: `${parsed.data.firstName} ${parsed.data.lastName}`,
       Email: parsed.data.email,
@@ -72,4 +76,16 @@ export async function createReservation(
     success: true,
     message: 'Vous recevrez une notification par e-mail.',
   };
+}
+
+async function getAmenityLabels(propertyId: string): Promise<string[]> {
+  const supabase = createAdminClient();
+  const { data } = await supabase
+    .from('property_amenities')
+    .select('amenities(label_fr)')
+    .eq('property_id', propertyId);
+
+  return (data ?? [])
+    .map((item) => item.amenities?.label_fr)
+    .filter((label): label is string => Boolean(label));
 }

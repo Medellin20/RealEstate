@@ -2,6 +2,7 @@ import 'server-only';
 
 import { createAdminClient } from '@/lib/supabase/admin';
 import { sendAdminAlert } from '@/lib/notifications/email';
+import { getPropertyEmailDetails } from '@/lib/notifications/property-details';
 
 /**
  * Relit la réservation et son client dans la base avant d'envoyer l'alerte.
@@ -27,7 +28,7 @@ export async function notifyAdminOfReservation(
   const [{ data: client, error: clientError }, { data: property, error: propertyError }] =
     await Promise.all([
       supabase.from('clients').select('*').eq('id', reservation.client_id).maybeSingle(),
-      supabase.from('properties').select('title, monthly_price').eq('id', reservation.property_id).maybeSingle(),
+      supabase.from('properties').select('*').eq('id', reservation.property_id).maybeSingle(),
     ]);
 
   if (clientError || propertyError || !client || !property) {
@@ -43,7 +44,10 @@ export async function notifyAdminOfReservation(
     `Nouveau dossier de paiement de réservation — ${reservation.reference}`,
     {
       Référence: reservation.reference,
-      Logement: property.title,
+      ...getPropertyEmailDetails(
+        property,
+        await getAmenityLabels(property.id)
+      ),
       'Frais de réservation (1 mois de loyer)': `${property.monthly_price} €`,
       Client: `${client.first_name} ${client.last_name}`,
       Email: client.email,
@@ -60,4 +64,16 @@ export async function notifyAdminOfReservation(
   );
 
   return { sent: result.sent };
+}
+
+async function getAmenityLabels(propertyId: string): Promise<string[]> {
+  const supabase = createAdminClient();
+  const { data } = await supabase
+    .from('property_amenities')
+    .select('amenities(label_fr)')
+    .eq('property_id', propertyId);
+
+  return (data ?? [])
+    .map((item) => item.amenities?.label_fr)
+    .filter((label): label is string => Boolean(label));
 }
