@@ -30,8 +30,7 @@ function formatDate(value: string): string {
  */
 export function getPropertyEmailDetails(
   property: Property,
-  amenityLabels: string[],
-  imageUrls: string[] = []
+  amenityLabels: string[]
 ): EmailDetails {
   const address = [
     property.address,
@@ -72,7 +71,6 @@ export function getPropertyEmailDetails(
     Garage: property.has_garage ? 'Oui' : 'Non',
     Jardin: property.has_garden ? 'Oui' : 'Non',
     Équipements: amenityLabels.length > 0 ? amenityLabels.join(', ') : 'Aucun renseigné',
-    Photos: imageUrls.length > 0 ? imageUrls.join(' | ') : 'Aucune photo renseignée',
     'Disponible à partir du': property.available_from
       ? formatDate(property.available_from)
       : 'Immédiatement',
