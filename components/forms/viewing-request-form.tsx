@@ -471,9 +471,10 @@ export function ViewingRequestForm({
             </div>
 
             <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-              Vérifiez vos informations puis confirmez
-              votre demande de visite. Aucun code, paiement
-              ou vérification supplémentaire ne sera demandé.
+              Les frais de visite, d’un montant de 100 €,
+              sont exigibles avant la visite de l’appartement.
+              Ils sont intégralement remboursables si, à l’issue
+              de la visite, le bien ne correspond pas à vos attentes.
             </p>
           </div>
         )}
