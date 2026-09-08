@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 
 const INFO = [
   { icon: Mail, label: 'contacts@realestatenl.agency' },
+  { icon: Phone, label: '+31649496257' },
   { icon: Phone, label: '+31 684130011' },
   { icon: MapPin, label: 'Amsterdam, Pays-Bas' },
   { icon: Clock, label: 'Lun–Ven, 9h–18h (CET)' },

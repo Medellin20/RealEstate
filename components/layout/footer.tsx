@@ -100,6 +100,18 @@ export function Footer() {
             </li>
             <li>
               <a
+                href="https://wa.me/31649496257"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Contacter Real Estate NL sur WhatsApp"
+                className="flex items-center gap-2.5 text-sm text-sand-300 transition-colors hover:text-white"
+              >
+                <Phone className="h-4 w-4 shrink-0" />
+                WhatsApp : +31649496257
+              </a>
+            </li>
+            <li>
+              <a
                 href="https://wa.me/31684130011"
                 target="_blank"
                 rel="noopener noreferrer"
