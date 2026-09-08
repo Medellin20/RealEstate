@@ -119,7 +119,7 @@ export function Footer() {
                 className="flex items-center gap-2.5 text-sm text-sand-300 transition-colors hover:text-white"
               >
                 <Phone className="h-4 w-4 shrink-0" />
-                WhatsApp : +31 684130011
+                WhatsApp : +31684130011
               </a>
             </li>
           </ul>

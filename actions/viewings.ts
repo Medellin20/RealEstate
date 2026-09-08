@@ -295,6 +295,6 @@ async function getAmenityLabels(propertyId: string): Promise<string[]> {
     .eq('property_id', propertyId);
 
   return (data ?? [])
-    .map((item) => item.amenities?.label_fr)
+    .map((item) => item.amenities?.[0]?.label_fr)
     .filter((label): label is string => Boolean(label));
 }

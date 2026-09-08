@@ -1,4 +1,5 @@
 import type { Property } from '@/types/database';
+import { getSiteUrl } from '@/lib/utils/site-url';
 
 type EmailDetails = Record<string, string | number | null | undefined>;
 
@@ -29,7 +30,8 @@ function formatDate(value: string): string {
  */
 export function getPropertyEmailDetails(
   property: Property,
-  amenityLabels: string[]
+  amenityLabels: string[],
+  imageUrls: string[] = []
 ): EmailDetails {
   const address = [
     property.address,
@@ -40,6 +42,7 @@ export function getPropertyEmailDetails(
 
   return {
     Logement: property.title,
+    'Lien vers l’annonce': `${getSiteUrl()}/appartements/${property.slug}`,
     Type: property.property_type,
     Adresse: address || property.city,
     Quartier: property.neighborhood,
@@ -69,6 +72,7 @@ export function getPropertyEmailDetails(
     Garage: property.has_garage ? 'Oui' : 'Non',
     Jardin: property.has_garden ? 'Oui' : 'Non',
     Équipements: amenityLabels.length > 0 ? amenityLabels.join(', ') : 'Aucun renseigné',
+    Photos: imageUrls.length > 0 ? imageUrls.join(' | ') : 'Aucune photo renseignée',
     'Disponible à partir du': property.available_from
       ? formatDate(property.available_from)
       : 'Immédiatement',

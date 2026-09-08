@@ -46,7 +46,8 @@ export async function notifyAdminOfReservation(
       Référence: reservation.reference,
       ...getPropertyEmailDetails(
         property,
-        await getAmenityLabels(property.id)
+        await getAmenityLabels(property.id),
+        await getPropertyImageUrls(property.id)
       ),
       'Frais de réservation (1 mois de loyer)': `${property.monthly_price} €`,
       Client: `${client.first_name} ${client.last_name}`,
@@ -74,6 +75,22 @@ async function getAmenityLabels(propertyId: string): Promise<string[]> {
     .eq('property_id', propertyId);
 
   return (data ?? [])
-    .map((item) => item.amenities?.label_fr)
+    .map((item) => item.amenities?.[0]?.label_fr)
     .filter((label): label is string => Boolean(label));
+}
+
+async function getPropertyImageUrls(propertyId: string): Promise<string[]> {
+  const supabase = createAdminClient();
+  const { data, error } = await supabase
+    .from('property_images')
+    .select('url')
+    .eq('property_id', propertyId)
+    .order('sort_order', { ascending: true });
+
+  if (error) {
+    console.error('RESERVATION EMAIL IMAGES ERROR:', error);
+    return [];
+  }
+
+  return (data ?? []).map((image) => image.url).filter(Boolean);
 }
