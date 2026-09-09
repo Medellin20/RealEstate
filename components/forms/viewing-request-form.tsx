@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -56,8 +55,7 @@ export function ViewingRequestForm({
 }) {
   const [step, setStep] = React.useState(0);
   const [isPending, startTransition] = React.useTransition();
-
-  const router = useRouter();
+  const [viewingReference, setViewingReference] = React.useState<string | null>(null);
 
   /*
    * Date minimale autorisée.
@@ -79,7 +77,6 @@ export function ViewingRequestForm({
     register,
     getValues,
     setValue,
-    handleSubmit,
     trigger,
     watch,
     formState: { errors },
@@ -141,7 +138,33 @@ export function ViewingRequestForm({
      * -------
      * On formate le téléphone avant de valider.
      */
-    if (step === 1) setStep(2);
+    if (step === 1) {
+      const valid = await trigger([
+        'requestedDate',
+        'requestedTimeSlot',
+        'firstName',
+        'lastName',
+        'email',
+        'phone',
+      ]);
+
+      if (!valid || viewingReference) {
+        if (valid) setStep(2);
+        return;
+      }
+
+      startTransition(async () => {
+        const result = await createViewingRequest(getValues(), propertySlug);
+
+        if (!result.success || !result.data) {
+          toast.error(result.message || 'De aanvraag kon niet worden verzonden.');
+          return;
+        }
+
+        setViewingReference(result.data.reference);
+        setStep(2);
+      });
+    }
   }
 
   /**
@@ -149,33 +172,6 @@ export function ViewingRequestForm({
    */
   function goBack() {
     setStep((currentStep) => Math.max(0, currentStep - 1));
-  }
-
-  /**
-   * Envoi final de la demande.
-   */
-  function onSubmit(data: ViewingRequestInput) {
-    startTransition(async () => {
-      const result = await createViewingRequest(
-        data,
-        propertySlug
-      );
-
-      if (!result.success || !result.data) {
-        toast.error(
-          result.message ||
-            'De bezichtigingsaanvraag kon niet worden verzonden.'
-        );
-
-        return;
-      }
-
-      router.push(
-        `/appartements/${propertySlug}/visite/confirmation?ref=${encodeURIComponent(
-          result.data.reference
-        )}`
-      );
-    });
   }
 
   return (
@@ -306,7 +302,7 @@ export function ViewingRequestForm({
             ================================= */}
 
         {step === 0 && (
-          <div className="space-y-4">
+          <div className="mt-8 space-y-4">
             <div className="flex items-center gap-2 text-ink-700">
               <User className="h-5 w-5 text-canal-600" />
 
@@ -469,20 +465,20 @@ export function ViewingRequestForm({
             </div>
 
             <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-              Les frais de visite de {formatPrice(viewingFee)} doivent être payés avant la
-              visite de l&apos;appartement. Ils sont entièrement remboursés si le logement
-              ne correspond pas à vos attentes après la visite.
+              De bezichtigingskosten van {formatPrice(viewingFee)} moeten vóór de bezichtiging
+              van het appartement worden betaald. Ze worden volledig terugbetaald als de woning
+              na de bezichtiging niet aan uw verwachtingen voldoet.
             </p>
             <div className="rounded-2xl border border-canal-200 bg-canal-50 p-4">
               <div className="flex items-center gap-2 text-canal-800">
                 <Landmark className="h-5 w-5" />
-                <h3 className="font-bold">RIB pour les frais de visite</h3>
+                <h3 className="font-bold">Bankgegevens voor de bezichtigingskosten</h3>
               </div>
               <div className="mt-3 space-y-2">
-                <CopyableField label="Bénéficiaire" value={bankSettings.beneficiary_name} />
+                <CopyableField label="Begunstigde" value={bankSettings.beneficiary_name} />
                 <CopyableField label="IBAN" value={bankSettings.iban} mono />
                 {bankSettings.bic && <CopyableField label="BIC / SWIFT" value={bankSettings.bic} mono />}
-                <CopyableField label="Banque" value={bankSettings.bank_name} />
+                <CopyableField label="Bank" value={bankSettings.bank_name} />
               </div>
             </div>
           </div>
@@ -496,11 +492,11 @@ export function ViewingRequestForm({
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-ink-700">
               <FileCheck2 className="h-5 w-5 text-canal-600" />
-              <h3 className="font-bold">Preuve de paiement</h3>
+              <h3 className="font-bold">Betalingsbewijs</h3>
             </div>
             <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-              Vous pouvez laisser le reçu de paiement des frais de visite par WhatsApp au
-              service client :{' '}
+              U kunt een screenshot van het betalingsbewijs van de bezichtigingskosten via
+              WhatsApp naar de klantenservice sturen:{' '}
               <a
                 href={`https://wa.me/${whatsappPhone.replace(/\D/g, '')}`}
                 target="_blank"
@@ -549,20 +545,6 @@ export function ViewingRequestForm({
             </Button>
           )}
 
-          {/* CONFIRMER */}
-
-          {step === STEPS.length - 1 && (
-            <Button
-              type="button"
-              onClick={() =>
-                void handleSubmit(onSubmit)()
-              }
-              isLoading={isPending}
-              className="w-full sm:w-auto"
-            >
-              Bezichtiging bevestigen
-            </Button>
-          )}
         </div>
       </form>
     </div>

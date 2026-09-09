@@ -28,5 +28,6 @@ export async function updateSiteSettings(input: SiteSettingsInput): Promise<Acti
   await logAdminAction({ action: 'site_settings.update' });
   revalidatePath('/', 'layout');
   revalidatePath('/admin/parametres');
+  revalidatePath('/appartements/[slug]/visite', 'page');
   return { success: true, message: 'Numéro du footer mis à jour avec succès.' };
 }
