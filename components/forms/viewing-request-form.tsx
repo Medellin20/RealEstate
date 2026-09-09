@@ -54,7 +54,7 @@ export function ViewingRequestForm({
   whatsappPhone: string;
 }) {
   const [step, setStep] = React.useState(0);
-  const [isPending, startTransition] = React.useTransition();
+const [isSending, setIsSending] = React.useState(false);
   const [viewingReference, setViewingReference] = React.useState<string | null>(null);
 
   /*
@@ -139,7 +139,7 @@ export function ViewingRequestForm({
      * On formate le téléphone avant de valider.
      */
     if (step === 1) {
-      if (isPending) return;
+      if (isSending) return;
 
       const valid = await trigger([
         'requestedDate',
@@ -155,7 +155,8 @@ export function ViewingRequestForm({
         return;
       }
 
-      startTransition(async () => {
+      setIsSending(true);
+      try {
         const result = await createViewingRequest({ ...getValues() }, propertySlug);
 
         if (!result.success || !result.data) {
@@ -165,7 +166,9 @@ export function ViewingRequestForm({
 
         setViewingReference(result.data.reference);
         setStep(2);
-      });
+      } finally {
+        setIsSending(false);
+      }
     }
   }
 
@@ -541,8 +544,8 @@ export function ViewingRequestForm({
               onClick={() => {
                 void goNext();
               }}
-              isLoading={isPending}
-              disabled={isPending}
+              isLoading={isSending}
+              disabled={isSending}
               className="w-full sm:w-auto"
             >
               Doorgaan
