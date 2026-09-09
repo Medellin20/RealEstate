@@ -250,6 +250,12 @@ export interface Favorite {
   created_at: string;
 }
 
+export interface SiteSettings {
+  id: number;
+  footer_phone: string;
+  updated_at: string;
+}
+
 // Table Database générique utilisée par le client Supabase typé.
 export interface Database {
   public: {
@@ -273,6 +279,7 @@ export interface Database {
       admin_logs: { Row: AdminLog; Insert: Partial<AdminLog>; Update: Partial<AdminLog> };
       status_history: { Row: StatusHistory; Insert: Partial<StatusHistory>; Update: Partial<StatusHistory> };
       favorites: { Row: Favorite; Insert: Partial<Favorite>; Update: Partial<Favorite> };
+      site_settings: { Row: SiteSettings; Insert: Partial<SiteSettings>; Update: Partial<SiteSettings> };
     };
   };
 }

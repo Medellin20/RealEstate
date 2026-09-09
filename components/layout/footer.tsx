@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Facebook, Home, Instagram, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
+import { getSiteSettings } from '@/lib/data/site-settings';
 
 const COLUMN_LINKS = [
   { href: '/', label: 'Home' },
@@ -16,8 +17,9 @@ const LEGAL_LINKS = [
   { href: '/conditions-generales', label: 'Algemene voorwaarden' },
 ];
 
-export function Footer() {
+export async function Footer() {
   const year = new Date().getFullYear();
+  const { footer_phone: footerPhone } = await getSiteSettings();
 
   return (
     <footer className="border-t border-ink-100 bg-ink-950 text-sand-200">
@@ -100,26 +102,26 @@ export function Footer() {
             </li>
             <li>
               <a
-                href="https://wa.me/31649496257"
+                href={`https://wa.me/${footerPhone.replace(/\D/g, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Contacter Real Estate NL op WhatsApp"
                 className="flex items-center gap-2.5 text-sm text-sand-300 transition-colors hover:text-white"
               >
                 <Phone className="h-4 w-4 shrink-0" />
-                WhatsApp : +31649496257
+                WhatsApp : {footerPhone}
               </a>
             </li>
             <li>
               <a
-                href="https://wa.me/31684130011"
+                href={`https://wa.me/${footerPhone.replace(/\D/g, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Contacter Real Estate NL op WhatsApp"
                 className="flex items-center gap-2.5 text-sm text-sand-300 transition-colors hover:text-white"
               >
                 <Phone className="h-4 w-4 shrink-0" />
-                WhatsApp : +31684130011
+                WhatsApp : {footerPhone}
               </a>
             </li>
           </ul>

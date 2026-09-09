@@ -31,6 +31,12 @@ alter table contact_messages      enable row level security;
 alter table favorites               enable row level security;
 alter table admin_logs             enable row level security;
 alter table status_history         enable row level security;
+alter table site_settings          enable row level security;
+
+create policy "public_read_site_settings"
+  on site_settings for select
+  to anon, authenticated
+  using (true);
 
 -- -----------------------------------------------------------------------------
 -- PROPERTIES — lecture publique des biens publiés uniquement

@@ -35,6 +35,16 @@ create type refund_status as enum (
 
 create type contact_status as enum ('new', 'in_progress', 'closed');
 
+create table site_settings (
+  id integer primary key default 1 check (id = 1),
+  footer_phone text not null default '+31649496257',
+  updated_at timestamptz not null default now()
+);
+
+insert into site_settings (id, footer_phone)
+values (1, '+31649496257')
+on conflict (id) do nothing;
+
 -- -----------------------------------------------------------------------------
 -- CLIENTS
 -- Prospects / locataires. Pas d'auth Supabase obligatoire : on identifie

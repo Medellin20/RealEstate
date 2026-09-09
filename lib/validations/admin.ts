@@ -14,3 +14,9 @@ export const bankSettingsSchema = z.object({
 });
 
 export type BankSettingsInput = z.infer<typeof bankSettingsSchema>;
+
+export const siteSettingsSchema = z.object({
+  footerPhone: z.string().trim().min(6, 'Merci d’indiquer un numéro de téléphone valide.').max(30),
+});
+
+export type SiteSettingsInput = z.infer<typeof siteSettingsSchema>;

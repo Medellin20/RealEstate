@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { getSiteUrl } from '@/lib/utils/site-url';
 import { Settings, ShieldCheck, ClipboardCheck, Globe } from 'lucide-react';
+import { getSiteSettings } from '@/lib/data/site-settings';
+import { SiteSettingsForm } from '@/components/admin/site-settings-form';
 
 export const metadata: Metadata = { title: 'Instellingen' };
 
@@ -15,6 +17,7 @@ export default function AdminParametresPage() {
       </h1>
 
       <div className="max-w-2xl space-y-5">
+        <SiteSettingsSection />
         <div className="rounded-2xl border border-ink-100 bg-white p-5 sm:p-6">
           <div className="flex items-center gap-3">
             <ShieldCheck className="h-5 w-5 text-canal-600" />
@@ -57,6 +60,19 @@ export default function AdminParametresPage() {
           </p>
         </div>
       </div>
+    </div>
+  );
+}
+
+async function SiteSettingsSection() {
+  const settings = await getSiteSettings();
+  return (
+    <div className="rounded-2xl border border-ink-100 bg-white p-5 sm:p-6">
+      <h2 className="font-bold text-ink-900">Coordonnées publiques</h2>
+      <p className="mt-2 mb-4 text-sm text-ink-500">
+        Modifiez le numéro affiché dans le footer et utilisé pour le bouton WhatsApp.
+      </p>
+      <SiteSettingsForm settings={settings} />
     </div>
   );
 }
