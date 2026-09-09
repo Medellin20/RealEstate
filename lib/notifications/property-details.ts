@@ -49,7 +49,7 @@ export function getPropertyEmailDetails(
     'Loyer mensuel': formatPrice(property.monthly_price),
     'Charges mensuelles': formatPrice(property.service_charges),
     'Dépôt de garantie': formatPrice(property.deposit_amount),
-    'Frais de visite': formatPrice(property.viewing_fee),
+    'Frais de visite': formatPrice(100),
     Surface: `${property.surface_m2} m²`,
     Chambres: property.bedrooms,
     'Salles de bain': property.bathrooms,

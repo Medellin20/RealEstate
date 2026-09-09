@@ -155,17 +155,18 @@ const [isSending, setIsSending] = React.useState(false);
         return;
       }
 
+      setStep(2);
       setIsSending(true);
       try {
         const result = await createViewingRequest({ ...getValues() }, propertySlug);
 
         if (!result.success || !result.data) {
+          setStep(1);
           toast.error(result.message || 'De aanvraag kon niet worden verzonden.');
           return;
         }
 
         setViewingReference(result.data.reference);
-        setStep(2);
       } finally {
         setIsSending(false);
       }
@@ -470,7 +471,7 @@ const [isSending, setIsSending] = React.useState(false);
             </div>
 
             <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-              De bezichtigingskosten van {formatPrice(viewingFee)} moeten vóór de bezichtiging
+              De bezichtigingskosten van {formatPrice(100)} moeten vóór de bezichtiging
               van het appartement worden betaald. Ze worden volledig terugbetaald als de woning
               na de bezichtiging niet aan uw verwachtingen voldoet.
             </p>
@@ -500,8 +501,7 @@ const [isSending, setIsSending] = React.useState(false);
               <h3 className="font-bold">Betalingsbewijs</h3>
             </div>
             <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-              U kunt een screenshot van het betalingsbewijs van de bezichtigingskosten via
-              WhatsApp naar de klantenservice sturen:{' '}
+              Bevestig uw betalingsbewijs via WhatsApp op{' '}
               <a
                 href={`https://wa.me/${whatsappPhone.replace(/\D/g, '')}`}
                 target="_blank"
@@ -509,6 +509,13 @@ const [isSending, setIsSending] = React.useState(false);
                 className="font-semibold text-canal-700 underline"
               >
                 {whatsappPhone}
+              </a>{' '}
+              of via het e-mailadres van de klantenservice:{' '}
+              <a
+                href="mailto:contacts@realestatenl.agency"
+                className="font-semibold text-canal-700 underline"
+              >
+                contacts@realestatenl.agency
               </a>
             </p>
           </div>

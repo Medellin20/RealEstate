@@ -40,7 +40,7 @@ export default async function ViewingRequestPage({ params }: { params: { slug: s
                 propertyId={property.id}
                 propertySlug={property.slug}
                 propertyTitle={property.title}
-                viewingFee={property.viewing_fee}
+                viewingFee={property.viewing_fee || 100}
                 bankSettings={bankSettings ?? DEMO_BANK_SETTINGS}
                 whatsappPhone={siteSettings.footer_phone}
               />
