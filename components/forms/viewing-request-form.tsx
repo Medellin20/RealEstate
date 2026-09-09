@@ -139,6 +139,8 @@ export function ViewingRequestForm({
      * On formate le téléphone avant de valider.
      */
     if (step === 1) {
+      if (isPending) return;
+
       const valid = await trigger([
         'requestedDate',
         'requestedTimeSlot',
@@ -154,7 +156,7 @@ export function ViewingRequestForm({
       }
 
       startTransition(async () => {
-        const result = await createViewingRequest(getValues(), propertySlug);
+        const result = await createViewingRequest({ ...getValues() }, propertySlug);
 
         if (!result.success || !result.data) {
           toast.error(result.message || 'De aanvraag kon niet worden verzonden.');
@@ -536,7 +538,11 @@ export function ViewingRequestForm({
           {step < STEPS.length - 1 && (
             <Button
               type="button"
-              onClick={() => void goNext()}
+              onClick={() => {
+                void goNext();
+              }}
+              isLoading={isPending}
+              disabled={isPending}
               className="w-full sm:w-auto"
             >
               Doorgaan
