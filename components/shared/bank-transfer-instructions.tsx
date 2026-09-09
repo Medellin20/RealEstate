@@ -36,7 +36,7 @@ export function BankTransferInstructions({
       <div className="mt-4 space-y-3">
         <CopyableField label="Begunstigde" value={bankSettings.beneficiary_name} />
         <CopyableField label="IBAN" value={bankSettings.iban} mono />
-        <CopyableField label="BIC" value={bankSettings.bic} mono />
+        {bankSettings.bic && <CopyableField label="BIC" value={bankSettings.bic} mono />}
         <CopyableField label="Banque" value={bankSettings.bank_name} />
         <CopyableField label="Op te geven referentie" value={reference} mono highlight />
       </div>

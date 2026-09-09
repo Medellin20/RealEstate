@@ -57,7 +57,7 @@ export function BankSettingsForm({ settings }: { settings: BankSettings }) {
           <FieldError message={errors.iban?.message} />
         </div>
         <div>
-          <Label htmlFor="bic">BIC / SWIFT</Label>
+          <Label htmlFor="bic">BIC / SWIFT (facultatif)</Label>
           <Input id="bic" {...register('bic')} className="font-mono" />
           <FieldError message={errors.bic?.message} />
         </div>

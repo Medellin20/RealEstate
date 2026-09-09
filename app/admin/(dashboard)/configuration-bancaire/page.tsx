@@ -37,7 +37,8 @@ export default async function AdminBankSettingsPage() {
           Configuration bancaire
         </h1>
         <p className="mt-1 text-sm text-ink-500">
-          Deze gegevens worden aan de klant getoond wanneer een waarborg moet worden overgemaakt.
+          Deze gegevens worden aan de klant getoond wanneer les frais de visite of een waarborg
+          moet worden overgemaakt.
           Ze worden opgeslagen in Supabase en staan nooit hardgecodeerd in de applicatie.
         </p>
         <p className="mt-1 text-xs text-ink-400">

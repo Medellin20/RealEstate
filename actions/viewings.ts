@@ -114,7 +114,7 @@ export async function createViewingRequest(
   const reference =
     generateReference('VIS');
 
-  const initialStatus = 'pending';
+  const initialStatus = property.viewing_fee > 0 ? 'payment_pending' : 'pending';
 
   /*
    * Création de la demande de visite.
@@ -142,7 +142,7 @@ export async function createViewingRequest(
       status:
         initialStatus,
 
-      fee_amount: 0,
+      fee_amount: property.viewing_fee,
     })
     .select('*')
     .single();

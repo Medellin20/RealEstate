@@ -1,6 +1,5 @@
 import Link from 'next/link';
-import { Facebook, Home, Instagram, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
-import { getSiteSettings } from '@/lib/data/site-settings';
+import { Facebook, Home, Instagram, Linkedin, Mail, MapPin } from 'lucide-react';
 
 const COLUMN_LINKS = [
   { href: '/', label: 'Home' },
@@ -19,7 +18,6 @@ const LEGAL_LINKS = [
 
 export async function Footer() {
   const year = new Date().getFullYear();
-  const { footer_phone: footerPhone } = await getSiteSettings();
 
   return (
     <footer className="border-t border-ink-100 bg-ink-950 text-sand-200">
@@ -98,30 +96,6 @@ export async function Footer() {
               >
                 <Mail className="h-4 w-4 shrink-0" />
                 contacts@realestatenl.agency
-              </a>
-            </li>
-            <li>
-              <a
-                href={`https://wa.me/${footerPhone.replace(/\D/g, '')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Contacter Real Estate NL op WhatsApp"
-                className="flex items-center gap-2.5 text-sm text-sand-300 transition-colors hover:text-white"
-              >
-                <Phone className="h-4 w-4 shrink-0" />
-                WhatsApp : {footerPhone}
-              </a>
-            </li>
-            <li>
-              <a
-                href={`https://wa.me/${footerPhone.replace(/\D/g, '')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Contacter Real Estate NL op WhatsApp"
-                className="flex items-center gap-2.5 text-sm text-sand-300 transition-colors hover:text-white"
-              >
-                <Phone className="h-4 w-4 shrink-0" />
-                WhatsApp : {footerPhone}
               </a>
             </li>
           </ul>

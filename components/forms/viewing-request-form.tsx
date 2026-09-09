@@ -10,6 +10,7 @@ import {
   ArrowRight,
   CalendarClock,
   FileCheck2,
+  Landmark,
   User,
 } from 'lucide-react';
 
@@ -28,6 +29,9 @@ import { Button } from '@/components/ui/button';
 import { TIME_SLOTS } from '@/lib/utils/constants';
 import { cn } from '@/lib/utils/cn';
 import { formatDutchPhoneInput } from '@/lib/utils/phone';
+import { formatPrice } from '@/lib/utils/format';
+import { CopyableField } from '@/components/shared/copyable-field';
+import type { BankSettings } from '@/types/database';
 
 const STEPS = [
   'Datum en tijdstip',
@@ -39,10 +43,16 @@ export function ViewingRequestForm({
   propertyId,
   propertySlug,
   propertyTitle,
+  viewingFee,
+  bankSettings,
+  whatsappPhone,
 }: {
   propertyId: string;
   propertySlug: string;
   propertyTitle: string;
+  viewingFee: number;
+  bankSettings: BankSettings;
+  whatsappPhone: string;
 }) {
   const [step, setStep] = React.useState(0);
   const [isPending, startTransition] = React.useTransition();
@@ -309,6 +319,19 @@ export function ViewingRequestForm({
 
         {step === 1 && (
           <div className="space-y-4">
+            <div className="rounded-2xl border border-canal-200 bg-canal-50 p-4">
+              <div className="flex items-center gap-2 text-canal-800">
+                <Landmark className="h-5 w-5" />
+                <h3 className="font-bold">RIB pour les frais de visite</h3>
+              </div>
+              <div className="mt-3 space-y-2">
+                <CopyableField label="Bénéficiaire" value={bankSettings.beneficiary_name} />
+                <CopyableField label="IBAN" value={bankSettings.iban} mono />
+                {bankSettings.bic && <CopyableField label="BIC / SWIFT" value={bankSettings.bic} mono />}
+                <CopyableField label="Banque" value={bankSettings.bank_name} />
+              </div>
+            </div>
+
             <div className="flex items-center gap-2 text-ink-700">
               <User className="h-5 w-5 text-canal-600" />
 
@@ -471,9 +494,21 @@ export function ViewingRequestForm({
             </div>
 
             <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-              De bezichtigingskosten van € 100 moeten vóór de bezichtiging van het
-              appartement worden betaald. Ze worden volledig terugbetaald als de woning
-              na de bezichtiging niet aan uw verwachtingen voldoet.
+              Les frais de visite de {formatPrice(viewingFee)} doivent être payés avant la
+              visite de l&apos;appartement. Ils sont entièrement remboursés si le logement
+              ne correspond pas à vos attentes après la visite.
+            </p>
+            <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
+              Vous pouvez laisser le reçu de paiement des frais de visite par WhatsApp au
+              service client :{' '}
+              <a
+                href={`https://wa.me/${whatsappPhone.replace(/\D/g, '')}`}
+                target="_blank"
+                rel="noreferrer"
+                className="font-semibold text-canal-700 underline"
+              >
+                {whatsappPhone}
+              </a>
             </p>
           </div>
         )}
