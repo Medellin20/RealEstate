@@ -31,6 +31,7 @@ import { formatDutchPhoneInput } from '@/lib/utils/phone';
 import { formatPrice } from '@/lib/utils/format';
 import { CopyableField } from '@/components/shared/copyable-field';
 import type { BankSettings } from '@/types/database';
+import { VIEWING_FEE } from '@/lib/utils/constants';
 
 const STEPS = [
   'Uw gegevens',
@@ -42,14 +43,12 @@ export function ViewingRequestForm({
   propertyId,
   propertySlug,
   propertyTitle,
-  viewingFee,
   bankSettings,
   whatsappPhone,
 }: {
   propertyId: string;
   propertySlug: string;
   propertyTitle: string;
-  viewingFee: number;
   bankSettings: BankSettings;
   whatsappPhone: string;
 }) {
@@ -471,7 +470,7 @@ const [isSending, setIsSending] = React.useState(false);
             </div>
 
             <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-              De bezichtigingskosten van {formatPrice(100)} moeten vóór de bezichtiging
+              De bezichtigingskosten van {formatPrice(VIEWING_FEE)} moeten vóór de bezichtiging
               van het appartement worden betaald. Ze worden volledig terugbetaald als de woning
               na de bezichtiging niet aan uw verwachtingen voldoet.
             </p>

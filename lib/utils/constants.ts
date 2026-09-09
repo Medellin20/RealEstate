@@ -48,6 +48,8 @@ export const VIEWING_STATUS_LABELS: Record<string, string> = {
   completed: 'Terminée',
 };
 
+export const VIEWING_FEE = 50;
+
 export const RESERVATION_STATUS_LABELS: Record<string, string> = {
   submitted: 'Envoyée',
   under_review: 'En cours d’examen',

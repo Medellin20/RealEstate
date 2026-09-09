@@ -13,6 +13,8 @@ import { generateReference } from '@/lib/utils/reference';
 import { sendAdminAlert } from '@/lib/notifications/email';
 import { getPropertyEmailDetails } from '@/lib/notifications/property-details';
 import { recordRequestSubmission } from '@/lib/data/request-submissions';
+import { VIEWING_FEE } from '@/lib/utils/constants';
+import { formatPrice } from '@/lib/utils/format';
 import type { ActionResult } from '@/types';
 
 export async function createViewingRequest(
@@ -114,7 +116,7 @@ export async function createViewingRequest(
   const reference =
     generateReference('VIS');
 
-  const viewingFee = 100;
+  const viewingFee = VIEWING_FEE;
   const initialStatus = 'payment_pending';
 
   /*
@@ -225,6 +227,7 @@ export async function createViewingRequest(
           property,
           await getAmenityLabels(property.id)
         ),
+        'Frais de visite': formatPrice(VIEWING_FEE),
 
         Client:
           `${parsed.data.firstName} ${parsed.data.lastName}`,
