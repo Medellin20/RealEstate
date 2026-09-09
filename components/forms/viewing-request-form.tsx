@@ -55,6 +55,32 @@ export function ViewingRequestForm({
   const [step, setStep] = React.useState(0);
 const [isSending, setIsSending] = React.useState(false);
   const [viewingReference, setViewingReference] = React.useState<string | null>(null);
+const storageKey = `viewing-flow:${propertySlug}`;
+const hasRestoredFlow = React.useRef(false);
+
+React.useEffect(() => {
+  const savedStep = sessionStorage.getItem(`${storageKey}:step`);
+  const savedReference = sessionStorage.getItem(`${storageKey}:reference`);
+
+  if (savedStep) {
+    const parsedStep = Number(savedStep);
+    if (Number.isInteger(parsedStep) && parsedStep >= 0 && parsedStep < STEPS.length) {
+      setStep(parsedStep);
+    }
+  }
+
+  if (savedReference) setViewingReference(savedReference);
+  hasRestoredFlow.current = true;
+}, [storageKey]);
+
+React.useEffect(() => {
+  if (!hasRestoredFlow.current) return;
+  sessionStorage.setItem(`${storageKey}:step`, String(step));
+
+  if (viewingReference) {
+    sessionStorage.setItem(`${storageKey}:reference`, viewingReference);
+  }
+}, [step, storageKey, viewingReference]);
 
   /*
    * Date minimale autorisée.
