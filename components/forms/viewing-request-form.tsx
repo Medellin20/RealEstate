@@ -34,9 +34,9 @@ import { CopyableField } from '@/components/shared/copyable-field';
 import type { BankSettings } from '@/types/database';
 
 const STEPS = [
-  'Datum en tijdstip',
   'Uw gegevens',
-  'Overzicht',
+  'Overzicht en betaling',
+  'Betaalbewijs',
 ] as const;
 
 export function ViewingRequestForm({
@@ -113,9 +113,19 @@ export function ViewingRequestForm({
      * Vérification de la date et du créneau.
      */
     if (step === 0) {
+      const formattedPhone = formatDutchPhoneInput(getValues('phone') || '');
+      setValue('phone', formattedPhone, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+
       const valid = await trigger([
         'requestedDate',
         'requestedTimeSlot',
+        'firstName',
+        'lastName',
+        'email',
+        'phone',
       ]);
 
       if (!valid) {
@@ -131,29 +141,7 @@ export function ViewingRequestForm({
      * -------
      * On formate le téléphone avant de valider.
      */
-    if (step === 1) {
-      const formattedPhone = formatDutchPhoneInput(
-        getValues('phone') || ''
-      );
-
-      setValue('phone', formattedPhone, {
-        shouldDirty: true,
-        shouldValidate: true,
-      });
-
-      const valid = await trigger([
-        'firstName',
-        'lastName',
-        'email',
-        'phone',
-      ]);
-
-      if (!valid) {
-        return;
-      }
-
-      setStep(2);
-    }
+    if (step === 1) setStep(2);
   }
 
   /**
@@ -314,24 +302,11 @@ export function ViewingRequestForm({
         )}
 
         {/* =================================
-            ÉTAPE 2 : COORDONNÉES
+            ÉTAPE 1 : COORDONNÉES
             ================================= */}
 
-        {step === 1 && (
+        {step === 0 && (
           <div className="space-y-4">
-            <div className="rounded-2xl border border-canal-200 bg-canal-50 p-4">
-              <div className="flex items-center gap-2 text-canal-800">
-                <Landmark className="h-5 w-5" />
-                <h3 className="font-bold">RIB pour les frais de visite</h3>
-              </div>
-              <div className="mt-3 space-y-2">
-                <CopyableField label="Bénéficiaire" value={bankSettings.beneficiary_name} />
-                <CopyableField label="IBAN" value={bankSettings.iban} mono />
-                {bankSettings.bic && <CopyableField label="BIC / SWIFT" value={bankSettings.bic} mono />}
-                <CopyableField label="Banque" value={bankSettings.bank_name} />
-              </div>
-            </div>
-
             <div className="flex items-center gap-2 text-ink-700">
               <User className="h-5 w-5 text-canal-600" />
 
@@ -436,10 +411,10 @@ export function ViewingRequestForm({
         )}
 
         {/* =================================
-            ÉTAPE 3 : RÉCAPITULATIF
+            ÉTAPE 2 : RÉCAPITULATIF ET PAIEMENT
             ================================= */}
 
-        {step === 2 && (
+        {step === 1 && (
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-ink-700">
               <FileCheck2 className="h-5 w-5 text-canal-600" />
@@ -498,6 +473,31 @@ export function ViewingRequestForm({
               visite de l&apos;appartement. Ils sont entièrement remboursés si le logement
               ne correspond pas à vos attentes après la visite.
             </p>
+            <div className="rounded-2xl border border-canal-200 bg-canal-50 p-4">
+              <div className="flex items-center gap-2 text-canal-800">
+                <Landmark className="h-5 w-5" />
+                <h3 className="font-bold">RIB pour les frais de visite</h3>
+              </div>
+              <div className="mt-3 space-y-2">
+                <CopyableField label="Bénéficiaire" value={bankSettings.beneficiary_name} />
+                <CopyableField label="IBAN" value={bankSettings.iban} mono />
+                {bankSettings.bic && <CopyableField label="BIC / SWIFT" value={bankSettings.bic} mono />}
+                <CopyableField label="Banque" value={bankSettings.bank_name} />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* =================================
+            ÉTAPE 3 : PREUVE DE PAIEMENT
+            ================================= */}
+
+        {step === 2 && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-ink-700">
+              <FileCheck2 className="h-5 w-5 text-canal-600" />
+              <h3 className="font-bold">Preuve de paiement</h3>
+            </div>
             <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
               Vous pouvez laisser le reçu de paiement des frais de visite par WhatsApp au
               service client :{' '}

@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Facebook, Home, Instagram, Linkedin, Mail, MapPin } from 'lucide-react';
+import { Facebook, Home, Instagram, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
+import { getSiteSettings } from '@/lib/data/site-settings';
 
 const COLUMN_LINKS = [
   { href: '/', label: 'Home' },
@@ -17,7 +18,10 @@ const LEGAL_LINKS = [
 ];
 
 export async function Footer() {
-  const year = new Date().getFullYear();
+  const [year, settings] = await Promise.all([
+    Promise.resolve(new Date().getFullYear()),
+    getSiteSettings(),
+  ]);
 
   return (
     <footer className="border-t border-ink-100 bg-ink-950 text-sand-200">
@@ -96,6 +100,15 @@ export async function Footer() {
               >
                 <Mail className="h-4 w-4 shrink-0" />
                 contacts@realestatenl.agency
+              </a>
+            </li>
+            <li>
+              <a
+                href={`tel:${settings.footer_phone.replace(/[^\d+]/g, '')}`}
+                className="flex min-w-0 items-center gap-2.5 break-all text-sm text-sand-300 transition-colors hover:text-white"
+              >
+                <Phone className="h-4 w-4 shrink-0" />
+                {settings.footer_phone}
               </a>
             </li>
           </ul>
