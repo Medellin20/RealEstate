@@ -160,12 +160,12 @@ const [isSending, setIsSending] = React.useState(false);
         const result = await createViewingRequest({ ...getValues() }, propertySlug);
 
         if (!result.success || !result.data) {
-          setStep(1);
           toast.error(result.message || 'De aanvraag kon niet worden verzonden.');
           return;
         }
 
         setViewingReference(result.data.reference);
+        setStep(2);
       } finally {
         setIsSending(false);
       }
