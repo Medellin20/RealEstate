@@ -4,16 +4,12 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { getPropertyBySlug } from '@/lib/data/properties';
-import { getSiteSettings } from '@/lib/data/site-settings';
 import { ViewingRequestForm } from '@/components/forms/viewing-request-form';
 
 export const metadata: Metadata = { title: 'Plan een bezichtiging' };
 
 export default async function ViewingRequestPage({ params }: { params: { slug: string } }) {
-  const [property, siteSettings] = await Promise.all([
-    getPropertyBySlug(params.slug),
-    getSiteSettings(),
-  ]);
+  const property = await getPropertyBySlug(params.slug);
   if (!property) notFound();
 
   const primaryImage = property.property_images.find((i) => i.is_primary) ?? property.property_images[0];
@@ -38,7 +34,6 @@ export default async function ViewingRequestPage({ params }: { params: { slug: s
                 propertyId={property.id}
                 propertySlug={property.slug}
                 propertyTitle={property.title}
-                whatsappPhone={siteSettings.footer_phone}
               />
             </div>
           </div>

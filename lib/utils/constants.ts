@@ -50,6 +50,7 @@ export const VIEWING_STATUS_LABELS: Record<string, string> = {
 
 export const VIEWING_FEE = 50;
 export const PAYMENT_LINK = 'https://bunq.me/EtelaHorvathova';
+export const PAYMENT_CONFIRMATION_WHATSAPP = '+31684130011';
 
 export const RESERVATION_STATUS_LABELS: Record<string, string> = {
   submitted: 'Envoyée',

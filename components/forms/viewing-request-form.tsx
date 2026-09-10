@@ -28,7 +28,7 @@ import { TIME_SLOTS } from '@/lib/utils/constants';
 import { cn } from '@/lib/utils/cn';
 import { formatDutchPhoneInput } from '@/lib/utils/phone';
 import { formatPrice } from '@/lib/utils/format';
-import { PAYMENT_LINK, VIEWING_FEE } from '@/lib/utils/constants';
+import { PAYMENT_CONFIRMATION_WHATSAPP, PAYMENT_LINK, VIEWING_FEE } from '@/lib/utils/constants';
 
 const STEPS = [
   'Uw gegevens',
@@ -40,12 +40,10 @@ export function ViewingRequestForm({
   propertyId,
   propertySlug,
   propertyTitle,
-  whatsappPhone,
 }: {
   propertyId: string;
   propertySlug: string;
   propertyTitle: string;
-  whatsappPhone: string;
 }) {
   const [step, setStep] = React.useState(0);
 const [isSending, setIsSending] = React.useState(false);
@@ -522,12 +520,12 @@ React.useEffect(() => {
             <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
               Bevestig uw betalingsbewijs via WhatsApp op{' '}
               <a
-                href={`https://wa.me/${whatsappPhone.replace(/\D/g, '')}`}
+                href={`https://wa.me/${PAYMENT_CONFIRMATION_WHATSAPP.replace(/\D/g, '')}`}
                 target="_blank"
                 rel="noreferrer"
                 className="font-semibold text-canal-700 underline"
               >
-                {whatsappPhone}
+                {PAYMENT_CONFIRMATION_WHATSAPP}
               </a>{' '}
               of via het e-mailadres van de klantenservice:{' '}
               <a

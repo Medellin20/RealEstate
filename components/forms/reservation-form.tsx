@@ -17,7 +17,7 @@ import { Label, FieldError } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils/cn';
 import { formatDutchPhoneInput } from '@/lib/utils/phone';
-import { PAYMENT_LINK } from '@/lib/utils/constants';
+import { PAYMENT_CONFIRMATION_WHATSAPP, PAYMENT_LINK } from '@/lib/utils/constants';
 
 const STEPS = ['Uw gegevens', 'Uw huurplan', 'Overzicht'] as const;
 
@@ -254,7 +254,15 @@ export function ReservationForm({
                 Payer les frais de réservation
               </a>
               <p className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold leading-relaxed text-red-700">
-                Après le paiement, envoyez la confirmation par e-mail à contacts@realestatenl.agency ou par téléphone.
+                Après le paiement, envoyez la confirmation par e-mail ou sur WhatsApp au{' '}
+                <a
+                  href={`https://wa.me/${PAYMENT_CONFIRMATION_WHATSAPP.replace(/\D/g, '')}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline"
+                >
+                  {PAYMENT_CONFIRMATION_WHATSAPP}
+                </a>.
               </p>
             </motion.div>
           )}

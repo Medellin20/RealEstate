@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { CheckCircle2, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { PAYMENT_LINK } from '@/lib/utils/constants';
+import { PAYMENT_CONFIRMATION_WHATSAPP, PAYMENT_LINK } from '@/lib/utils/constants';
 
 export const metadata = { title: 'Dossier verzonden' };
 
@@ -35,7 +35,15 @@ export default function ReservationConfirmationPage() {
           Payer les frais de réservation
         </a>
         <p className="mt-3 rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold leading-relaxed text-red-700">
-          Après le paiement, envoyez la confirmation par e-mail à contacts@realestatenl.agency ou par téléphone.
+          Après le paiement, envoyez la confirmation par e-mail ou sur WhatsApp au{' '}
+          <a
+            href={`https://wa.me/${PAYMENT_CONFIRMATION_WHATSAPP.replace(/\D/g, '')}`}
+            target="_blank"
+            rel="noreferrer"
+            className="underline"
+          >
+            {PAYMENT_CONFIRMATION_WHATSAPP}
+          </a>.
         </p>
 
         <Link href="/appartements" className="mt-8 inline-block w-full sm:w-auto">
