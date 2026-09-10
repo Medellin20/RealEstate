@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -16,7 +17,6 @@ import { Label, FieldError } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils/cn';
 import { formatDutchPhoneInput } from '@/lib/utils/phone';
-import { PAYMENT_CONFIRMATION_WHATSAPP, PAYMENT_LINK } from '@/lib/utils/constants';
 
 const STEPS = ['Uw gegevens', 'Uw huurplan'] as const;
 
@@ -24,11 +24,14 @@ export function ReservationForm({
   propertyId,
   propertyTitle,
   reservationFee,
+  confirmationUrl,
 }: {
   propertyId: string;
   propertyTitle: string;
   reservationFee: string;
+  confirmationUrl: string;
 }) {
+  const router = useRouter();
   const [step, setStep] = React.useState(0);
   const [isPending, startTransition] = React.useTransition();
 
@@ -73,7 +76,7 @@ export function ReservationForm({
       if (result && !result.success) {
         toast.error(result.message);
       } else if (result?.success) {
-        toast.success('Uw dossier is verzonden. Controleer uw e-mail.');
+        router.replace(confirmationUrl);
       }
     });
   }
@@ -228,27 +231,8 @@ export function ReservationForm({
               className="space-y-4"
             >
               <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-                De reserveringskosten bedragen 50% van één maand huur ({reservationFee}). Klik op de knop
-                hieronder om uw betaling uit te voeren.
-              </p>
-              <a
-                href={PAYMENT_LINK}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex w-full items-center justify-center rounded-xl bg-canal-700 px-4 py-3 text-sm font-bold text-white transition hover:bg-canal-800"
-              >
-                Payer les frais de réservation
-              </a>
-              <p className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold leading-relaxed text-red-700">
-                Après le paiement, envoyez la confirmation par e-mail ou sur WhatsApp au{' '}
-                <a
-                  href={`https://wa.me/${PAYMENT_CONFIRMATION_WHATSAPP.replace(/\D/g, '')}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="underline"
-                >
-                  {PAYMENT_CONFIRMATION_WHATSAPP}
-                </a>.
+                Les frais de réservation sont de 50% d’un mois de loyer ({reservationFee}).
+                Cliquez sur « Continuer » pour envoyer votre dossier et accéder au paiement.
               </p>
             </motion.div>
           )}

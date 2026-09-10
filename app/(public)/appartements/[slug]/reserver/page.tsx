@@ -6,11 +6,15 @@ import { ArrowLeft } from 'lucide-react';
 import { getPropertyBySlug } from '@/lib/data/properties';
 import { ReservationForm } from '@/components/forms/reservation-form';
 import { formatPrice } from '@/lib/utils/format';
+import { getSiteSettings } from '@/lib/data/site-settings';
 
 export const metadata: Metadata = { title: 'Payer de frais de reservering' };
 
 export default async function ReservationPage({ params }: { params: { slug: string } }) {
-  const property = await getPropertyBySlug(params.slug);
+  const [property] = await Promise.all([
+    getPropertyBySlug(params.slug),
+    getSiteSettings(),
+  ]);
   if (!property) notFound();
 
   const primaryImage = property.property_images.find((i) => i.is_primary) ?? property.property_images[0];
@@ -39,6 +43,7 @@ export default async function ReservationPage({ params }: { params: { slug: stri
                 propertyId={property.id}
                 propertyTitle={property.title}
                 reservationFee={formatPrice(property.monthly_price / 2)}
+                confirmationUrl={`/appartements/${property.slug}/reserver/confirmation`}
               />
             </div>
           </div>

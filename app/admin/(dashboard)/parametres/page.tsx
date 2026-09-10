@@ -70,7 +70,7 @@ async function SiteSettingsSection() {
     <div className="rounded-2xl border border-ink-100 bg-white p-5 sm:p-6">
       <h2 className="font-bold text-ink-900">Coordonnées publiques</h2>
       <p className="mt-2 mb-4 text-sm text-ink-500">
-        Modifiez le numéro affiché dans le footer et utilisé pour le bouton WhatsApp.
+        Modifiez le numéro affiché dans le footer et le lien de paiement utilisé pour les visites et réservations.
       </p>
       <SiteSettingsForm settings={settings} />
     </div>

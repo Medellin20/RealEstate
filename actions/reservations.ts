@@ -7,7 +7,7 @@ import {
 } from '@/lib/validations/reservation';
 import { sendAdminAlert } from '@/lib/notifications/email';
 import { getPropertyEmailDetails } from '@/lib/notifications/property-details';
-import { PAYMENT_LINK } from '@/lib/utils/constants';
+import { getSiteSettings } from '@/lib/data/site-settings';
 import type { ActionResult } from '@/types';
 
 /**
@@ -51,7 +51,7 @@ export async function createReservation(
         await getAmenityLabels(property.id)
       ),
       'Frais de réservation (50 % du loyer)': `${property.monthly_price / 2} €`,
-      'Lien de paiement': PAYMENT_LINK,
+      'Lien de paiement': (await getSiteSettings()).payment_link,
       Client: `${parsed.data.firstName} ${parsed.data.lastName}`,
       Email: parsed.data.email,
       Téléphone: parsed.data.phone,

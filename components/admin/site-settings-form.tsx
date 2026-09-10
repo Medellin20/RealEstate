@@ -16,7 +16,7 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
   const [isPending, startTransition] = React.useTransition();
   const { register, handleSubmit, formState: { errors } } = useForm<SiteSettingsInput>({
     resolver: zodResolver(siteSettingsSchema),
-    defaultValues: { footerPhone: settings.footer_phone },
+    defaultValues: { footerPhone: settings.footer_phone, paymentLink: settings.payment_link },
   });
 
   function onSubmit(data: SiteSettingsInput) {
@@ -34,6 +34,12 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
         <Input id="footerPhone" type="tel" placeholder="+31649496257" {...register('footerPhone')} />
         <FieldError message={errors.footerPhone?.message} />
         <p className="mt-1 text-xs text-ink-400">Ce numéro sera affiché sur toutes les pages publiques.</p>
+      </div>
+      <div>
+        <Label htmlFor="paymentLink">Lien de paiement</Label>
+        <Input id="paymentLink" type="url" {...register('paymentLink')} />
+        <FieldError message={errors.paymentLink?.message} />
+        <p className="mt-1 text-xs text-ink-400">Ce lien sera utilisé pour les visites et les réservations.</p>
       </div>
       <Button type="submit" isLoading={isPending}>
         <Save className="h-4 w-4" />

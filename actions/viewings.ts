@@ -13,9 +13,10 @@ import { generateReference } from '@/lib/utils/reference';
 import { sendAdminAlert } from '@/lib/notifications/email';
 import { getPropertyEmailDetails } from '@/lib/notifications/property-details';
 import { recordRequestSubmission } from '@/lib/data/request-submissions';
-import { PAYMENT_LINK, VIEWING_FEE } from '@/lib/utils/constants';
+import { VIEWING_FEE } from '@/lib/utils/constants';
 import { formatPrice } from '@/lib/utils/format';
 import type { ActionResult } from '@/types';
+import { getSiteSettings } from '@/lib/data/site-settings';
 
 export async function createViewingRequest(
   input: ViewingRequestInput,
@@ -228,7 +229,7 @@ export async function createViewingRequest(
           await getAmenityLabels(property.id)
         ),
         'Frais de visite': formatPrice(VIEWING_FEE),
-        'Lien de paiement': PAYMENT_LINK,
+        'Lien de paiement': (await getSiteSettings()).payment_link,
 
         Client:
           `${parsed.data.firstName} ${parsed.data.lastName}`,

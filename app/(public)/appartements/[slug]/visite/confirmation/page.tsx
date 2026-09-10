@@ -5,7 +5,8 @@ import { getViewingByReference } from '@/lib/data/dossier';
 import { Button } from '@/components/ui/button';
 import { VIEWING_STATUS_LABELS } from '@/lib/utils/constants';
 import { formatDate } from '@/lib/utils/format';
-import { PAYMENT_CONFIRMATION_WHATSAPP, PAYMENT_LINK } from '@/lib/utils/constants';
+import { PAYMENT_CONFIRMATION_WHATSAPP } from '@/lib/utils/constants';
+import { getSiteSettings } from '@/lib/data/site-settings';
 
 export const metadata = { title: 'Bezichtigingsaanvraag verzonden' };
 
@@ -19,6 +20,7 @@ export default async function ViewingConfirmationPage({
   if (!viewing) notFound();
 
   const property = (viewing as any).properties;
+  const { payment_link: paymentLink } = await getSiteSettings();
   return (
     <div className="container-app flex min-h-[70vh] items-center justify-center py-6 sm:py-14">
       <div className="w-full max-w-2xl rounded-2xl border border-ink-100 bg-white p-4 text-center shadow-card sm:p-8">
@@ -46,7 +48,7 @@ export default async function ViewingConfirmationPage({
         </p>
 
         <a
-          href={PAYMENT_LINK}
+          href={paymentLink}
           target="_blank"
           rel="noreferrer"
           className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-canal-700 px-4 py-3 text-sm font-bold text-white transition hover:bg-canal-800"
@@ -54,7 +56,11 @@ export default async function ViewingConfirmationPage({
           Payer les frais de visite
         </a>
         <p className="mt-3 rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold leading-relaxed text-red-700">
-          Après le paiement, envoyez la confirmation par e-mail ou sur WhatsApp au{' '}
+          Après le paiement, envoyez la confirmation par e-mail au{' '}
+          <a href="mailto:contacts@realestatenl.agency" className="underline">
+            contacts@realestatenl.agency
+          </a>{' '}
+          ou sur WhatsApp au{' '}
           <a
             href={`https://wa.me/${PAYMENT_CONFIRMATION_WHATSAPP.replace(/\D/g, '')}`}
             target="_blank"

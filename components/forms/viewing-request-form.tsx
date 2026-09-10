@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -28,23 +29,25 @@ import { TIME_SLOTS } from '@/lib/utils/constants';
 import { cn } from '@/lib/utils/cn';
 import { formatDutchPhoneInput } from '@/lib/utils/phone';
 import { formatPrice } from '@/lib/utils/format';
-import { PAYMENT_CONFIRMATION_WHATSAPP, PAYMENT_LINK, VIEWING_FEE } from '@/lib/utils/constants';
+import { VIEWING_FEE } from '@/lib/utils/constants';
 
 const STEPS = [
   'Uw gegevens',
   'Overzicht en betaling',
-  'Betaalbewijs',
 ] as const;
 
 export function ViewingRequestForm({
   propertyId,
   propertySlug,
   propertyTitle,
+  confirmationUrl,
 }: {
   propertyId: string;
   propertySlug: string;
   propertyTitle: string;
+  confirmationUrl: string;
 }) {
+  const router = useRouter();
   const [step, setStep] = React.useState(0);
 const [isSending, setIsSending] = React.useState(false);
   const [viewingReference, setViewingReference] = React.useState<string | null>(null);
@@ -169,11 +172,9 @@ React.useEffect(() => {
       ]);
 
       if (!valid || viewingReference) {
-        if (valid) setStep(2);
         return;
       }
 
-      setStep(2);
       setIsSending(true);
       try {
         const result = await createViewingRequest({ ...getValues() }, propertySlug);
@@ -184,7 +185,7 @@ React.useEffect(() => {
         }
 
         setViewingReference(result.data.reference);
-        setStep(2);
+        router.replace(`${confirmationUrl}?ref=${encodeURIComponent(result.data.reference)}`);
       } finally {
         setIsSending(false);
       }
@@ -492,48 +493,6 @@ React.useEffect(() => {
               De bezichtigingskosten van {formatPrice(VIEWING_FEE)} moeten vóór de bezichtiging
               van het appartement worden betaald. Ze worden volledig terugbetaald als de woning
               na de bezichtiging niet aan uw verwachtingen voldoet.
-            </p>
-            <a
-              href={PAYMENT_LINK}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex w-full items-center justify-center rounded-xl bg-canal-700 px-4 py-3 text-sm font-bold text-white transition hover:bg-canal-800"
-            >
-              Payer les frais de visite
-            </a>
-            <p className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold leading-relaxed text-red-700">
-              Après le paiement, envoyez la confirmation par e-mail à contacts@realestatenl.agency ou par téléphone.
-            </p>
-          </div>
-        )}
-
-        {/* =================================
-            ÉTAPE 3 : PREUVE DE PAIEMENT
-            ================================= */}
-
-        {step === 2 && (
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 text-ink-700">
-              <FileCheck2 className="h-5 w-5 text-canal-600" />
-              <h3 className="font-bold">Betalingsbewijs</h3>
-            </div>
-            <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-              Bevestig uw betalingsbewijs via WhatsApp op{' '}
-              <a
-                href={`https://wa.me/${PAYMENT_CONFIRMATION_WHATSAPP.replace(/\D/g, '')}`}
-                target="_blank"
-                rel="noreferrer"
-                className="font-semibold text-canal-700 underline"
-              >
-                {PAYMENT_CONFIRMATION_WHATSAPP}
-              </a>{' '}
-              of via het e-mailadres van de klantenservice:{' '}
-              <a
-                href="mailto:contacts@realestatenl.agency"
-                className="font-semibold text-canal-700 underline"
-              >
-                contacts@realestatenl.agency
-              </a>
             </p>
           </div>
         )}

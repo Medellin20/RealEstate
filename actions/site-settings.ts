@@ -11,14 +11,18 @@ export async function updateSiteSettings(input: SiteSettingsInput): Promise<Acti
   if (!parsed.success) {
     return {
       success: false,
-      message: 'Merci de corriger le numéro indiqué.',
+      message: 'Merci de corriger les paramètres indiqués.',
       fieldErrors: parsed.error.flatten().fieldErrors,
     };
   }
 
   const { error } = await createAdminClient()
     .from('site_settings')
-    .update({ footer_phone: parsed.data.footerPhone, updated_at: new Date().toISOString() })
+    .update({
+      footer_phone: parsed.data.footerPhone,
+      payment_link: parsed.data.paymentLink,
+      updated_at: new Date().toISOString(),
+    })
     .eq('id', 1);
 
   if (error) {
@@ -29,5 +33,5 @@ export async function updateSiteSettings(input: SiteSettingsInput): Promise<Acti
   revalidatePath('/', 'layout');
   revalidatePath('/admin/parametres');
   revalidatePath('/appartements/[slug]/visite', 'page');
-  return { success: true, message: 'Numéro du footer mis à jour avec succès.' };
+  return { success: true, message: 'Paramètres du site mis à jour avec succès.' };
 }

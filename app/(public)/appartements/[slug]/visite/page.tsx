@@ -34,6 +34,7 @@ export default async function ViewingRequestPage({ params }: { params: { slug: s
                 propertyId={property.id}
                 propertySlug={property.slug}
                 propertyTitle={property.title}
+                confirmationUrl={`/appartements/${property.slug}/visite/confirmation`}
               />
             </div>
           </div>

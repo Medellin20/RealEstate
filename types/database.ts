@@ -253,6 +253,7 @@ export interface Favorite {
 export interface SiteSettings {
   id: number;
   footer_phone: string;
+  payment_link: string;
   updated_at: string;
 }
 
