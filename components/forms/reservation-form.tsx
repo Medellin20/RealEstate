@@ -1,12 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
-import { ArrowLeft, ArrowRight, ClipboardList, FileCheck2, User } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ClipboardList, User } from 'lucide-react';
 import { reservationSchema, type ReservationInput } from '@/lib/validations/reservation';
 import { createReservation } from '@/actions/reservations';
 import { Input } from '@/components/ui/input';
@@ -19,20 +18,17 @@ import { cn } from '@/lib/utils/cn';
 import { formatDutchPhoneInput } from '@/lib/utils/phone';
 import { PAYMENT_CONFIRMATION_WHATSAPP, PAYMENT_LINK } from '@/lib/utils/constants';
 
-const STEPS = ['Uw gegevens', 'Uw huurplan', 'Overzicht'] as const;
+const STEPS = ['Uw gegevens', 'Uw huurplan'] as const;
 
 export function ReservationForm({
   propertyId,
   propertyTitle,
   reservationFee,
-  confirmationUrl,
 }: {
   propertyId: string;
   propertyTitle: string;
   reservationFee: string;
-  confirmationUrl: string;
 }) {
-  const router = useRouter();
   const [step, setStep] = React.useState(0);
   const [isPending, startTransition] = React.useTransition();
 
@@ -61,7 +57,14 @@ export function ReservationForm({
       ['desiredMoveInDate', 'durationMonths', 'occupantsCount', 'hasPets', 'employmentContract', 'monthlyIncome', 'originCity'],
     ];
     const valid = await trigger(fieldsByStep[step]);
-    if (valid) setStep((s) => Math.min(s + 1, STEPS.length - 1));
+    if (!valid) return;
+
+    if (step === 1) {
+      onSubmit(watch());
+      return;
+    }
+
+    setStep((s) => Math.min(s + 1, STEPS.length - 1));
   }
 
   function onSubmit(data: ReservationInput) {
@@ -70,7 +73,7 @@ export function ReservationForm({
       if (result && !result.success) {
         toast.error(result.message);
       } else if (result?.success) {
-        router.replace(confirmationUrl);
+        toast.success('Uw dossier is verzonden. Controleer uw e-mail.');
       }
     });
   }
@@ -215,32 +218,15 @@ export function ReservationForm({
             </motion.div>
           )}
 
-          {step === 2 && (
+          {step === 1 && (
             <motion.div
-              key="s2"
+              key="s1"
               initial={{ opacity: 0, x: 16 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -16 }}
               transition={{ duration: 0.2 }}
               className="space-y-4"
             >
-              <div className="flex items-center gap-2 text-ink-700">
-                <FileCheck2 className="h-5 w-5 text-canal-600" />
-                <h3 className="font-bold">Overzicht van uw aanvraag</h3>
-              </div>
-              <div className="space-y-2 rounded-xl border border-ink-100 bg-sand-100/60 p-4 text-sm">
-                <Row label="woning" value={propertyTitle} />
-                <Row label="Reserveringskosten (50% van één maand huur)" value={reservationFee} />
-                <Row label="Naam" value={`${values.firstName || ''} ${values.lastName || ''}`.trim() || '—'} />
-                <Row label="E-mail" value={values.email || '—'} />
-                <Row label="Gewenste verhuisdatum" value={values.desiredMoveInDate || '—'} />
-                <Row label="Duur" value={values.durationMonths ? `${values.durationMonths} maanden` : '—'} />
-                <Row label="Aantal bewoners" value={String(values.occupantsCount || '—')} />
-                <Row label="Huisdieren" value={values.hasPets ? 'Ja' : 'Nee'} />
-                <Row label="Arbeidscontract" value={values.employmentContract || '—'} />
-                <Row label="Revenu mensuel" value={values.monthlyIncome != null ? `${values.monthlyIncome} €` : '—'} />
-                <Row label="Plaats van herkomst" value={values.originCity || '—'} />
-              </div>
               <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
                 De reserveringskosten bedragen 50% van één maand huur ({reservationFee}). Klik op de knop
                 hieronder om uw betaling uit te voeren.
@@ -279,16 +265,10 @@ export function ReservationForm({
             Retour
           </Button>
 
-          {step < STEPS.length - 1 ? (
-            <Button type="button" onClick={goNext} className="w-full sm:w-auto">
-              Continuer
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          ) : (
-            <Button type="submit" isLoading={isPending} className="w-full sm:w-auto">
-              Envoyer mon dossier
-            </Button>
-          )}
+          <Button type="button" onClick={goNext} isLoading={isPending} className="w-full sm:w-auto">
+            Continuer
+            <ArrowRight className="h-4 w-4" />
+          </Button>
         </div>
       </form>
     </div>
