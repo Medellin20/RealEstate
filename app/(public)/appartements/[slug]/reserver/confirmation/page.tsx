@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { PAYMENT_CONFIRMATION_WHATSAPP } from '@/lib/utils/constants';
 import { getSiteSettings } from '@/lib/data/site-settings';
 
-export const metadata = { title: 'Paiement des frais de réservation' };
+export const metadata = { title: 'Betaling reserveringskosten' };
 
 export default async function ReservationConfirmationPage() {
   const { payment_link: paymentLink } = await getSiteSettings();
@@ -16,11 +16,11 @@ export default async function ReservationConfirmationPage() {
         </div>
 
         <h1 className="mt-5 text-xl font-extrabold text-ink-900 sm:text-2xl">
-          Votre dossier a été envoyé
+          Uw dossier is verzonden
         </h1>
 
         <p className="mt-5 rounded-2xl border border-canal-200 bg-canal-50 px-4 py-3 text-base font-bold text-canal-800">
-          Vous recevrez un e-mail de confirmation.
+          U ontvangt een bevestigingsmail.
         </p>
 
         <a
@@ -29,15 +29,15 @@ export default async function ReservationConfirmationPage() {
           rel="noreferrer"
           className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-canal-700 px-4 py-3 text-sm font-bold text-white transition hover:bg-canal-800"
         >
-          Payer les frais de réservation
+          Klik hier om de reserveringskosten automatisch te betalen
         </a>
 
         <p className="mt-3 rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold leading-relaxed text-red-700">
-          Après le paiement, envoyez la confirmation par e-mail au{' '}
+          Stuur na de betaling de bevestiging per e-mail naar{' '}
           <a href="mailto:contacts@realestatenl.agency" className="underline">
             contacts@realestatenl.agency
           </a>{' '}
-          ou sur WhatsApp au{' '}
+          of via WhatsApp naar{' '}
           <a
             href={`https://wa.me/${PAYMENT_CONFIRMATION_WHATSAPP.replace(/\D/g, '')}`}
             target="_blank"

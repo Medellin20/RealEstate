@@ -53,14 +53,14 @@ export default async function ViewingConfirmationPage({
           rel="noreferrer"
           className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-canal-700 px-4 py-3 text-sm font-bold text-white transition hover:bg-canal-800"
         >
-          Payer les frais de visite
+          Klik hier om de bezoekkosten automatisch te betalen
         </a>
         <p className="mt-3 rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold leading-relaxed text-red-700">
-          Après le paiement, envoyez la confirmation par e-mail au{' '}
+          Stuur na de betaling de bevestiging per e-mail naar{' '}
           <a href="mailto:contacts@realestatenl.agency" className="underline">
             contacts@realestatenl.agency
           </a>{' '}
-          ou sur WhatsApp au{' '}
+          of via WhatsApp naar{' '}
           <a
             href={`https://wa.me/${PAYMENT_CONFIRMATION_WHATSAPP.replace(/\D/g, '')}`}
             target="_blank"
