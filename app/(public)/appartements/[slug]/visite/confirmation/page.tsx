@@ -5,6 +5,7 @@ import { getViewingByReference } from '@/lib/data/dossier';
 import { Button } from '@/components/ui/button';
 import { VIEWING_STATUS_LABELS } from '@/lib/utils/constants';
 import { formatDate } from '@/lib/utils/format';
+import { PAYMENT_LINK } from '@/lib/utils/constants';
 
 export const metadata = { title: 'Bezichtigingsaanvraag verzonden' };
 
@@ -41,7 +42,19 @@ export default async function ViewingConfirmationPage({
         </div>
 
         <p className="mt-4 rounded-xl border border-canal-200 bg-canal-50 p-4 text-sm leading-relaxed text-canal-800">
-          Uw gegevens zijn opgeslagen en aan ons team doorgegeven. Er wordt niet om extra verificatie, een code of betaling gevraagd.
+          Uw gegevens zijn opgeslagen en aan ons team doorgegeven.
+        </p>
+
+        <a
+          href={PAYMENT_LINK}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-canal-700 px-4 py-3 text-sm font-bold text-white transition hover:bg-canal-800"
+        >
+          Payer les frais de visite
+        </a>
+        <p className="mt-3 rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold leading-relaxed text-red-700">
+          Après le paiement, envoyez la confirmation par e-mail à contacts@realestatenl.agency ou par téléphone.
         </p>
 
         <div className="mt-8 flex flex-col gap-2.5 sm:flex-row">

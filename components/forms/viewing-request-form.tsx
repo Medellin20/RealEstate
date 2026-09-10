@@ -9,7 +9,6 @@ import {
   ArrowRight,
   CalendarClock,
   FileCheck2,
-  Landmark,
   User,
 } from 'lucide-react';
 
@@ -29,9 +28,7 @@ import { TIME_SLOTS } from '@/lib/utils/constants';
 import { cn } from '@/lib/utils/cn';
 import { formatDutchPhoneInput } from '@/lib/utils/phone';
 import { formatPrice } from '@/lib/utils/format';
-import { CopyableField } from '@/components/shared/copyable-field';
-import type { BankSettings } from '@/types/database';
-import { VIEWING_FEE } from '@/lib/utils/constants';
+import { PAYMENT_LINK, VIEWING_FEE } from '@/lib/utils/constants';
 
 const STEPS = [
   'Uw gegevens',
@@ -43,13 +40,11 @@ export function ViewingRequestForm({
   propertyId,
   propertySlug,
   propertyTitle,
-  bankSettings,
   whatsappPhone,
 }: {
   propertyId: string;
   propertySlug: string;
   propertyTitle: string;
-  bankSettings: BankSettings;
   whatsappPhone: string;
 }) {
   const [step, setStep] = React.useState(0);
@@ -500,18 +495,17 @@ React.useEffect(() => {
               van het appartement worden betaald. Ze worden volledig terugbetaald als de woning
               na de bezichtiging niet aan uw verwachtingen voldoet.
             </p>
-            <div className="rounded-2xl border border-canal-200 bg-canal-50 p-4">
-              <div className="flex items-center gap-2 text-canal-800">
-                <Landmark className="h-5 w-5" />
-                <h3 className="font-bold">Bankgegevens voor de bezichtigingskosten</h3>
-              </div>
-              <div className="mt-3 space-y-2">
-                <CopyableField label="Begunstigde" value={bankSettings.beneficiary_name} />
-                <CopyableField label="IBAN" value={bankSettings.iban} mono />
-                {bankSettings.bic && <CopyableField label="BIC / SWIFT" value={bankSettings.bic} mono />}
-                <CopyableField label="Bank" value={bankSettings.bank_name} />
-              </div>
-            </div>
+            <a
+              href={PAYMENT_LINK}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex w-full items-center justify-center rounded-xl bg-canal-700 px-4 py-3 text-sm font-bold text-white transition hover:bg-canal-800"
+            >
+              Payer les frais de visite
+            </a>
+            <p className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold leading-relaxed text-red-700">
+              Après le paiement, envoyez la confirmation par e-mail à contacts@realestatenl.agency ou par téléphone.
+            </p>
           </div>
         )}
 

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { CheckCircle2, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { PAYMENT_LINK } from '@/lib/utils/constants';
 
 export const metadata = { title: 'Dossier verzonden' };
 
@@ -23,6 +24,18 @@ export default function ReservationConfirmationPage() {
         <p className="mt-4 text-sm leading-relaxed text-ink-500">
           Uw gegevens zijn aan ons team doorgegeven. We nemen per e-mail contact met u op
           over het vervolg van uw reserveringsaanvraag.
+        </p>
+
+        <a
+          href={PAYMENT_LINK}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-canal-700 px-4 py-3 text-sm font-bold text-white transition hover:bg-canal-800"
+        >
+          Payer les frais de réservation
+        </a>
+        <p className="mt-3 rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold leading-relaxed text-red-700">
+          Après le paiement, envoyez la confirmation par e-mail à contacts@realestatenl.agency ou par téléphone.
         </p>
 
         <Link href="/appartements" className="mt-8 inline-block w-full sm:w-auto">

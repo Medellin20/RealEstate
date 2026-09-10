@@ -49,6 +49,7 @@ export const VIEWING_STATUS_LABELS: Record<string, string> = {
 };
 
 export const VIEWING_FEE = 50;
+export const PAYMENT_LINK = 'https://bunq.me/EtelaHorvathova';
 
 export const RESERVATION_STATUS_LABELS: Record<string, string> = {
   submitted: 'Envoyée',

@@ -17,6 +17,7 @@ import { Label, FieldError } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils/cn';
 import { formatDutchPhoneInput } from '@/lib/utils/phone';
+import { PAYMENT_LINK } from '@/lib/utils/constants';
 
 const STEPS = ['Uw gegevens', 'Uw huurplan', 'Overzicht'] as const;
 
@@ -241,8 +242,19 @@ export function ReservationForm({
                 <Row label="Plaats van herkomst" value={values.originCity || '—'} />
               </div>
               <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-                De reserveringskosten bedragen 50% van één maand huur ({reservationFee}). Na controle van uw
-                dossier stuurt het agentschap u de betaalinstructies.
+                De reserveringskosten bedragen 50% van één maand huur ({reservationFee}). Klik op de knop
+                hieronder om uw betaling uit te voeren.
+              </p>
+              <a
+                href={PAYMENT_LINK}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex w-full items-center justify-center rounded-xl bg-canal-700 px-4 py-3 text-sm font-bold text-white transition hover:bg-canal-800"
+              >
+                Payer les frais de réservation
+              </a>
+              <p className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold leading-relaxed text-red-700">
+                Après le paiement, envoyez la confirmation par e-mail à contacts@realestatenl.agency ou par téléphone.
               </p>
             </motion.div>
           )}
