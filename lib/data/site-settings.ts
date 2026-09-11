@@ -12,10 +12,10 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     throw new Error(`Impossible de charger les paramètres du site : ${error.message}`);
   }
 
-  return data ?? {
+  return {
     id: 1,
-    footer_phone: DEFAULT_FOOTER_PHONE,
-    payment_link: DEFAULT_PAYMENT_LINK,
-    updated_at: new Date(0).toISOString(),
+    footer_phone: data?.footer_phone?.trim() || DEFAULT_FOOTER_PHONE,
+    payment_link: data?.payment_link?.trim() || DEFAULT_PAYMENT_LINK,
+    updated_at: data?.updated_at || new Date(0).toISOString(),
   };
 }
