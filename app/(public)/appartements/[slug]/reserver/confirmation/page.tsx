@@ -19,10 +19,6 @@ export default async function ReservationConfirmationPage() {
           Uw dossier is verzonden
         </h1>
 
-        <p className="mt-5 rounded-2xl border border-canal-200 bg-canal-50 px-4 py-3 text-base font-bold text-canal-800">
-          U ontvangt een bevestigingsmail.
-        </p>
-
         <a
           href={paymentLink}
           target="_blank"
