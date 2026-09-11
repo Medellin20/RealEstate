@@ -521,21 +521,18 @@ React.useEffect(() => {
 
           {/* CONTINUER */}
 
-          {step < STEPS.length - 1 && (
-            <Button
-              type="button"
-              onClick={() => {
-                void goNext();
-              }}
-              isLoading={isSending}
-              disabled={isSending}
-              className="w-full sm:w-auto"
-            >
-              Doorgaan
-
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          )}
+          <Button
+            type="button"
+            onClick={() => {
+              void goNext();
+            }}
+            isLoading={isSending}
+            disabled={isSending}
+            className="w-full sm:w-auto"
+          >
+            Doorgaan
+            <ArrowRight className="h-4 w-4" />
+          </Button>
 
         </div>
       </form>
