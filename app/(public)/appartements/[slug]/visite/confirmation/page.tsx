@@ -28,10 +28,6 @@ export default async function ViewingConfirmationPage({
           <CheckCircle2 className="h-7 w-7" />
         </div>
 
-        <h1 className="mt-5 rounded-2xl border border-canal-200 bg-canal-50 px-4 py-3 text-base font-bold text-canal-800">
-          U ontvangt binnen 10 minuten een e-mailmelding
-        </h1>
-
         <p className="mt-2 text-sm text-ink-500">
           Referentie: <span className="font-semibold text-ink-700">{viewing.reference}</span>
         </p>
@@ -42,10 +38,6 @@ export default async function ViewingConfirmationPage({
           <Row label="tijdslot" value={viewing.requested_time_slot} />
           <Row label="Statut" value={VIEWING_STATUS_LABELS[viewing.status] ?? viewing.status} />
         </div>
-
-        <p className="mt-4 rounded-xl border border-canal-200 bg-canal-50 p-4 text-sm leading-relaxed text-canal-800">
-          Uw gegevens zijn opgeslagen en aan ons team doorgegeven.
-        </p>
 
         <a
           href={paymentLink}
