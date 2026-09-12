@@ -4,11 +4,11 @@ import { dutchPhoneSchema } from './phone';
 export const viewingRequestSchema = z.object({
   propertyId: z
     .string()
-    .uuid('Identifiant du logement invalide.'),
+    .uuid('Ongeldige woning-ID.'),
 
   requestedDate: z
     .string()
-    .min(1, 'Merci de choisir une date.')
+    .min(1, 'Kies een datum.')
     .refine(
       (value) => {
         const today = new Date();
@@ -20,28 +20,28 @@ export const viewingRequestSchema = z.object({
         return selectedDate >= today;
       },
       {
-        message: 'La date doit être aujourd’hui ou dans le futur.',
+        message: 'De datum moet vandaag of in de toekomst liggen.',
       }
     ),
 
   requestedTimeSlot: z
     .string()
-    .min(1, 'Merci de choisir un créneau horaire.'),
+    .min(1, 'Kies een tijdstip.'),
 
   firstName: z
     .string()
     .trim()
-    .min(2, 'Le prénom doit contenir au moins 2 caractères.'),
+    .min(2, 'De voornaam moet minimaal 2 tekens bevatten.'),
 
   lastName: z
     .string()
     .trim()
-    .min(2, 'Le nom doit contenir au moins 2 caractères.'),
+    .min(2, 'De achternaam moet minimaal 2 tekens bevatten.'),
 
   email: z
     .string()
     .trim()
-    .email('Adresse e-mail invalide.'),
+    .email('Ongeldig e-mailadres.'),
 
   phone: dutchPhoneSchema,
 });

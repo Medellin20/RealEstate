@@ -8,7 +8,7 @@ import { ReservationForm } from '@/components/forms/reservation-form';
 import { formatPrice } from '@/lib/utils/format';
 import { getSiteSettings } from '@/lib/data/site-settings';
 
-export const metadata: Metadata = { title: 'Payer de frais de reservering' };
+export const metadata: Metadata = { title: 'Reserveringskosten betalen' };
 
 export default async function ReservationPage({ params }: { params: { slug: string } }) {
   const [property] = await Promise.all([

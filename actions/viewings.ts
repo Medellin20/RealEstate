@@ -32,7 +32,7 @@ export async function createViewingRequest(
     return {
       success: false,
       message:
-        'Merci de corriger les champs indiqués.',
+        'Corrigeer de gemarkeerde velden.',
       fieldErrors:
         parsed.error.flatten().fieldErrors,
     };
@@ -64,7 +64,7 @@ export async function createViewingRequest(
     return {
       success: false,
       message:
-        'Impossible de vérifier le logement. Merci de réessayer.',
+        'De woning kan niet worden gecontroleerd. Probeer het opnieuw.',
     };
   }
 
@@ -75,7 +75,7 @@ export async function createViewingRequest(
     return {
       success: false,
       message:
-        'Ce logement n’est plus disponible.',
+        'Deze woning is niet meer beschikbaar.',
     };
   }
 
@@ -107,7 +107,7 @@ export async function createViewingRequest(
     return {
       success: false,
       message:
-        'Impossible d’enregistrer vos informations. Merci de réessayer.',
+        'Uw gegevens kunnen niet worden opgeslagen. Probeer het opnieuw.',
     };
   }
 
@@ -163,7 +163,7 @@ export async function createViewingRequest(
     return {
       success: false,
       message:
-        'Une erreur est survenue lors de l’enregistrement de votre demande. Merci de réessayer.',
+        'Er is een fout opgetreden bij het opslaan van uw aanvraag. Probeer het opnieuw.',
     };
   }
 
@@ -285,7 +285,7 @@ export async function createViewingRequest(
     success: true,
 
     message:
-      'Votre demande de visite a bien été confirmée.',
+      'Uw bezoekaanvraag is succesvol bevestigd.',
 
     data: {
       reference,

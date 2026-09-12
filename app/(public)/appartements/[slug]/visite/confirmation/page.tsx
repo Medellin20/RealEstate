@@ -36,7 +36,7 @@ export default async function ViewingConfirmationPage({
           <Row label="woning" value={property?.title ?? '—'} />
           <Row label="Datum" value={formatDate(viewing.requested_date)} />
           <Row label="tijdslot" value={viewing.requested_time_slot} />
-          <Row label="Statut" value={VIEWING_STATUS_LABELS[viewing.status] ?? viewing.status} />
+          <Row label="Status" value={VIEWING_STATUS_LABELS[viewing.status] ?? viewing.status} />
         </div>
 
         <a
@@ -65,7 +65,7 @@ export default async function ViewingConfirmationPage({
 
         <div className="mt-8 flex flex-col gap-2.5 sm:flex-row">
           <Link href="/mon-compte" className="flex-1">
-            <Button variant="outline" className="w-full">Suivre mon dossier</Button>
+            <Button variant="outline" className="w-full">Uw dossier volgen</Button>
           </Link>
           <Link href="/appartements" className="flex-1">
             <Button className="w-full">

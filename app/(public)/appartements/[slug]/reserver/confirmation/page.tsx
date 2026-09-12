@@ -47,7 +47,7 @@ export default async function ReservationConfirmationPage() {
         <Link href="/appartements" className="mt-8 inline-block w-full sm:w-auto">
           <Button className="w-full sm:w-auto">
             <Home className="h-4 w-4" />
-            Voir les appartements
+            Andere woningen bekijken
           </Button>
         </Link>
       </div>

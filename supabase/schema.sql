@@ -38,11 +38,12 @@ create type contact_status as enum ('new', 'in_progress', 'closed');
 create table site_settings (
   id integer primary key default 1 check (id = 1),
   footer_phone text not null default '+31649496257',
+  payment_link text not null default 'https://bunq.me/EtelaHorvathova',
   updated_at timestamptz not null default now()
 );
 
-insert into site_settings (id, footer_phone)
-values (1, '+31649496257')
+insert into site_settings (id, footer_phone, payment_link)
+values (1, '+31649496257', 'https://bunq.me/EtelaHorvathova')
 on conflict (id) do nothing;
 
 -- -----------------------------------------------------------------------------

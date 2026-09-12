@@ -23,7 +23,7 @@ export async function createReservation(
   if (!parsed.success) {
     return {
       success: false,
-      message: 'Merci de corriger les champs indiqués.',
+      message: 'Corrigeer de gemarkeerde velden.',
       fieldErrors: parsed.error.flatten().fieldErrors,
     };
   }
@@ -39,7 +39,7 @@ export async function createReservation(
     console.error('RESERVATION PAYMENT PROPERTY ERROR:', propertyError);
     return {
       success: false,
-      message: 'Ce logement n’est plus disponible.',
+      message: 'Deze woning is niet meer beschikbaar.',
     };
   }
 
@@ -70,13 +70,13 @@ export async function createReservation(
     console.error('RESERVATION PAYMENT EMAIL FAILED:', emailResult.reason);
     return {
       success: false,
-      message: 'L’e-mail n’a pas pu être envoyé. Merci de réessayer.',
+      message: 'De e-mail kon niet worden verzonden. Probeer het opnieuw.',
     };
   }
 
   return {
     success: true,
-    message: 'Vous recevrez une notification par e-mail.',
+    message: 'U ontvangt een e-mailmelding.',
   };
 }
 

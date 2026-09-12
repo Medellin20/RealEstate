@@ -188,7 +188,7 @@ export function ReservationForm({
                 </div>
                 <label className="flex cursor-pointer items-center gap-2.5 pt-7 text-sm text-ink-700">
                   <Checkbox {...register('hasPets')} />
-                  Animaux de compagnie
+                  Huisdieren
                 </label>
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -202,8 +202,8 @@ export function ReservationForm({
                   <Select id="employmentContract" {...register('employmentContract')}>
                     <option value="">Selecteer uw contract</option>
                     <option value="CDI">CDI</option><option value="CDD">CDD</option>
-                    <option value="Indépendant">Indépendant</option><option value="Intérim">Intérim</option>
-                    <option value="Étudiant">Etudiant</option><option value="Autre">Autre</option>
+                    <option value="Indépendant">Zelfstandig</option><option value="Intérim">Tijdelijk contract</option>
+                    <option value="Étudiant">Student</option><option value="Autre">Anders</option>
                   </Select>
                   <FieldError message={errors.employmentContract?.message} />
                 </div>
@@ -231,8 +231,8 @@ export function ReservationForm({
               className="space-y-4"
             >
               <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-                Les frais de réservation sont de 50% d’un mois de loyer ({reservationFee}).
-                Cliquez sur « Continuer » pour envoyer votre dossier et accéder au paiement.
+                De reserveringskosten bedragen 50% van één maand huur ({reservationFee}).
+                Klik op « Doorgaan » om uw dossier te verzenden en naar de betaling te gaan.
               </p>
             </motion.div>
           )}
@@ -246,11 +246,11 @@ export function ReservationForm({
             className={cn('w-full sm:w-auto', step === 0 && 'hidden sm:inline-flex sm:invisible')}
           >
             <ArrowLeft className="h-4 w-4" />
-            Retour
+            Terug
           </Button>
 
           <Button type="button" onClick={goNext} isLoading={isPending} className="w-full sm:w-auto">
-            Continuer
+            Doorgaan
             <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
