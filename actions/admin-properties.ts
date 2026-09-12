@@ -24,7 +24,6 @@ function toDbPayload(data: PropertyInput, description: string) {
     monthly_price: data.monthlyPrice,
     service_charges: data.serviceCharges,
     deposit_amount: data.depositAmount,
-    viewing_fee: data.viewingFee,
     surface_m2: data.surfaceM2,
     bedrooms: data.bedrooms,
     bathrooms: data.bathrooms,

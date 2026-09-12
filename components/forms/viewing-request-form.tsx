@@ -29,7 +29,6 @@ import { TIME_SLOTS } from '@/lib/utils/constants';
 import { cn } from '@/lib/utils/cn';
 import { formatDutchPhoneInput } from '@/lib/utils/phone';
 import { formatPrice } from '@/lib/utils/format';
-import { VIEWING_FEE } from '@/lib/utils/constants';
 
 const STEPS = [
   'Uw gegevens',
@@ -41,11 +40,13 @@ export function ViewingRequestForm({
   propertySlug,
   propertyTitle,
   confirmationUrl,
+  viewingFee,
 }: {
   propertyId: string;
   propertySlug: string;
   propertyTitle: string;
   confirmationUrl: string;
+  viewingFee: number;
 }) {
   const router = useRouter();
   const [step, setStep] = React.useState(0);
@@ -490,7 +491,7 @@ React.useEffect(() => {
             </div>
 
             <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-              De bezichtigingskosten van {formatPrice(VIEWING_FEE)} moeten vóór de bezichtiging
+              De bezichtigingskosten van {formatPrice(viewingFee)} moeten vóór de bezichtiging
               van het appartement worden betaald. Ze worden volledig terugbetaald als de woning
               na de bezichtiging niet aan uw verwachtingen voldoet.
             </p>

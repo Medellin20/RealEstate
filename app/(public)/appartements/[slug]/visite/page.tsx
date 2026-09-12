@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { getPropertyBySlug } from '@/lib/data/properties';
 import { ViewingRequestForm } from '@/components/forms/viewing-request-form';
+import { getSiteSettings } from '@/lib/data/site-settings';
 
 export const metadata: Metadata = { title: 'Plan een bezichtiging' };
 
@@ -13,6 +14,7 @@ export default async function ViewingRequestPage({ params }: { params: { slug: s
   if (!property) notFound();
 
   const primaryImage = property.property_images.find((i) => i.is_primary) ?? property.property_images[0];
+  const { viewing_fee: viewingFee } = await getSiteSettings();
 
   return (
     <div className="container-app py-6 sm:py-14">
@@ -35,6 +37,7 @@ export default async function ViewingRequestPage({ params }: { params: { slug: s
                 propertySlug={property.slug}
                 propertyTitle={property.title}
                 confirmationUrl={`/appartements/${property.slug}/visite/confirmation`}
+                viewingFee={viewingFee}
               />
             </div>
           </div>

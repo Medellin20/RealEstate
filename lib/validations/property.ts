@@ -18,7 +18,6 @@ export const propertySchema = z.object({
   monthlyPrice: z.coerce.number().positive('Le prix mensuel doit être positif.'),
   serviceCharges: z.coerce.number().min(0).default(0),
   depositAmount: z.coerce.number().min(0).default(0),
-  viewingFee: z.coerce.number().min(0).default(0),
 
   surfaceM2: z.coerce.number().positive('La surface doit être positive.'),
   bedrooms: z.coerce.number().int().min(0),

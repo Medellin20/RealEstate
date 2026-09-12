@@ -16,7 +16,11 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
   const [isPending, startTransition] = React.useTransition();
   const { register, handleSubmit, formState: { errors } } = useForm<SiteSettingsInput>({
     resolver: zodResolver(siteSettingsSchema),
-    defaultValues: { footerPhone: settings.footer_phone, paymentLink: settings.payment_link },
+    defaultValues: {
+      footerPhone: settings.footer_phone,
+      paymentLink: settings.payment_link,
+      viewingFee: settings.viewing_fee,
+    },
   });
 
   function onSubmit(data: SiteSettingsInput) {
@@ -30,10 +34,16 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
-        <Label htmlFor="footerPhone">Numéro de téléphone du footer</Label>
+        <Label htmlFor="footerPhone">Numéro de contact et de confirmation de paiement</Label>
         <Input id="footerPhone" type="tel" placeholder="+31649496257" {...register('footerPhone')} />
         <FieldError message={errors.footerPhone?.message} />
-        <p className="mt-1 text-xs text-ink-400">Ce numéro sera affiché sur toutes les pages publiques.</p>
+        <p className="mt-1 text-xs text-ink-400">Ce numéro est utilisé dans le footer, les contacts et les confirmations de paiement WhatsApp.</p>
+      </div>
+      <div>
+        <Label htmlFor="viewingFee">Frais de visite (€)</Label>
+        <Input id="viewingFee" type="number" min="0" step="0.01" {...register('viewingFee')} />
+        <FieldError message={errors.viewingFee?.message} />
+        <p className="mt-1 text-xs text-ink-400">Ce montant est indépendant des appartements et s’applique à toutes les visites.</p>
       </div>
       <div>
         <Label htmlFor="paymentLink">Lien de paiement</Label>

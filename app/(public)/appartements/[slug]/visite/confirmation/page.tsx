@@ -5,7 +5,6 @@ import { getViewingByReference } from '@/lib/data/dossier';
 import { Button } from '@/components/ui/button';
 import { VIEWING_STATUS_LABELS } from '@/lib/utils/constants';
 import { formatDate } from '@/lib/utils/format';
-import { PAYMENT_CONFIRMATION_WHATSAPP } from '@/lib/utils/constants';
 import { getSiteSettings } from '@/lib/data/site-settings';
 
 export const metadata = { title: 'Bezichtigingsaanvraag verzonden' };
@@ -20,7 +19,7 @@ export default async function ViewingConfirmationPage({
   if (!viewing) notFound();
 
   const property = (viewing as any).properties;
-  const { payment_link: paymentLink } = await getSiteSettings();
+  const { payment_link: paymentLink, footer_phone: confirmationPhone } = await getSiteSettings();
   return (
     <div className="container-app flex min-h-[70vh] items-center justify-center py-6 sm:py-14">
       <div className="w-full max-w-2xl rounded-2xl border border-ink-100 bg-white p-4 text-center shadow-card sm:p-8">
@@ -54,12 +53,12 @@ export default async function ViewingConfirmationPage({
           </a>{' '}
           of via WhatsApp naar{' '}
           <a
-            href={`https://wa.me/${PAYMENT_CONFIRMATION_WHATSAPP.replace(/\D/g, '')}`}
+            href={`https://wa.me/${confirmationPhone.replace(/\D/g, '')}`}
             target="_blank"
             rel="noreferrer"
             className="underline"
           >
-            {PAYMENT_CONFIRMATION_WHATSAPP}
+            {confirmationPhone}
           </a>.
         </p>
 
