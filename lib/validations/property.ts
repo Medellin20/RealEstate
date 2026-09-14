@@ -1,4 +1,13 @@
 import { z } from 'zod';
+
+// Les champs numériques HTML vides renvoient une chaîne vide, pas undefined.
+function optionalNumber(schema: z.ZodNumber) {
+  return z.preprocess(
+    (value) => typeof value === 'string' && value.trim() === '' ? undefined : value,
+    schema.optional()
+  );
+}
+
 export const propertySchema = z.object({
   title: z.string().trim().min(5, 'Le titre doit contenir au moins 5 caractères.'),
   slug: z
@@ -12,8 +21,8 @@ export const propertySchema = z.object({
   city: z.string().trim().min(2, 'Merci d’indiquer la ville de l’appartement.'),
   postalCode: z.string().trim().optional().or(z.literal('')),
   neighborhood: z.string().trim().optional().or(z.literal('')),
-  latitude: z.coerce.number().min(-90).max(90).optional(),
-  longitude: z.coerce.number().min(-180).max(180).optional(),
+  latitude: optionalNumber(z.coerce.number().min(-90).max(90)),
+  longitude: optionalNumber(z.coerce.number().min(-180).max(180)),
 
   monthlyPrice: z.coerce.number().positive('Le prix mensuel doit être positif.'),
   serviceCharges: z.coerce.number().min(0).default(0),
@@ -22,15 +31,15 @@ export const propertySchema = z.object({
   surfaceM2: z.coerce.number().positive('La surface doit être positive.'),
   bedrooms: z.coerce.number().int().min(0),
   bathrooms: z.coerce.number().int().min(0),
-  rooms: z.coerce.number().int().min(0).optional(),
-  floor: z.coerce.number().int().optional(),
-  floorsCount: z.coerce.number().int().min(1).optional(),
-  volumeM3: z.coerce.number().positive().optional(),
+  rooms: optionalNumber(z.coerce.number().int().min(0)),
+  floor: optionalNumber(z.coerce.number().int()),
+  floorsCount: optionalNumber(z.coerce.number().int().min(1)),
+  volumeM3: optionalNumber(z.coerce.number().positive()),
   contractType: z.string().trim().min(2),
   interiorType: z.string().trim().min(2),
   maintenanceCondition: z.string().trim().min(2),
   constructionType: z.string().trim().min(2),
-  constructionYear: z.coerce.number().int().min(1000).max(2200).optional(),
+  constructionYear: optionalNumber(z.coerce.number().int().min(1000).max(2200)),
   energyLabel: z.string().trim().optional().or(z.literal('')),
 
   hasElevator: z.boolean().default(false),

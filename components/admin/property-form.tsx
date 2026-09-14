@@ -215,7 +215,7 @@ export function PropertyForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+    <form onSubmit={handleSubmit(onSubmit, () => toast.error('Controleer de gemarkeerde velden.'))} className="space-y-8">
       {/* INFORMATIONS GÉNÉRALES */}
       <FormSection title="Algemene informatie">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -335,6 +335,7 @@ export function PropertyForm({
           <div>
             <Label htmlFor="depositAmount">Waarborgsom (€)</Label>
             <Input id="depositAmount" type="number" step="1" {...register('depositAmount')} />
+            <FieldError message={errors.depositAmount?.message} />
           </div>
         </div>
       </FormSection>
@@ -350,26 +351,32 @@ export function PropertyForm({
           <div>
             <Label htmlFor="bedrooms">Slaapkamers</Label>
             <Input id="bedrooms" type="number" {...register('bedrooms')} />
+            <FieldError message={errors.bedrooms?.message} />
           </div>
           <div>
             <Label htmlFor="bathrooms">Badkamers</Label>
             <Input id="bathrooms" type="number" {...register('bathrooms')} />
+            <FieldError message={errors.bathrooms?.message} />
           </div>
           <div>
             <Label htmlFor="rooms">Aantal kamers</Label>
             <Input id="rooms" type="number" {...register('rooms')} />
+            <FieldError message={errors.rooms?.message} />
           </div>
           <div>
             <Label htmlFor="floor">Verdieping</Label>
             <Input id="floor" type="number" {...register('floor')} />
+            <FieldError message={errors.floor?.message} />
           </div>
           <div>
             <Label htmlFor="floorsCount">Aantal verdiepingen</Label>
             <Input id="floorsCount" type="number" min="1" {...register('floorsCount')} />
+            <FieldError message={errors.floorsCount?.message} />
           </div>
           <div>
             <Label htmlFor="volumeM3">Volume (m³)</Label>
             <Input id="volumeM3" type="number" step="0.5" {...register('volumeM3')} />
+            <FieldError message={errors.volumeM3?.message} />
           </div>
           <div>
             <Label htmlFor="availableFrom">Beschikbaar vanaf</Label>
@@ -378,6 +385,7 @@ export function PropertyForm({
           <div>
             <Label htmlFor="minimumStayMonths">Minimale duur (maanden)</Label>
             <Input id="minimumStayMonths" type="number" {...register('minimumStayMonths')} />
+            <FieldError message={errors.minimumStayMonths?.message} />
           </div>
         </div>
 
@@ -433,6 +441,7 @@ export function PropertyForm({
           <div>
             <Label htmlFor="constructionYear">Bouwjaar</Label>
             <Input id="constructionYear" type="number" min="1000" max="2200" {...register('constructionYear')} />
+            <FieldError message={errors.constructionYear?.message} />
           </div>
           <div>
             <Label htmlFor="energyLabel">Energielabel</Label>
