@@ -2,58 +2,24 @@ import 'server-only';
 import { createAdminClient } from '@/lib/supabase/admin';
 
 type AdminPropertiesParams = {
-  search?: string;
-  status?: string;
-  city?: string;
-  postalCode?: string;
-  minPrice?: number;
-  maxPrice?: number;
   page?: number;
+  search?: string;
 };
 
-const SEARCHABLE_COLUMNS = ['title', 'city', 'slug', 'address', 'neighborhood', 'postal_code'];
-
-function getSearchTerms(value: string) {
-  return [
-    ...new Set(
-      value
-        .trim()
-        .split(/\s+/)
-        .map((term) => term.replace(/[^\p{L}\p{N}-]/gu, ''))
-        .filter(Boolean)
-    ),
-  ];
-}
-
-function normalizeSearchValue(value: string) {
-  return value
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase();
-}
-
-function getPropertySearchScore(
-  property: Record<string, unknown>,
-  terms: string[],
-  rawSearch: string
-) {
-  const searchableText = normalizeSearchValue(
-    SEARCHABLE_COLUMNS.map((column) => String(property[column] ?? '')).join(' ')
-  );
-  const normalizedTitle = normalizeSearchValue(String(property.title ?? ''));
-  const normalizedSearch = normalizeSearchValue(rawSearch).replace(
-    /^(logement|titre)\s*[:\-]?\s*/,
-    ''
-  );
-  const exactTitleBonus = normalizedTitle === normalizedSearch ? 1_000 : 0;
-
-  return (
-    exactTitleBonus +
-    terms.reduce(
-      (score, term) => score + (searchableText.includes(normalizeSearchValue(term)) ? 1 : 0),
-      0
-    )
-  );
+export function buildPropertySearchFilter(search: string) {
+  // Quote PostgREST values and escape LIKE wildcards so input stays literal.
+  const pattern = `%${search.replace(/[\\%_*]/g, '\\$&')}%`;
+  const value = JSON.stringify(pattern);
+  const filters = ['title', 'city', 'neighborhood', 'address', 'postal_code', 'slug']
+    .map((column) => `${column}.ilike.${value}`);
+  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(search)) {
+    filters.push(`id.eq.${search}`);
+  }
+  const price = search.replace(/€/g, '').replace(/\s/g, '').replace(',', '.');
+  if (/^\d+(?:\.\d{1,2})?$/.test(price) && Number.isFinite(Number(price))) {
+    filters.push(`monthly_price.eq.${Number(price)}`);
+  }
+  return filters.join(',');
 }
 
 export async function getAllPropertiesAdmin(params: AdminPropertiesParams = {}) {
@@ -68,48 +34,8 @@ export async function getAllPropertiesAdmin(params: AdminPropertiesParams = {}) 
     .select('*, property_images(id, url, is_primary)', { count: 'exact' })
     .order('created_at', { ascending: false });
 
-  const searchTerms = getSearchTerms(params.search ?? '');
-  const searchFilters = searchTerms.flatMap((term) =>
-    SEARCHABLE_COLUMNS.map((column) => `${column}.ilike.*${term}*`)
-  );
-  if (searchFilters.length > 0) {
-    query = query.or(searchFilters.join(','));
-  }
-  if (params.status) {
-    query = query.eq('status', params.status);
-  }
-  if (params.city) {
-    query = query.eq('city', params.city);
-  }
-  const postalCode = params.postalCode?.replace(/[^a-zA-Z0-9 ]/g, '').trim();
-  if (postalCode) {
-    query = query.ilike('postal_code', `%${postalCode}%`);
-  }
-  if (params.minPrice !== undefined) query = query.gte('monthly_price', params.minPrice);
-  if (params.maxPrice !== undefined) query = query.lte('monthly_price', params.maxPrice);
-
-  if (searchTerms.length > 0) {
-    const { data, error } = await query;
-    if (error) {
-      console.error('getAllPropertiesAdmin search error:', error.message);
-      return { properties: [], total: 0, page, pageSize };
-    }
-
-    const rankedProperties = (data ?? [])
-      .map((property) => ({
-        property,
-        score: getPropertySearchScore(property, searchTerms, params.search ?? ''),
-      }))
-      .sort((a, b) => b.score - a.score)
-      .map(({ property }) => property);
-
-    return {
-      properties: rankedProperties.slice(from, to + 1),
-      total: rankedProperties.length,
-      page,
-      pageSize,
-    };
-  }
+  const search = params.search?.trim();
+  if (search) query = query.or(buildPropertySearchFilter(search));
 
   const { data, error, count } = await query.range(from, to);
   if (error) {

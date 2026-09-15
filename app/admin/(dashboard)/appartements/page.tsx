@@ -1,16 +1,15 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { MapPin, PlusCircle, Search } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 import { getAllPropertiesAdmin } from '@/lib/data/admin-properties';
+import { PropertySearch } from '@/components/admin/property-search';
 import { PropertyRowActions } from '@/components/admin/property-row-actions';
 import { Pagination } from '@/components/properties/pagination';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { AutoSubmitSelect } from '@/components/admin/auto-submit-select';
 import { Badge, StatusDot } from '@/components/ui/badge';
 import { EmptyState } from '@/components/ui/empty-state';
-import { DUTCH_CITIES, PROPERTY_STATUS_LABELS } from '@/lib/utils/constants';
+import { PROPERTY_STATUS_LABELS } from '@/lib/utils/constants';
 import { formatPrice } from '@/lib/utils/format';
 
 export const metadata: Metadata = { title: 'Appartementen' };
@@ -21,24 +20,11 @@ export const fetchCache = 'force-no-store';
 export default async function AdminPropertiesPage({
   searchParams,
 }: {
-  searchParams: { search?: string; status?: string; city?: string; postalCode?: string; minPrice?: string; maxPrice?: string; page?: string };
+  searchParams: { page?: string; search?: string };
 }) {
   const requestedPage = Number(searchParams.page);
-  const status = Object.hasOwn(PROPERTY_STATUS_LABELS, searchParams.status ?? '') ? searchParams.status : undefined;
-  const city = DUTCH_CITIES.includes(searchParams.city as (typeof DUTCH_CITIES)[number]) ? searchParams.city : undefined;
-  const postalCode = searchParams.postalCode?.replace(/[^a-zA-Z0-9 ]/g, '').trim() || undefined;
-  const minPrice = Number(searchParams.minPrice);
-  const maxPrice = Number(searchParams.maxPrice);
-  const validMinPrice = Number.isFinite(minPrice) && minPrice >= 0 ? minPrice : undefined;
-  const validMaxPrice = Number.isFinite(maxPrice) && maxPrice >= 0 ? maxPrice : undefined;
-  const hasActiveFilters = Boolean(searchParams.search?.trim() || status || city || postalCode || validMinPrice !== undefined || validMaxPrice !== undefined);
   const { properties, total, page, pageSize } = await getAllPropertiesAdmin({
     search: searchParams.search,
-    status,
-    city,
-    postalCode,
-    minPrice: validMinPrice,
-    maxPrice: validMaxPrice,
     page: Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1,
   });
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
@@ -58,44 +44,11 @@ export default async function AdminPropertiesPage({
         </Link>
       </div>
 
-      <form role="search" className="mb-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap" action="/admin/appartements" method="get">
-        <div className="relative flex-1">
-          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-300" />
-          <Input name="search" placeholder="Zoeken par titre of ville..." defaultValue={searchParams.search} className="pl-10" />
-        </div>
-        <div className="relative sm:w-48">
-          <MapPin className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-300" />
-          <Input name="postalCode" placeholder="Postcode" defaultValue={postalCode} className="pl-10" />
-        </div>
-        <Input name="minPrice" type="number" min="0" step="0.01" placeholder="prijs min." defaultValue={searchParams.minPrice} className="sm:w-36" />
-        <Input name="maxPrice" type="number" min="0" step="0.01" placeholder="prijs max." defaultValue={searchParams.maxPrice} className="sm:w-36" />
-        <AutoSubmitSelect name="status" defaultValue={status} className="sm:w-52">
-          <option value="">alle de statuts</option>
-          <option value="draft">Concept</option>
-          <option value="available">Beschikbaar</option>
-          <option value="reserved">Gereserveerd</option>
-          <option value="rented">Verhuurd</option>
-          <option value="unavailable">Niet beschikbaar</option>
-        </AutoSubmitSelect>
-        <AutoSubmitSelect name="city" defaultValue={city} className="sm:w-52">
-          <option value="">Alle steden</option>
-          {DUTCH_CITIES.map((city) => (
-            <option key={city} value={city}>{city}</option>
-          ))}
-        </AutoSubmitSelect>
-        <Button type="submit" className="w-full sm:w-auto">
-          <Search className="h-4 w-4" />
-          Zoeken
-        </Button>
-        {hasActiveFilters && (
-          <Link href="/admin/appartements" className="inline-flex h-11 items-center justify-center rounded-xl px-3.5 text-sm font-medium text-ink-500 hover:bg-sand-100 hover:text-ink-900">
-            Resetten
-          </Link>
-        )}
-      </form>
+      <PropertySearch search={searchParams.search ?? ''} />
 
+      <div aria-live="polite" aria-atomic="true" className="sr-only">{total} appartement(s) trouvé(s)</div>
       {properties.length === 0 ? (
-        <EmptyState title="Geen appartementen gevonden" description="Ajoutez uw premier woning voor commencer." />
+        <EmptyState title="Aucun appartement trouvé" />
       ) : (
         <>
           {/* Vue tableau — desktop */}
@@ -125,7 +78,7 @@ export default async function AdminPropertiesPage({
                             )}
                           </div>
                           <div className="min-w-0">
-                            <p className="truncate font-semibold text-ink-900">{property.title}</p>
+                            <Link href={`/admin/appartements/${property.id}`} className="block truncate font-semibold text-ink-900 hover:underline focus-visible:underline">{property.title}</Link>
                             <span className="mt-0.5 inline-flex items-center gap-1.5 text-xs text-ink-400">
                               <StatusDot colorClass={statusMeta.colorClass} />
                               {statusMeta.label}
@@ -163,7 +116,7 @@ export default async function AdminPropertiesPage({
                       {primaryImage && <Image src={primaryImage.url} alt="" fill sizes="80px" className="object-cover" />}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate font-semibold text-ink-900">{property.title}</p>
+                      <Link href={`/admin/appartements/${property.id}`} className="block truncate font-semibold text-ink-900 hover:underline focus-visible:underline">{property.title}</Link>
                       <p className="text-xs text-ink-400">{property.city}</p>
                       <p className="mt-0.5 text-sm font-medium text-ink-700">{formatPrice(property.monthly_price)}</p>
                     </div>
@@ -183,14 +136,7 @@ export default async function AdminPropertiesPage({
             currentPage={page}
             totalPages={totalPages}
             basePath="/admin/appartements"
-            searchParams={{
-              search: searchParams.search?.trim() || undefined,
-              status,
-              city,
-              postalCode,
-              minPrice: validMinPrice?.toString(),
-              maxPrice: validMaxPrice?.toString(),
-            }}
+            searchParams={{ search: searchParams.search?.trim() || undefined }}
           />
         </>
       )}
