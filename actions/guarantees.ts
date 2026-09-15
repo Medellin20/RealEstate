@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidateStatusViews } from '@/lib/data/revalidate-status';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { recordStatusChange } from '@/lib/data/history';
 import { declareTransferSchema } from '@/lib/validations/refund';
@@ -87,8 +87,7 @@ export async function declareGuaranteeTransfer(
     changedBy: 'client',
   });
 
-  revalidatePath('/admin/garanties');
-  revalidatePath('/mon-compte');
+  revalidateStatusViews();
 
   return { success: true, message: 'Votre virement a bien été déclaré. Notre équipe va le vérifier.' };
 }

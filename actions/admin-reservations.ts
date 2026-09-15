@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidateStatusViews } from '@/lib/data/revalidate-status';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { recordStatusChange, logAdminAction } from '@/lib/data/history';
 import type { ActionResult } from '@/types';
@@ -38,9 +38,7 @@ export async function updateReservationStatus(
   });
   await logAdminAction({ action: 'reservation.status_change', entityType: 'reservation', entityId: id, details: { status } });
 
-  revalidatePath('/admin/reservations');
-  revalidatePath('/admin');
-  revalidatePath('/mon-compte');
+  revalidateStatusViews();
 
   return { success: true, message: 'Statut de la réservation mis à jour.' };
 }

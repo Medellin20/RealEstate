@@ -1,6 +1,6 @@
 import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { revalidatePath } from 'next/cache';
+import { revalidateStatusViews } from '@/lib/data/revalidate-status';
 import { getStripeClientForWebhook, getStripeWebhookSecret } from '@/lib/payments/stripe';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { recordStatusChange, logAdminAction } from '@/lib/data/history';
@@ -72,8 +72,7 @@ export async function POST(request: Request) {
           },
         });
 
-        revalidatePath('/admin/visites');
-        revalidatePath('/mon-compte');
+        revalidateStatusViews();
       }
     }
   }

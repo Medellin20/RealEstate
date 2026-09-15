@@ -1,3 +1,4 @@
+import { StatusAutoRefresh } from '@/components/shared/status-auto-refresh';
 import { AdminSidebar } from '@/components/admin/sidebar';
 
 // Toutes les pages administrateur lisent des données privées Supabase et
@@ -7,6 +8,7 @@ export const dynamic = 'force-dynamic';
 export default function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-sand-100 lg:flex-row">
+      <StatusAutoRefresh />
       <AdminSidebar />
       <div className="flex min-w-0 flex-1 flex-col">
         <main className="min-w-0 flex-1 overflow-x-hidden p-4 sm:p-6 lg:p-8">{children}</main>

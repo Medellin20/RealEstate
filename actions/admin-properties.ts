@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidateStatusViews } from '@/lib/data/revalidate-status';
 import { redirect } from 'next/navigation';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { logAdminAction } from '@/lib/data/history';
@@ -67,14 +67,6 @@ async function syncAmenities(propertyId: string, amenityIds: string[]) {
       .from('property_amenities')
       .insert(amenityIds.map((amenityId) => ({ property_id: propertyId, amenity_id: amenityId })));
   }
-}
-
-function revalidatePublicPaths(slug?: string) {
-  revalidatePath('/admin');
-  revalidatePath('/appartements');
-  revalidatePath('/');
-  revalidatePath('/admin/appartements');
-  if (slug) revalidatePath(`/appartements/${slug}`);
 }
 
 /** Vérifie le titre et le slug pendant la saisie, avant de remplir tout le formulaire. */
@@ -150,7 +142,7 @@ export async function createProperty(input: PropertyInput): Promise<ActionResult
 
   await syncAmenities(property.id, parsed.data.amenityIds);
   await logAdminAction({ action: 'property.create', entityType: 'property', entityId: property.id });
-  revalidatePublicPaths(parsed.data.slug);
+  revalidateStatusViews();
 
   return { success: true, message: 'Appartement ajouté avec succès.', data: { id: property.id } };
 }
@@ -194,7 +186,7 @@ export async function updateProperty(id: string, input: PropertyInput): Promise<
 
   await syncAmenities(id, parsed.data.amenityIds);
   await logAdminAction({ action: 'property.update', entityType: 'property', entityId: id });
-  revalidatePublicPaths(parsed.data.slug);
+  revalidateStatusViews();
 
   return { success: true, message: 'Appartement mis à jour avec succès.' };
 }
@@ -228,7 +220,7 @@ export async function regenerateAvailablePropertyDescriptions(): Promise<ActionR
     return { success: false, message: `${failures} description(s) n’ont pas pu être générée(s).` };
   }
 
-  revalidatePublicPaths();
+  revalidateStatusViews();
   return { success: true, message: `${data?.length ?? 0} description(s) générée(s).`, data: { updated: data?.length ?? 0 } };
 }
 
@@ -246,7 +238,7 @@ export async function deleteProperty(id: string): Promise<ActionResult> {
   }
 
   await logAdminAction({ action: 'property.delete', entityType: 'property', entityId: id });
-  revalidatePublicPaths();
+  revalidateStatusViews();
 
   return { success: true, message: 'Appartement supprimé.' };
 }
@@ -260,7 +252,7 @@ export async function updatePropertyStatus(id: string, status: PropertyStatus): 
   }
 
   await logAdminAction({ action: 'property.status_change', entityType: 'property', entityId: id, details: { status } });
-  revalidatePublicPaths(data?.slug);
+  revalidateStatusViews();
 
   return { success: true, message: 'Statut mis à jour.' };
 }
@@ -283,7 +275,7 @@ export async function togglePropertyPublish(id: string, isPublished: boolean): P
     entityType: 'property',
     entityId: id,
   });
-  revalidatePublicPaths(data?.slug);
+  revalidateStatusViews();
 
   return { success: true, message: isPublished ? 'Logement publié.' : 'Logement dépublié.' };
 }

@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidateStatusViews } from '@/lib/data/revalidate-status';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { recordStatusChange, logAdminAction } from '@/lib/data/history';
 import type { ActionResult } from '@/types';
@@ -54,9 +54,7 @@ export async function updateRefundStatus(id: string, status: RefundStatus, admin
   });
   await logAdminAction({ action: 'refund.status_change', entityType: 'refund_request', entityId: id, details: { status } });
 
-  revalidatePath('/admin/remboursements');
-  revalidatePath('/admin/garanties');
-  revalidatePath('/mon-compte');
+  revalidateStatusViews();
 
   return { success: true, message: 'Statut du remboursement mis à jour.' };
 }

@@ -12,7 +12,6 @@ import { getDashboardStats, getRecentAdminLogs } from '@/lib/data/admin-stats';
 import { StatCard } from '@/components/admin/stat-card';
 import { Button } from '@/components/ui/button';
 import { formatDateTime } from '@/lib/utils/format';
-import { DashboardAutoRefresh } from '@/components/admin/dashboard-auto-refresh';
 import type { DashboardStats } from '@/types';
 
 export const metadata: Metadata = { title: 'Dashboard admin' };
@@ -41,7 +40,6 @@ export default async function AdminDashboardPage() {
 
   return (
     <div>
-      <DashboardAutoRefresh />
       {dataLoadFailed && (
         <div role="alert" className="mb-6 rounded-2xl border border-brick-200 bg-brick-50 p-4 text-sm text-brick-700">
           Sommige gegevens kunnen niet worden geladen. Controleer de Supabase-variabelen van de implementatie.

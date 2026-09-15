@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidateStatusViews } from '@/lib/data/revalidate-status';
 import { cookies } from 'next/headers';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { isValidAdminSessionToken } from '@/lib/auth/admin-session';
@@ -44,9 +44,7 @@ export async function updateViewingStatus(
   });
   await logAdminAction({ action: 'viewing.status_change', entityType: 'viewing_request', entityId: id, details: { status } });
 
-  revalidatePath('/admin/visites');
-  revalidatePath('/admin');
-  revalidatePath('/mon-compte');
+  revalidateStatusViews();
 
   return { success: true, message: 'Statut de la visite mis à jour.' };
 }

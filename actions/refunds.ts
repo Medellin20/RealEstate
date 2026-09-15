@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidateStatusViews } from '@/lib/data/revalidate-status';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { recordStatusChange } from '@/lib/data/history';
 import { refundRequestSchema, type RefundRequestInput } from '@/lib/validations/refund';
@@ -78,8 +78,7 @@ export async function requestGuaranteeRefund(input: RefundRequestInput): Promise
     changedBy: 'client',
   });
 
-  revalidatePath('/admin/remboursements');
-  revalidatePath('/mon-compte');
+  revalidateStatusViews();
 
   return {
     success: true,

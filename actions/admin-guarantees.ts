@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidateStatusViews } from '@/lib/data/revalidate-status';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { recordStatusChange, logAdminAction } from '@/lib/data/history';
 import type { ActionResult } from '@/types';
@@ -57,9 +57,7 @@ export async function updateGuaranteeStatus(id: string, status: GuaranteeStatus)
   });
   await logAdminAction({ action: 'guarantee.status_change', entityType: 'guarantee_payment', entityId: id, details: { status } });
 
-  revalidatePath('/admin/garanties');
-  revalidatePath('/admin/reservations');
-  revalidatePath('/mon-compte');
+  revalidateStatusViews();
 
   return { success: true, message: 'Statut de la garantie mis à jour.' };
 }
