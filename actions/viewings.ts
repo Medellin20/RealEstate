@@ -116,7 +116,8 @@ export async function createViewingRequest(
   const reference =
     generateReference('VIS');
 
-  const viewingFee = (await getSiteSettings()).viewing_fee;
+  const siteSettings = await getSiteSettings();
+  const viewingFee = siteSettings.viewing_fee;
   const initialStatus = 'payment_pending';
 
   /*
@@ -228,7 +229,7 @@ export async function createViewingRequest(
           await getAmenityLabels(property.id)
         ),
         'Frais de visite': formatPrice(viewingFee),
-        'Lien de paiement': (await getSiteSettings()).payment_link,
+        'Lien de paiement': siteSettings.payment_link,
 
         Client:
           `${parsed.data.firstName} ${parsed.data.lastName}`,

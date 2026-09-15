@@ -43,15 +43,20 @@ export async function createReservation(
     };
   }
 
+  const [amenityLabels, siteSettings] = await Promise.all([
+    getAmenityLabels(property.id),
+    getSiteSettings(),
+  ]);
+
   const emailResult = await sendAdminAlert(
     `Nouvelle demande de réservation — ${property.title}`,
     {
       ...getPropertyEmailDetails(
         property,
-        await getAmenityLabels(property.id)
+        amenityLabels
       ),
       'Frais de réservation (50 % du loyer)': `${property.monthly_price / 2} €`,
-      'Lien de paiement': (await getSiteSettings()).payment_link,
+      'Lien de paiement': siteSettings.payment_link,
       Client: `${parsed.data.firstName} ${parsed.data.lastName}`,
       Email: parsed.data.email,
       Téléphone: parsed.data.phone,

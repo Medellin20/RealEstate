@@ -201,14 +201,9 @@ export async function sendAdminAlert(
     });
 
     // -------------------------------------------------------
-    // 8. Vérification de la connexion Gmail
+    // sendMail établit et authentifie lui-même la connexion SMTP.
+    // Un verify préalable doublerait cette étape à chaque formulaire.
     // -------------------------------------------------------
-
-    await transporter.verify();
-
-    console.log(
-      'GMAIL SMTP CONNECTION OK'
-    );
 
     // -------------------------------------------------------
     // 9. Envoi du message
