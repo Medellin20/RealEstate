@@ -16,6 +16,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     { count: availableProperties },
     { count: reservedProperties },
     { count: rentedProperties },
+    { count: draftProperties },
     { count: viewingRequestsTotal },
     { count: viewingsToday },
     { count: reservationsPending },
@@ -24,6 +25,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     supabase.from('properties').select('*', { count: 'exact', head: true }).eq('status', 'available'),
     supabase.from('properties').select('*', { count: 'exact', head: true }).eq('status', 'reserved'),
     supabase.from('properties').select('*', { count: 'exact', head: true }).eq('status', 'rented'),
+    supabase.from('properties').select('*', { count: 'exact', head: true }).eq('status', 'draft'),
     supabase.from('viewing_requests').select('*', { count: 'exact', head: true }),
     supabase
       .from('viewing_requests')
@@ -41,6 +43,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     availableProperties: availableProperties ?? 0,
     reservedProperties: reservedProperties ?? 0,
     rentedProperties: rentedProperties ?? 0,
+    draftProperties: draftProperties ?? 0,
     viewingRequestsTotal: viewingRequestsTotal ?? 0,
     viewingsToday: viewingsToday ?? 0,
     reservationsPending: reservationsPending ?? 0,

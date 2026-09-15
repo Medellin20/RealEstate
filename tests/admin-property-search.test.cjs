@@ -62,8 +62,8 @@ test('an empty search retrieves all apartments with pagination', async () => {
 test('each dashboard card opens the list matching its counter', async () => {
   const dashboard = fs.readFileSync('app/admin/(dashboard)/page.tsx', 'utf8');
   const links = [...dashboard.matchAll(/<StatCard href="([^"]+)"/g)].map((match) => match[1]);
-  assert.equal(links.length, 4);
-  for (const [index, status] of [undefined, 'available', 'reserved', 'rented'].entries()) {
+  assert.equal(links.length, 5);
+  for (const [index, status] of [undefined, 'available', 'reserved', 'rented', 'draft'].entries()) {
     const url = new URL(links[index], 'http://localhost');
     assert.equal(url.pathname, '/admin/appartements');
     assert.equal(url.searchParams.get('status'), status ?? null);

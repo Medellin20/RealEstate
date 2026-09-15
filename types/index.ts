@@ -22,6 +22,7 @@ export interface DashboardStats {
   availableProperties: number;
   reservedProperties: number;
   rentedProperties: number;
+  draftProperties: number;
   viewingRequestsTotal: number;
   viewingsToday: number;
   reservationsPending: number;

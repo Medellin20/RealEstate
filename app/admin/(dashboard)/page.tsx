@@ -5,6 +5,7 @@ import {
   CheckCircle2,
   Clock,
   Home,
+  FileText,
   PlusCircle,
 } from 'lucide-react';
 import { getDashboardStats, getRecentAdminLogs } from '@/lib/data/admin-stats';
@@ -30,6 +31,7 @@ export default async function AdminDashboardPage() {
         availableProperties: 0,
         reservedProperties: 0,
         rentedProperties: 0,
+        draftProperties: 0,
         viewingRequestsTotal: 0,
         viewingsToday: 0,
         reservationsPending: 0,
@@ -63,6 +65,7 @@ export default async function AdminDashboardPage() {
         <StatCard href="/admin/appartements?status=available" icon={Home} label="beschikbare" value={stats.availableProperties} tone="positive" />
         <StatCard href="/admin/appartements?status=reserved" icon={Clock} label="Gereserveerd" value={stats.reservedProperties} tone="warning" />
         <StatCard href="/admin/appartements?status=rented" icon={CheckCircle2} label="Verhuurd" value={stats.rentedProperties} />
+        <StatCard href="/admin/appartements?status=draft" icon={FileText} label="Brouillons" value={stats.draftProperties} />
       </div>
 
       <div className="mt-8 rounded-2xl border border-ink-100 bg-white p-5 sm:p-6">
