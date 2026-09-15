@@ -1,5 +1,7 @@
 'use client';
 
+import { useAdminAction } from '@/lib/hooks/use-admin-action';
+
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,7 +16,7 @@ import { Button } from '@/components/ui/button';
 import type { BankSettings } from '@/types/database';
 
 export function BankSettingsForm({ settings }: { settings: BankSettings }) {
-  const [isPending, startTransition] = React.useTransition();
+  const [isPending, startTransition] = useAdminAction();
 
   const {
     register,

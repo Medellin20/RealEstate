@@ -1,5 +1,7 @@
 'use client';
 
+import { useAdminAction } from '@/lib/hooks/use-admin-action';
+
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -21,7 +23,7 @@ export function PropertyRowActions({
   status: PropertyStatus;
 }) {
   const router = useRouter();
-  const [isPending, startTransition] = React.useTransition();
+  const [isPending, startTransition] = useAdminAction();
 
   function handleTogglePublish() {
     startTransition(async () => {

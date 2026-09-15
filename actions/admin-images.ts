@@ -164,7 +164,7 @@ export async function deletePropertyImage(imageId: string): Promise<ActionResult
 export async function setPrimaryPropertyImage(propertyId: string, imageId: string): Promise<ActionResult> {
   const supabase = createAdminClient();
 
-  const { error } = await supabase.from('property_images').update({ is_primary: true }).eq('id', imageId);
+  const { error } = await supabase.from('property_images').update({ is_primary: true }).eq('property_id', propertyId).eq('id', imageId).select('id').single();
   if (error) {
     return { success: false, message: 'Impossible de définir l’image principale.' };
   }
@@ -173,6 +173,8 @@ export async function setPrimaryPropertyImage(propertyId: string, imageId: strin
 
   revalidatePath(`/admin/appartements/${propertyId}`);
   if (property?.slug) revalidatePath(`/appartements/${property.slug}`);
+  revalidatePath('/appartements');
+  revalidatePath('/');
 
   return { success: true, message: 'Image principale mise à jour.' };
 }
@@ -180,12 +182,15 @@ export async function setPrimaryPropertyImage(propertyId: string, imageId: strin
 export async function reorderPropertyImages(propertyId: string, orderedImageIds: string[]): Promise<ActionResult> {
   const supabase = createAdminClient();
 
-  await Promise.all(
+  const results = await Promise.all(
     orderedImageIds.map((id, index) =>
-      supabase.from('property_images').update({ sort_order: index }).eq('id', id)
+      supabase.from('property_images').update({ sort_order: index }).eq('property_id', propertyId).eq('id', id).select('id').single()
     )
   );
 
-  revalidatePath(`/admin/appartements/${propertyId}`);
+  revalidatePath('/', 'layout');
+  if (results.some((result) => result.error)) {
+    return { success: false, message: 'Impossible d’enregistrer tout l’ordre des photos. Rechargez la page avant de réessayer.' };
+  }
   return { success: true, message: 'Ordre des photos mis à jour.' };
 }

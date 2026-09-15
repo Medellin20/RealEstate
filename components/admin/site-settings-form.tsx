@@ -1,5 +1,7 @@
 'use client';
 
+import { useAdminAction } from '@/lib/hooks/use-admin-action';
+
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,7 +15,7 @@ import { Label, FieldError } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 
 export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
-  const [isPending, startTransition] = React.useTransition();
+  const [isPending, startTransition] = useAdminAction();
   const { register, handleSubmit, formState: { errors } } = useForm<SiteSettingsInput>({
     resolver: zodResolver(siteSettingsSchema),
     defaultValues: {

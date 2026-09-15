@@ -1,5 +1,7 @@
 'use client';
 
+import { useAdminAction } from '@/lib/hooks/use-admin-action';
+
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -23,7 +25,7 @@ export function ConfirmDeleteButton({
 }) {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
-  const [isPending, startTransition] = React.useTransition();
+  const [isPending, startTransition] = useAdminAction();
 
   function handleConfirm() {
     startTransition(async () => {
@@ -42,17 +44,17 @@ export function ConfirmDeleteButton({
 
   return (
     <>
-      <Button variant="destructive" size={size} onClick={() => setOpen(true)}>
+      <Button type="button" variant="destructive" size={size} onClick={() => setOpen(true)}>
         <Trash2 className="h-3.5 w-3.5" />
         {label}
       </Button>
-      <Modal open={open} onClose={() => setOpen(false)} title={confirmTitle}>
+      <Modal open={open} onClose={() => { if (!isPending) setOpen(false); }} title={confirmTitle}>
         <p className="text-sm text-ink-500">{confirmDescription}</p>
         <div className="mt-6 flex gap-2.5">
-          <Button variant="outline" className="flex-1" onClick={() => setOpen(false)}>
+          <Button type="button" disabled={isPending} variant="outline" className="flex-1" onClick={() => setOpen(false)}>
             Annuler
           </Button>
-          <Button variant="destructive" className="flex-1" isLoading={isPending} onClick={handleConfirm}>
+          <Button type="button" variant="destructive" className="flex-1" isLoading={isPending} onClick={handleConfirm}>
             Confirmer la suppression
           </Button>
         </div>

@@ -1,5 +1,7 @@
 'use client';
 
+import { useAdminAction } from '@/lib/hooks/use-admin-action';
+
 import * as React from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -9,7 +11,7 @@ import { Button } from '@/components/ui/button';
 
 export function ApproveViewingButton({ viewingId }: { viewingId: string }) {
   const router = useRouter();
-  const [isPending, startTransition] = React.useTransition();
+  const [isPending, startTransition] = useAdminAction();
 
   function handleApprove() {
     startTransition(async () => {

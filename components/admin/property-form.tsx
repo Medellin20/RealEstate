@@ -1,5 +1,7 @@
 'use client';
 
+import { useAdminAction } from '@/lib/hooks/use-admin-action';
+
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
@@ -89,7 +91,7 @@ export function PropertyForm({
   amenities: Amenity[];
 }) {
   const router = useRouter();
-  const [isPending, startTransition] = React.useTransition();
+  const [isPending, startTransition] = useAdminAction();
   const [slugTouched, setSlugTouched] = React.useState(mode === 'edit');
   const [slugExists, setSlugExists] = React.useState(false);
   const [availabilityError, setAvailabilityError] = React.useState(false);

@@ -1,5 +1,7 @@
 'use client';
 
+import { useAdminAction } from '@/lib/hooks/use-admin-action';
+
 import * as React from 'react';
 import Image from 'next/image';
 import { toast } from 'sonner';
@@ -22,11 +24,11 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
   const [isUploading, setIsUploading] = React.useState(false);
   const [pendingCount, setPendingCount] = React.useState(0);
   const [imageToDelete, setImageToDelete] = React.useState<PropertyImage | null>(null);
-  const [isPending, startTransition] = React.useTransition();
+  const [isPending, startTransition] = useAdminAction();
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   async function handleFiles(fileList: FileList | null) {
-    if (!fileList || fileList.length === 0) return;
+    if (isUploading || isPending || !fileList || fileList.length === 0) return;
     setIsUploading(true);
     setPendingCount(fileList.length);
 
@@ -51,7 +53,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
   }
 
   function handleDelete() {
-    if (!imageToDelete) return;
+    if (isUploading || isPending || !imageToDelete) return;
     const imageId = imageToDelete.id;
     const previousImages = images;
     setImageToDelete(null);
@@ -77,6 +79,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
   }
 
   function handleSetPrimary(imageId: string) {
+    if (isUploading || isPending) return;
     const previousImages = images;
     setImages((prev) => prev.map((img) => ({ ...img, is_primary: img.id === imageId })));
     startTransition(async () => {
@@ -94,12 +97,13 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
   }
 
   function move(index: number, direction: -1 | 1) {
+    if (isUploading || isPending) return;
     const newIndex = index + direction;
     if (newIndex < 0 || newIndex >= images.length) return;
     const next = [...images];
     const previousImages = images;
     [next[index], next[newIndex]] = [next[newIndex], next[index]];
-    setImages(next);
+    setImages(next.map((image, sort_order) => ({ ...image, sort_order })));
     startTransition(async () => {
       try {
         const result = await reorderPropertyImages(propertyId, next.map((i) => i.id));
@@ -118,9 +122,14 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
     <div>
       <label
         htmlFor="property-images-input"
+        onDragOver={(event) => event.preventDefault()}
+        onDrop={(event) => {
+          event.preventDefault();
+          void handleFiles(event.dataTransfer.files);
+        }}
         className={cn(
           'flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-ink-200 bg-sand-100/50 px-4 py-8 text-center transition-colors hover:border-ink-300 hover:bg-sand-100',
-          isUploading && 'pointer-events-none opacity-70'
+          (isUploading || isPending) && 'pointer-events-none opacity-70'
         )}
       >
         {isUploading ? (
@@ -145,6 +154,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
         id="property-images-input"
         type="file"
         multiple
+        disabled={isUploading || isPending}
         accept="image/jpeg,image/png,image/webp,image/avif"
         className="hidden"
         onChange={(e) => handleFiles(e.target.files)}
@@ -174,7 +184,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
                   <button
                     type="button"
                     onClick={() => handleSetPrimary(image.id)}
-                    disabled={isPending}
+                    disabled={isUploading || isPending}
                     title="Als hoofdfoto instellen"
                     className="rounded-full bg-white/90 p-1.5 text-ink-700 hover:bg-white"
                   >
@@ -184,7 +194,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
                 <button
                   type="button"
                   onClick={() => move(index, -1)}
-                  disabled={isPending || index === 0}
+                  disabled={isUploading || isPending || index === 0}
                   title="Naar links verplaatsen"
                   className="rounded-full bg-white/90 p-1.5 text-ink-700 hover:bg-white disabled:opacity-40"
                 >
@@ -193,7 +203,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
                 <button
                   type="button"
                   onClick={() => move(index, 1)}
-                  disabled={isPending || index === images.length - 1}
+                  disabled={isUploading || isPending || index === images.length - 1}
                   title="Naar rechts verplaatsen"
                   className="rounded-full bg-white/90 p-1.5 text-ink-700 hover:bg-white disabled:opacity-40"
                 >
@@ -202,7 +212,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
                 <button
                   type="button"
                   onClick={() => setImageToDelete(image)}
-                  disabled={isPending}
+                  disabled={isUploading || isPending}
                   title="Verwijderen"
                   className="rounded-full bg-white/90 p-1.5 text-brick-500 hover:bg-white"
                 >
