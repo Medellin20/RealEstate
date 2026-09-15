@@ -58,3 +58,33 @@ test('an empty search retrieves all apartments with pagination', async () => {
   assert(!calls.some(([method]) => method === 'or'));
   assert.deepEqual(calls.find(([method]) => method === 'range'), ['range', 0, 11]);
 });
+
+test('each dashboard card opens the list matching its counter', async () => {
+  const dashboard = fs.readFileSync('app/admin/(dashboard)/page.tsx', 'utf8');
+  const links = [...dashboard.matchAll(/<StatCard href="([^"]+)"/g)].map((match) => match[1]);
+  assert.equal(links.length, 4);
+  for (const [index, status] of [undefined, 'available', 'reserved', 'rented'].entries()) {
+    const url = new URL(links[index], 'http://localhost');
+    assert.equal(url.pathname, '/admin/appartements');
+    assert.equal(url.searchParams.get('status'), status ?? null);
+    const { getAllPropertiesAdmin, calls } = load();
+    await getAllPropertiesAdmin({ status: url.searchParams.get('status') ?? undefined });
+    const statusFilters = calls.filter(([method]) => method === 'eq');
+    assert.deepEqual(statusFilters, status ? [['eq', 'status', status]] : []);
+  }
+});
+
+test('status is combined with search before pagination', async () => {
+  const { getAllPropertiesAdmin, calls } = load();
+  await getAllPropertiesAdmin({ status: 'reserved', search: 'Rotterdam', page: 2 });
+  assert(calls.some(([method]) => method === 'or'));
+  assert.deepEqual(calls.find(([method]) => method === 'eq'), ['eq', 'status', 'reserved']);
+  assert(calls.findIndex(([method]) => method === 'eq') < calls.findIndex(([method]) => method === 'range'));
+  assert.deepEqual(calls.find(([method]) => method === 'range'), ['range', 12, 23]);
+});
+
+test('unknown statuses do not filter the list', async () => {
+  const { getAllPropertiesAdmin, calls } = load();
+  await getAllPropertiesAdmin({ status: 'unknown' });
+  assert(!calls.some(([method]) => method === 'eq'));
+});

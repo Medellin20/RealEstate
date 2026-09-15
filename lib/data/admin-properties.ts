@@ -4,6 +4,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 type AdminPropertiesParams = {
   page?: number;
   search?: string;
+  status?: string;
 };
 
 export function buildPropertySearchFilter(search: string) {
@@ -36,6 +37,9 @@ export async function getAllPropertiesAdmin(params: AdminPropertiesParams = {}) 
 
   const search = params.search?.trim();
   if (search) query = query.or(buildPropertySearchFilter(search));
+  if (params.status && ['draft', 'available', 'reserved', 'rented', 'unavailable'].includes(params.status)) {
+    query = query.eq('status', params.status);
+  }
 
   const { data, error, count } = await query.range(from, to);
   if (error) {

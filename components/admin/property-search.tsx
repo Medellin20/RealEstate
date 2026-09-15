@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Loader2, Search, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
-export function PropertySearch({ search }: { search: string }) {
+export function PropertySearch({ search, status }: { search: string; status?: string }) {
   const router = useRouter();
   const [value, setValue] = useState(search);
   const [pending, startTransition] = useTransition();
@@ -22,6 +22,7 @@ export function PropertySearch({ search }: { search: string }) {
   function navigate(next: string) {
     submitted.current = next;
     const params = new URLSearchParams();
+    if (status) params.set('status', status);
     if (next.trim()) params.set('search', next.trim());
     startTransition(() => {
       router.replace(`/admin/appartements${params.size ? `?${params}` : ''}`, { scroll: false });

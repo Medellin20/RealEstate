@@ -20,11 +20,14 @@ export const fetchCache = 'force-no-store';
 export default async function AdminPropertiesPage({
   searchParams,
 }: {
-  searchParams: { page?: string; search?: string };
+  searchParams: { page?: string; search?: string; status?: string };
 }) {
   const requestedPage = Number(searchParams.page);
+  const status = searchParams.status && Object.hasOwn(PROPERTY_STATUS_LABELS, searchParams.status)
+    ? searchParams.status : undefined;
   const { properties, total, page, pageSize } = await getAllPropertiesAdmin({
     search: searchParams.search,
+    status,
     page: Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1,
   });
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
@@ -35,6 +38,13 @@ export default async function AdminPropertiesPage({
         <div>
           <h1 className="text-2xl font-extrabold text-ink-900">Appartementen</h1>
           <p className="mt-1 text-sm text-ink-500">{total} woning(en) in totaal.</p>
+          {status && (
+            <p className="mt-2 text-sm text-ink-600">
+              {PROPERTY_STATUS_LABELS[status].label}
+              {' · '}
+              <Link href="/admin/appartements" className="underline hover:text-ink-900">Alle appartementen</Link>
+            </p>
+          )}
         </div>
         <Link href="/admin/appartements/nouveau" className="w-full sm:w-auto">
           <Button className="w-full sm:w-auto">
@@ -44,7 +54,7 @@ export default async function AdminPropertiesPage({
         </Link>
       </div>
 
-      <PropertySearch search={searchParams.search ?? ''} />
+      <PropertySearch search={searchParams.search ?? ''} status={status} />
 
       <div aria-live="polite" aria-atomic="true" className="sr-only">{total} appartement(s) trouvé(s)</div>
       {properties.length === 0 ? (
@@ -136,7 +146,7 @@ export default async function AdminPropertiesPage({
             currentPage={page}
             totalPages={totalPages}
             basePath="/admin/appartements"
-            searchParams={{ search: searchParams.search?.trim() || undefined }}
+            searchParams={{ search: searchParams.search?.trim() || undefined, status }}
           />
         </>
       )}
