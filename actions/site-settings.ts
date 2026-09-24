@@ -21,6 +21,7 @@ export async function updateSiteSettings(input: SiteSettingsInput): Promise<Acti
     .update({
       footer_phone: parsed.data.footerPhone.trim(),
       payment_link: parsed.data.paymentLink.trim(),
+      show_payment_link: parsed.data.showPaymentLink,
       viewing_fee: parsed.data.viewingFee,
       updated_at: new Date().toISOString(),
     })

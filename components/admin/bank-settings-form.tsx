@@ -13,7 +13,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label, FieldError } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import type { BankSettings } from '@/types/database';
 
 export function BankSettingsForm({ settings }: { settings: BankSettings }) {
@@ -82,18 +81,6 @@ export function BankSettingsForm({ settings }: { settings: BankSettings }) {
         <Textarea id="paymentInstructions" rows={4} {...register('paymentInstructions')} />
         <FieldError message={errors.paymentInstructions?.message} />
       </div>
-
-      <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-ink-100 bg-sand-50 p-3.5">
-        <Checkbox id="showOnConfirmations" {...register('showOnConfirmations')} />
-        <span>
-          <span className="block text-sm font-semibold text-ink-800">
-            RIB tonen op de bevestigingspagina&apos;s
-          </span>
-          <span className="mt-0.5 block text-xs text-ink-500">
-            Toon deze bankgegevens naast de betaallink na een bezoek- of reserveringsaanvraag.
-          </span>
-        </span>
-      </label>
 
       <Button type="submit" isLoading={isPending}>
         <Save className="h-4 w-4" />

@@ -39,12 +39,13 @@ create table site_settings (
   id integer primary key default 1 check (id = 1),
   footer_phone text not null default '+31684130011',
   payment_link text not null default 'https://bunq.me/EtelaHorvathova',
+  show_payment_link boolean not null default true,
   viewing_fee numeric(10, 2) not null default 50,
   updated_at timestamptz not null default now()
 );
 
-insert into site_settings (id, footer_phone, payment_link, viewing_fee)
-values (1, '+31684130011', 'https://bunq.me/EtelaHorvathova', 50)
+insert into site_settings (id, footer_phone, payment_link, show_payment_link, viewing_fee)
+values (1, '+31684130011', 'https://bunq.me/EtelaHorvathova', true, 50)
 on conflict (id) do nothing;
 
 -- -----------------------------------------------------------------------------

@@ -21,7 +21,11 @@ export default async function ViewingConfirmationPage({
   if (!viewing) notFound();
 
   const property = (viewing as any).properties;
-  const { payment_link: paymentLink, footer_phone: confirmationPhone } = await getSiteSettings();
+  const {
+    payment_link: paymentLink,
+    show_payment_link: showPaymentLink,
+    footer_phone: confirmationPhone,
+  } = await getSiteSettings();
   const bankSettings = await getBankSettings();
   const showBankDetails = Boolean(bankSettings?.show_on_confirmations && bankSettings);
 
@@ -44,14 +48,16 @@ export default async function ViewingConfirmationPage({
         </div>
 
         <div className="mt-6 grid items-start gap-4 lg:grid-cols-[1.2fr_0.8fr]">
-          <a
-            href={paymentLink}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex h-fit min-h-12 w-full items-center justify-center rounded-xl bg-canal-700 px-4 py-3 text-center text-sm font-bold text-white transition hover:bg-canal-800"
-          >
-            Klik hier om de bezoekkosten automatisch te betalen
-          </a>
+          {showPaymentLink && (
+            <a
+              href={paymentLink}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex h-fit min-h-12 w-full items-center justify-center rounded-xl bg-canal-700 px-4 py-3 text-center text-sm font-bold text-white transition hover:bg-canal-800"
+            >
+              Klik hier om de bezoekkosten automatisch te betalen
+            </a>
+          )}
           {showBankDetails && bankSettings && (
             <div className="h-fit">
               <BankTransferInstructions bankSettings={bankSettings} />

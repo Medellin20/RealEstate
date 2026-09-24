@@ -255,6 +255,7 @@ export interface SiteSettings {
   id: number;
   footer_phone: string;
   payment_link: string;
+  show_payment_link: boolean;
   viewing_fee: number;
   updated_at: string;
 }

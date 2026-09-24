@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { getSiteUrl } from '@/lib/utils/site-url';
 import { Settings, ShieldCheck, ClipboardCheck, Globe } from 'lucide-react';
 import { getSiteSettings } from '@/lib/data/site-settings';
+import { getBankSettings } from '@/lib/data/bank';
 import { SiteSettingsForm } from '@/components/admin/site-settings-form';
 
 export const metadata: Metadata = { title: 'Instellingen' };
@@ -66,13 +67,16 @@ export default function AdminParametresPage() {
 
 async function SiteSettingsSection() {
   const settings = await getSiteSettings();
+  const bankSettings = await getBankSettings();
+  if (!bankSettings) return null;
+
   return (
     <div className="rounded-2xl border border-ink-100 bg-white p-5 sm:p-6">
       <h2 className="font-bold text-ink-900">Coordonnées publiques</h2>
       <p className="mt-2 mb-4 text-sm text-ink-500">
         Modifiez le numéro affiché dans le footer et le lien de paiement utilisé pour les visites et réservations.
       </p>
-      <SiteSettingsForm settings={settings} />
+      <SiteSettingsForm settings={settings} bankSettings={bankSettings} />
     </div>
   );
 }
