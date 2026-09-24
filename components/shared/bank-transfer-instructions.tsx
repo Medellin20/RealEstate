@@ -15,10 +15,10 @@ export function BankTransferInstructions({
   isExample?: boolean;
 }) {
   return (
-    <div className="rounded-2xl border border-ink-100 bg-white p-4 sm:p-6">
-      <div className="flex items-center gap-2 text-ink-700">
-        <Landmark className="h-5 w-5 text-canal-600" />
-        <h3 className="font-bold">Contactgegevens bancaires voor uw virement</h3>
+    <div className="rounded-2xl border border-ink-100 bg-white p-4 text-left sm:p-5">
+      <div className="flex items-start gap-2 text-ink-700">
+        <Landmark className="mt-0.5 h-4 w-4 shrink-0 text-canal-600" />
+        <h3 className="text-sm font-bold leading-snug sm:text-base">Contactgegevens bancaires voor uw virement</h3>
       </div>
 
       {isExample && (

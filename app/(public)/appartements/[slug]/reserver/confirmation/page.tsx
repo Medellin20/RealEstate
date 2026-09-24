@@ -23,17 +23,17 @@ export default async function ReservationConfirmationPage() {
           Uw dossier is verzonden
         </h1>
 
-        <div className="mt-6 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+        <div className="mt-6 grid items-start gap-4 lg:grid-cols-[1.2fr_0.8fr]">
           <a
             href={paymentLink}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex w-full items-center justify-center rounded-xl bg-canal-700 px-4 py-3 text-sm font-bold text-white transition hover:bg-canal-800"
+            className="inline-flex h-fit min-h-12 w-full items-center justify-center rounded-xl bg-canal-700 px-4 py-3 text-center text-sm font-bold text-white transition hover:bg-canal-800"
           >
             Klik hier om de reserveringskosten automatisch te betalen
           </a>
           {showBankDetails && bankSettings && (
-            <div className="lg:pt-1">
+            <div className="h-fit">
               <BankTransferInstructions bankSettings={bankSettings} />
             </div>
           )}
