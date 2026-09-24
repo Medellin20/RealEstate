@@ -32,6 +32,7 @@ export async function updateBankSettings(input: BankSettingsInput): Promise<Acti
     .eq('id', 1);
 
   if (error) {
+    console.error('Failed to update bank settings:', error);
     return { success: false, message: 'Impossible de mettre à jour la configuration bancaire.' };
   }
 
