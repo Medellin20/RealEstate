@@ -208,6 +208,7 @@ export interface BankSettings {
   bank_name: string;
   payment_instructions: string;
   default_deposit_amount: number;
+  show_on_confirmations: boolean;
   updated_at: string;
 }
 

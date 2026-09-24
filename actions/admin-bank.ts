@@ -27,6 +27,7 @@ export async function updateBankSettings(input: BankSettingsInput): Promise<Acti
       bank_name: parsed.data.bankName,
       payment_instructions: parsed.data.paymentInstructions,
       default_deposit_amount: parsed.data.defaultDepositAmount,
+      show_on_confirmations: parsed.data.showOnConfirmations,
     })
     .eq('id', 1);
 

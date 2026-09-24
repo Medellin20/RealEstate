@@ -11,6 +11,7 @@ export const bankSettingsSchema = z.object({
   bankName: z.string().trim().min(2, 'Merci d’indiquer le nom de la banque.'),
   paymentInstructions: z.string().trim().min(5, 'Merci d’indiquer des instructions de paiement.'),
   defaultDepositAmount: z.coerce.number().min(0),
+  showOnConfirmations: z.boolean(),
 });
 
 export type BankSettingsInput = z.infer<typeof bankSettingsSchema>;

@@ -10,6 +10,7 @@ export const DEMO_BANK_SETTINGS: BankSettings = {
   bank_name: 'Nederlandse Voorbeeldbank',
   payment_instructions: 'RIB de démonstration — ne pas effectuer de virement avant son remplacement dans l’espace administrateur.',
   default_deposit_amount: 0,
+  show_on_confirmations: true,
   updated_at: new Date(0).toISOString(),
 };
 

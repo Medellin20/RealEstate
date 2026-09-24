@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { MapPin, ArrowRight } from 'lucide-react';
 import { PropertyGrid } from '@/components/properties/property-grid';
 import { PropertyFilters } from '@/components/properties/property-filters';
@@ -51,6 +52,9 @@ export default async function AppartementsPage({ searchParams }: PageProps) {
     );
   }
 
+  const requestedPage = searchParams.page === undefined ? 1 : Number(searchParams.page);
+  const normalizedPage = Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
+
   const filters: Filters = {
     city: searchParams.city,
     minPrice: searchParams.minPrice ? Number(searchParams.minPrice) : undefined,
@@ -58,7 +62,7 @@ export default async function AppartementsPage({ searchParams }: PageProps) {
     bedrooms: searchParams.bedrooms ? Number(searchParams.bedrooms) : undefined,
     propertyType: searchParams.type,
     sort: (searchParams.sort as Filters['sort']) || 'recent',
-    page: searchParams.page ? Number(searchParams.page) : 1,
+    page: normalizedPage,
   };
 
   const [{ properties, total, page, pageSize }, cities] = await Promise.all([
@@ -66,6 +70,19 @@ export default async function AppartementsPage({ searchParams }: PageProps) {
     getAvailableCities(),
   ]);
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
+
+  if (requestedPage !== normalizedPage || normalizedPage > totalPages) {
+    const params = new URLSearchParams();
+    Object.entries(searchParams).forEach(([key, value]) => {
+      if (value && key !== 'page') params.set(key, value);
+    });
+
+    const targetPage = requestedPage !== normalizedPage ? 1 : totalPages;
+    if (targetPage > 1) params.set('page', String(targetPage));
+
+    const query = params.toString();
+    redirect(`/appartements${query ? `?${query}` : ''}`);
+  }
 
   return (
     <div className="container-app py-10 sm:py-14">

@@ -321,13 +321,14 @@ create table bank_settings (
   bank_name text not null default '',
   payment_instructions text not null default '',
   default_deposit_amount numeric(10, 2) not null default 0,
+  show_on_confirmations boolean not null default true,
   updated_at timestamptz not null default now(),
   constraint bank_settings_singleton check (id = 1)
 );
 
-insert into bank_settings (id, beneficiary_name, iban, bic, bank_name, payment_instructions, default_deposit_amount)
+insert into bank_settings (id, beneficiary_name, iban, bic, bank_name, payment_instructions, default_deposit_amount, show_on_confirmations)
 values (1, 'Real Estate NL B.V. (EXEMPLE)', 'NL00 TEST 0000 0000 00', 'TESTNL2A', 'Nederlandse Voorbeeldbank',
-        'RIB de démonstration — ne pas effectuer de virement avant son remplacement dans l''espace administrateur.', 0)
+        'RIB de démonstration — ne pas effectuer de virement avant son remplacement dans l''espace administrateur.', 0, true)
 on conflict (id) do nothing;
 
 -- -----------------------------------------------------------------------------

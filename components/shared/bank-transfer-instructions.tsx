@@ -10,8 +10,8 @@ export function BankTransferInstructions({
   isExample = false,
 }: {
   bankSettings: BankSettings;
-  reference: string;
-  amount: number;
+  reference?: string;
+  amount?: number;
   isExample?: boolean;
 }) {
   return (
@@ -28,17 +28,19 @@ export function BankTransferInstructions({
         </div>
       )}
 
-      <div className="mt-4 flex flex-col gap-1 rounded-xl bg-ink-700 px-4 py-3.5 text-white min-[380px]:flex-row min-[380px]:items-center min-[380px]:justify-between">
-        <span className="text-sm font-medium">Bedrag aan verser</span>
-        <span className="text-lg font-extrabold">{formatPrice(amount)}</span>
-      </div>
+      {amount !== undefined && (
+        <div className="mt-4 flex flex-col gap-1 rounded-xl bg-ink-700 px-4 py-3.5 text-white min-[380px]:flex-row min-[380px]:items-center min-[380px]:justify-between">
+          <span className="text-sm font-medium">Bedrag aan verser</span>
+          <span className="text-lg font-extrabold">{formatPrice(amount)}</span>
+        </div>
+      )}
 
       <div className="mt-4 space-y-3">
         <CopyableField label="Begunstigde" value={bankSettings.beneficiary_name} />
         <CopyableField label="IBAN" value={bankSettings.iban} mono />
         {bankSettings.bic && <CopyableField label="BIC" value={bankSettings.bic} mono />}
         <CopyableField label="Banque" value={bankSettings.bank_name} />
-        <CopyableField label="Op te geven referentie" value={reference} mono highlight />
+        {reference && <CopyableField label="Op te geven referentie" value={reference} mono highlight />}
       </div>
 
       {bankSettings.payment_instructions && (
