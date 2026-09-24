@@ -42,6 +42,7 @@ export function SiteSettingsForm({
         toast.error(result.message);
         return;
       }
+      toast.success('Le lien de paiement a été enregistré.');
 
       const bankResult = await updateBankSettings({
         beneficiaryName: bankSettings.beneficiary_name,
@@ -52,8 +53,7 @@ export function SiteSettingsForm({
         defaultDepositAmount: bankSettings.default_deposit_amount,
         showOnConfirmations: data.showOnConfirmations,
       });
-      if (bankResult.success) toast.success(result.message);
-      else toast.error(bankResult.message);
+      if (!bankResult.success) toast.error(`Le lien est enregistré, mais le RIB n'a pas été mis à jour : ${bankResult.message}`);
     });
   }
 
