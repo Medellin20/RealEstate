@@ -6,7 +6,8 @@ import { HeroSearchBar } from '@/components/properties/hero-search-bar';
 import { FadeIn } from '@/components/ui/fade-in';
 import { SectionHeading } from '@/components/ui/section-heading';
 import { Button } from '@/components/ui/button';
-import { getCityPropertySummaries } from '@/lib/data/properties';
+import { FeaturedProperties } from '@/components/properties/featured-properties';
+import { getCityPropertySummaries, getFeaturedProperties } from '@/lib/data/properties';
 import { formatPrice } from '@/lib/utils/format';
 import { DUTCH_CITIES } from '@/lib/utils/constants';
 import { DUTCH_TESTIMONIALS } from '@/lib/data/testimonials';
@@ -49,7 +50,10 @@ const TRUST_POINTS = [
 ];
 
 export default async function HomePage() {
-  const citySummaries = await getCityPropertySummaries();
+  const [citySummaries, featuredProperties] = await Promise.all([
+    getCityPropertySummaries(),
+    getFeaturedProperties(3),
+  ]);
 
   return (
     <>
@@ -99,6 +103,8 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
+
+      <FeaturedProperties properties={featuredProperties} />
 
       {/* APPARTEMENTS CLASSÉS PAR VILLE */}
       <section className="py-16 sm:py-20">
