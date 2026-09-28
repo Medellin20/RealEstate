@@ -172,7 +172,7 @@ export async function getCityPropertySummaries(): Promise<CityPropertySummary[]>
     count: summary.count,
     averagePrice: Math.round(summary.total / summary.count),
     imageUrl: summary.imageUrl,
-  })).sort((a, b) => a.city.localeCompare(b.city, 'fr'));
+  })).sort((a, b) => b.count - a.count || a.city.localeCompare(b.city, 'fr'));
 }
 
 /** Biens mis en avant pour la page d'accueil. */

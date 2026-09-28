@@ -95,11 +95,21 @@ const config: Config = {
           '0%': { backgroundPosition: '-700px 0' },
           '100%': { backgroundPosition: '700px 0' },
         },
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        'marquee-reverse': {
+          '0%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
       },
       animation: {
         'fade-up': 'fade-up 0.6s cubic-bezier(0.16,1,0.3,1) both',
         'fade-in': 'fade-in 0.4s ease-out both',
         shimmer: 'shimmer 1.6s linear infinite',
+        marquee: 'marquee 34s linear infinite',
+        'marquee-reverse': 'marquee-reverse 34s linear infinite',
       },
       backgroundImage: {
         'canal-line':
