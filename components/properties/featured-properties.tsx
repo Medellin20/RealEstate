@@ -67,7 +67,7 @@ export function FeaturedProperties({
         <div className="flex flex-wrap items-end justify-between gap-5">
           <SectionHeading
             eyebrow="Uitgelicht"
-            title="Appartements à la une"
+            title="Uitgelichte appartementen"
             description="Ontdek onze uitgelichte woningen, zorgvuldig geselecteerd op toplocaties in Nederland."
           />
           <Link

@@ -171,14 +171,14 @@ export default async function HomePage() {
 
           <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((step, i) => (
-              <FadeIn key={step.title} delay={i * 0.08}>
-                <div className="relative rounded-2xl border border-ink-100 bg-white p-6 shadow-soft">
+              <FadeIn key={step.title} delay={i * 0.08} className="h-full">
+                <div className="relative flex h-full flex-col rounded-2xl border border-ink-100 bg-white p-6 shadow-soft">
                   <span className="text-eyebrow text-ink-300">Stap {i + 1}</span>
                   <div className="mt-3 flex h-11 w-11 items-center justify-center rounded-xl bg-canal-50 text-canal-700">
                     <step.icon className="h-5 w-5" />
                   </div>
                   <h3 className="mt-4 text-base font-bold text-ink-900">{step.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-ink-500">{step.description}</p>
+                  <p className="mt-1.5 flex-1 text-sm leading-relaxed text-ink-500">{step.description}</p>
                 </div>
               </FadeIn>
             ))}
