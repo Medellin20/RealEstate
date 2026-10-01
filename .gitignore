@@ -21,6 +21,9 @@ exported/
 # Environment variables and local secrets
 .env
 .env.*
+.env.local
+.env.production
+.env*.local
 !.env.example
 !.env.sample
 !.env.template
