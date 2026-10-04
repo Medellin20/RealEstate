@@ -41,9 +41,9 @@ export default async function ViewingConfirmationPage({
         </p>
 
         <div className="mt-6 space-y-2 rounded-xl bg-sand-100/60 p-4 text-left text-sm">
-          <Row label="woning" value={property?.title ?? '—'} />
+          <Row label="Woning" value={property?.title ?? '—'} />
           <Row label="Datum" value={formatDate(viewing.requested_date)} />
-          <Row label="tijdslot" value={viewing.requested_time_slot} />
+          <Row label="Tijdstip" value={viewing.requested_time_slot} />
           <Row label="Status" value={VIEWING_STATUS_LABELS[viewing.status] ?? viewing.status} />
         </div>
 

@@ -448,7 +448,7 @@ React.useEffect(() => {
 
             <div className="space-y-2 rounded-xl border border-ink-100 bg-sand-100/60 p-4 text-sm">
               <Row
-                label="woning"
+                label="Woning"
                 value={propertyTitle}
               />
 
@@ -460,14 +460,14 @@ React.useEffect(() => {
               />
 
               <Row
-                label="tijdslot"
+                label="Tijdstip"
                 value={
                   values.requestedTimeSlot || '—'
                 }
               />
 
               <Row
-                label="naam"
+                label="Naam"
                 value={
                   `${values.firstName || ''} ${
                     values.lastName || ''

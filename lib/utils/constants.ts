@@ -40,12 +40,12 @@ export const PROPERTY_STATUS_LABELS: Record<string, { label: string; colorClass:
 };
 
 export const VIEWING_STATUS_LABELS: Record<string, string> = {
-  pending: 'En attente',
-  payment_pending: 'En attente de paiement',
-  paid: 'Payée',
-  confirmed: 'Confirmée',
-  cancelled: 'Annulée',
-  completed: 'Terminée',
+  pending: 'In afwachting',
+  payment_pending: 'Wacht op betaling',
+  paid: 'Betaald',
+  confirmed: 'Bevestigd',
+  cancelled: 'Geannuleerd',
+  completed: 'Afgerond',
 };
 
 export const VIEWING_FEE = 50;

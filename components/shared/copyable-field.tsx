@@ -42,7 +42,7 @@ export function CopyableField({
       </div>
       <button
         onClick={handleCopy}
-        aria-label={`Copier ${label}`}
+        aria-label={`${label} kopiëren`}
         className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-ink-400 transition-colors hover:bg-white hover:text-ink-700"
       >
         {copied ? <Check className="h-4 w-4 text-canal-600" /> : <Copy className="h-4 w-4" />}
