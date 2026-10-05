@@ -227,11 +227,6 @@ export async function regenerateAvailablePropertyDescriptions(): Promise<ActionR
 export async function deleteProperty(id: string): Promise<ActionResult> {
   const supabase = createAdminClient();
 
-  const { data: images } = await supabase.from('property_images').select('storage_path').eq('property_id', id);
-  if (images && images.length > 0) {
-    await supabase.storage.from('property-images').remove(images.map((i) => i.storage_path));
-  }
-
   const { error } = await supabase.from('properties').delete().eq('id', id);
   if (error) {
     return { success: false, message: 'Impossible de supprimer ce logement.' };

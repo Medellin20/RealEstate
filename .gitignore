@@ -84,6 +84,7 @@ temp/
 *.pid
 *.pid.lock
 *.seed
+imagekit-url-map.json
 
 # Editors and IDEs
 .vscode/

@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { randomUUID } from 'node:crypto';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { logAdminAction } from '@/lib/data/history';
 import type { ActionResult } from '@/types';
@@ -10,8 +11,7 @@ const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif'];
 const MAX_SIZE = 10 * 1024 * 1024; // 10 Mo
 
 /**
- * Téléverse une ou plusieurs images vers le bucket Supabase Storage
- * `property-images` et crée les lignes `property_images` correspondantes.
+ * Téléverse les images vers Supabase Storage et crée les lignes correspondantes.
  * La première image uploadée devient automatiquement l'image principale
  * si le logement n'en a pas encore.
  */
@@ -54,23 +54,25 @@ export async function uploadPropertyImages(propertyId: string, formData: FormDat
       continue; // fichier trop volumineux
     }
 
-    const extension = file.name.split('.').pop() || 'jpg';
-    const path = `${propertyId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${extension}`;
-
+    const extension = file.name.split('.').pop()?.replace(/[^a-zA-Z0-9]/g, '') || 'jpg';
+    const fileName = `${Date.now()}-${randomUUID()}.${extension}`;
+    const storagePath = `${property.slug}/${fileName}`;
     const { error: uploadError } = await supabase.storage
       .from('property-images')
-      .upload(path, file, { contentType: file.type, upsert: false });
+      .upload(storagePath, file, { contentType: file.type, upsert: false });
+    if (uploadError) {
+      console.error('Supabase image upload failed:', uploadError.message);
+      continue;
+    }
 
-    if (uploadError) continue;
-
-    const { data: publicUrlData } = supabase.storage.from('property-images').getPublicUrl(path);
+    const { data: publicUrl } = supabase.storage.from('property-images').getPublicUrl(storagePath);
 
     const { data: imageRow, error: insertError } = await supabase
       .from('property_images')
       .insert({
         property_id: propertyId,
-        storage_path: path,
-        url: publicUrlData.publicUrl,
+        storage_path: storagePath,
+        url: publicUrl.publicUrl,
         is_primary: existingCount === 0 && uploaded.length === 0,
         sort_order: nextOrder,
       })
@@ -80,6 +82,8 @@ export async function uploadPropertyImages(propertyId: string, formData: FormDat
     if (!insertError && imageRow) {
       uploaded.push(imageRow);
       nextOrder += 1;
+    } else {
+      await supabase.storage.from('property-images').remove([storagePath]);
     }
   }
 
@@ -119,9 +123,11 @@ export async function deletePropertyImage(imageId: string): Promise<ActionResult
     return { success: false, message: 'Impossible de supprimer la photo de la base de données.' };
   }
 
-  // La ligne est supprimée en premier : une panne Storage ne laisse ainsi
-  // jamais une photo cassée visible sur le site.
-  const { error: storageError } = await supabase.storage.from('property-images').remove([image.storage_path]);
+  const storagePath = image.storage_path.startsWith('imagekit:') ? null : image.storage_path;
+  if (storagePath) {
+    const { error: storageError } = await supabase.storage.from('property-images').remove([storagePath]);
+    if (storageError) console.error('Supabase image cleanup failed:', storageError.message);
+  }
 
   // Si l'image supprimée était la principale, promouvoir la suivante.
   if (image.is_primary) {
@@ -149,14 +155,6 @@ export async function deletePropertyImage(imageId: string): Promise<ActionResult
   const slug = (image as any).properties?.slug;
   if (slug) revalidatePath(`/appartements/${slug}`);
   revalidatePath('/appartements');
-
-  if (storageError) {
-    console.error('Nettoyage Storage impossible:', storageError.message);
-    return {
-      success: true,
-      message: 'Photo retirée du logement. Le fichier résiduel devra être nettoyé dans Supabase Storage.',
-    };
-  }
 
   return { success: true, message: 'Photo supprimée.' };
 }
