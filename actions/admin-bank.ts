@@ -23,7 +23,7 @@ export async function updateBankSettings(input: BankSettingsInput): Promise<Acti
     .update({
       beneficiary_name: parsed.data.beneficiaryName,
       iban: parsed.data.iban,
-      bic: parsed.data.bic,
+      bic: parsed.data.bic ?? '',
       bank_name: parsed.data.bankName,
       payment_instructions: parsed.data.paymentInstructions,
       default_deposit_amount: parsed.data.defaultDepositAmount,

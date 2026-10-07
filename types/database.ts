@@ -260,30 +260,35 @@ export interface SiteSettings {
   updated_at: string;
 }
 
+type Table<Row extends object> = {
+  Row: { [Column in keyof Row]: Row[Column] };
+  Insert: Partial<{ [Column in keyof Row]: Row[Column] }>;
+  Update: Partial<{ [Column in keyof Row]: Row[Column] }>;
+  Relationships: [];
+};
+
 // Table Database générique utilisée par le client Supabase typé.
 export interface Database {
   public: {
     Tables: {
-      clients: { Row: Client; Insert: Partial<Client>; Update: Partial<Client> };
-      properties: { Row: Property; Insert: Partial<Property>; Update: Partial<Property> };
-      property_images: { Row: PropertyImage; Insert: Partial<PropertyImage>; Update: Partial<PropertyImage> };
-      amenities: { Row: Amenity; Insert: Partial<Amenity>; Update: Partial<Amenity> };
-      property_amenities: {
-        Row: { property_id: string; amenity_id: string };
-        Insert: { property_id: string; amenity_id: string };
-        Update: { property_id?: string; amenity_id?: string };
-      };
-      viewing_requests: { Row: ViewingRequest; Insert: Partial<ViewingRequest>; Update: Partial<ViewingRequest> };
-      reservations: { Row: Reservation; Insert: Partial<Reservation>; Update: Partial<Reservation> };
-      request_submissions: { Row: RequestSubmission; Insert: Partial<RequestSubmission>; Update: Partial<RequestSubmission> };
-      guarantee_payments: { Row: GuaranteePayment; Insert: Partial<GuaranteePayment>; Update: Partial<GuaranteePayment> };
-      refund_requests: { Row: RefundRequest; Insert: Partial<RefundRequest>; Update: Partial<RefundRequest> };
-      bank_settings: { Row: BankSettings; Insert: Partial<BankSettings>; Update: Partial<BankSettings> };
-      contact_messages: { Row: ContactMessage; Insert: Partial<ContactMessage>; Update: Partial<ContactMessage> };
-      admin_logs: { Row: AdminLog; Insert: Partial<AdminLog>; Update: Partial<AdminLog> };
-      status_history: { Row: StatusHistory; Insert: Partial<StatusHistory>; Update: Partial<StatusHistory> };
-      favorites: { Row: Favorite; Insert: Partial<Favorite>; Update: Partial<Favorite> };
-      site_settings: { Row: SiteSettings; Insert: Partial<SiteSettings>; Update: Partial<SiteSettings> };
+      clients: Table<Client>;
+      properties: Table<Property>;
+      property_images: Table<PropertyImage>;
+      amenities: Table<Amenity>;
+      property_amenities: Table<{ property_id: string; amenity_id: string }>;
+      viewing_requests: Table<ViewingRequest>;
+      reservations: Table<Reservation>;
+      request_submissions: Table<RequestSubmission>;
+      guarantee_payments: Table<GuaranteePayment>;
+      refund_requests: Table<RefundRequest>;
+      bank_settings: Table<BankSettings>;
+      contact_messages: Table<ContactMessage>;
+      admin_logs: Table<AdminLog>;
+      status_history: Table<StatusHistory>;
+      favorites: Table<Favorite>;
+      site_settings: Table<SiteSettings>;
     };
+    Views: {};
+    Functions: {};
   };
 }
