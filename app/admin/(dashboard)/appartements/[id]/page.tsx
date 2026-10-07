@@ -13,7 +13,7 @@ export default async function EditPropertyPage({ params }: { params: { id: strin
   const [property, amenities] = await Promise.all([getPropertyByIdAdmin(params.id), getAllAmenities()]);
   if (!property) notFound();
 
-  const currentAmenityIds = (property.property_amenities ?? []).map((pa: any) => pa.amenity_id);
+  const currentAmenityIds = (property.property_amenities ?? []).map((pa) => pa.amenity_id);
 
   return (
     <div>

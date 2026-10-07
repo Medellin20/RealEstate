@@ -1,5 +1,6 @@
 import 'server-only';
 import { createAdminClient } from '@/lib/supabase/admin';
+import type { GuaranteeStatus, RefundStatus, ReservationStatus, ViewingStatus } from '@/types/database';
 
 export async function getAllViewingsAdmin(params: { status?: string; date?: string } = {}) {
   try {
@@ -9,8 +10,9 @@ export async function getAllViewingsAdmin(params: { status?: string; date?: stri
       .select('*, properties(title, slug, city), clients(first_name, last_name, email, phone)')
       .order('created_at', { ascending: false });
 
-    if (params.status && ['pending', 'payment_pending', 'paid', 'confirmed', 'cancelled', 'completed'].includes(params.status)) {
-      query = query.eq('status', params.status);
+    const status = params.status as ViewingStatus;
+    if (params.status && ['pending', 'payment_pending', 'paid', 'confirmed', 'cancelled', 'completed'].includes(status)) {
+      query = query.eq('status', status);
     }
     if (params.date) query = query.eq('requested_date', params.date);
 
@@ -38,8 +40,9 @@ export async function getAllReservationsAdmin(params: { status?: string; scope?:
       .select('*, properties(title, slug, city), clients(first_name, last_name, email, phone)')
       .order('created_at', { ascending: false });
 
-    if (params.status && ['submitted', 'under_review', 'accepted', 'rejected', 'awaiting_guarantee', 'guarantee_paid', 'confirmed', 'cancelled'].includes(params.status)) {
-      query = query.eq('status', params.status);
+    const status = params.status as ReservationStatus;
+    if (params.status && ['submitted', 'under_review', 'accepted', 'rejected', 'awaiting_guarantee', 'guarantee_paid', 'confirmed', 'cancelled'].includes(status)) {
+      query = query.eq('status', status);
     }
     if (params.scope === 'pending') query = query.in('status', ['submitted', 'under_review']);
 
@@ -83,8 +86,9 @@ export async function getAllGuaranteesAdmin(params: { status?: string } = {}) {
     .select('*, reservations(reference, property_id, properties(title)), clients(first_name, last_name, email)')
     .order('created_at', { ascending: false });
 
-  if (params.status && ['awaiting_payment', 'payment_declared', 'payment_received', 'reservation_confirmed', 'refund_requested', 'refund_processing', 'refunded', 'cancelled'].includes(params.status)) {
-    query = query.eq('status', params.status);
+  const status = params.status as GuaranteeStatus;
+  if (params.status && ['awaiting_payment', 'payment_declared', 'payment_received', 'reservation_confirmed', 'refund_requested', 'refund_processing', 'refunded', 'cancelled'].includes(status)) {
+    query = query.eq('status', status);
   }
 
   const { data, error } = await query;
@@ -99,8 +103,9 @@ export async function getAllRefundsAdmin(params: { status?: string } = {}) {
     .select('*, reservations(reference, properties(title)), clients(first_name, last_name, email)')
     .order('created_at', { ascending: false });
 
-  if (params.status && ['requested', 'approved', 'processing', 'refunded', 'rejected'].includes(params.status)) {
-    query = query.eq('status', params.status);
+  const status = params.status as RefundStatus;
+  if (params.status && ['requested', 'approved', 'processing', 'refunded', 'rejected'].includes(status)) {
+    query = query.eq('status', status);
   }
 
   const { data, error } = await query;

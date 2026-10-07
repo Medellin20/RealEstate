@@ -4,7 +4,7 @@ import { revalidateStatusViews } from '@/lib/data/revalidate-status';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { recordStatusChange, logAdminAction } from '@/lib/data/history';
 import type { ActionResult } from '@/types';
-import type { RefundStatus } from '@/types/database';
+import type { GuaranteeStatus, RefundStatus } from '@/types/database';
 
 /**
  * Fait progresser une demande de remboursement. IMPORTANT : conformément
@@ -30,7 +30,7 @@ export async function updateRefundStatus(id: string, status: RefundStatus, admin
 
   if (error) return { success: false, message: 'Impossible de mettre à jour le statut.' };
 
-  const guaranteeStatusMap: Partial<Record<RefundStatus, string>> = {
+  const guaranteeStatusMap: Partial<Record<RefundStatus, GuaranteeStatus>> = {
     approved: 'refund_processing',
     processing: 'refund_processing',
     refunded: 'refunded',

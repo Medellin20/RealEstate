@@ -107,12 +107,12 @@ export async function getSimilarProperties(property: Property, limit = 3) {
 /** Liste des villes disponibles avec biens publiés (pour les filtres). */
 export async function getAvailableCities(): Promise<string[]> {
   const supabase = createClient();
-  let query = supabase
+  const query = supabase
     .from('properties')
     .select('city')
     .eq('is_published', true)
-    .neq('status', 'draft');
-
+    .neq('status', 'draft')
+    .returns<Pick<Property, 'city'>[]>();
   const { data, error } = await query;
 
   if (error || !data) return [];
@@ -126,7 +126,8 @@ export async function getAvailableCityCounts(): Promise<{ city: string; count: n
     .from('properties')
     .select('city')
     .eq('is_published', true)
-    .neq('status', 'draft');
+    .neq('status', 'draft')
+    .returns<Pick<Property, 'city'>[]>();
 
   if (error || !data) return [];
   const counts = new Map<string, number>();

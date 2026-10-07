@@ -4,7 +4,7 @@ import { revalidateStatusViews } from '@/lib/data/revalidate-status';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { recordStatusChange, logAdminAction } from '@/lib/data/history';
 import type { ActionResult } from '@/types';
-import type { GuaranteeStatus } from '@/types/database';
+import type { GuaranteePayment, GuaranteeStatus } from '@/types/database';
 
 /**
  * Validation manuelle de la réception d'un virement de garantie par
@@ -18,7 +18,9 @@ export async function updateGuaranteeStatus(id: string, status: GuaranteeStatus)
   const { data: guarantee } = await supabase.from('guarantee_payments').select('*').eq('id', id).maybeSingle();
   if (!guarantee) return { success: false, message: 'Dossier de garantie introuvable.' };
 
-  const updatePayload: Record<string, unknown> = { status };
+  const updatePayload: Partial<Pick<GuaranteePayment, 'status' | 'validated_at' | 'validated_by'>> = {
+    status,
+  };
   if (status === 'payment_received' && !guarantee.validated_at) {
     updatePayload.validated_at = new Date().toISOString();
     updatePayload.validated_by = 'admin';

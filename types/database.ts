@@ -260,11 +260,23 @@ export interface SiteSettings {
   updated_at: string;
 }
 
-type Table<Row extends object> = {
+type Table<Row extends object, Relations extends Relationship[] = []> = {
   Row: { [Column in keyof Row]: Row[Column] };
   Insert: Partial<{ [Column in keyof Row]: Row[Column] }>;
   Update: Partial<{ [Column in keyof Row]: Row[Column] }>;
-  Relationships: [];
+  Relationships: Relations;
+};
+
+type Relationship<
+  Columns extends string = string,
+  ReferencedRelation extends string = string,
+  ReferencedColumns extends string = string,
+> = {
+  foreignKeyName: string;
+  columns: [Columns];
+  isOneToOne: false;
+  referencedRelation: ReferencedRelation;
+  referencedColumns: [ReferencedColumns];
 };
 
 // Table Database générique utilisée par le client Supabase typé.
@@ -273,14 +285,54 @@ export interface Database {
     Tables: {
       clients: Table<Client>;
       properties: Table<Property>;
-      property_images: Table<PropertyImage>;
+      property_images: Table<
+        PropertyImage,
+        [Relationship<'property_id', 'properties', 'id'>]
+      >;
       amenities: Table<Amenity>;
-      property_amenities: Table<{ property_id: string; amenity_id: string }>;
-      viewing_requests: Table<ViewingRequest>;
-      reservations: Table<Reservation>;
-      request_submissions: Table<RequestSubmission>;
-      guarantee_payments: Table<GuaranteePayment>;
-      refund_requests: Table<RefundRequest>;
+      property_amenities: Table<
+        { property_id: string; amenity_id: string },
+        [
+          Relationship<'property_id', 'properties', 'id'>,
+          Relationship<'amenity_id', 'amenities', 'id'>,
+        ]
+      >;
+      viewing_requests: Table<
+        ViewingRequest,
+        [
+          Relationship<'property_id', 'properties', 'id'>,
+          Relationship<'client_id', 'clients', 'id'>,
+        ]
+      >;
+      reservations: Table<
+        Reservation,
+        [
+          Relationship<'property_id', 'properties', 'id'>,
+          Relationship<'client_id', 'clients', 'id'>,
+        ]
+      >;
+      request_submissions: Table<
+        RequestSubmission,
+        [
+          Relationship<'property_id', 'properties', 'id'>,
+          Relationship<'client_id', 'clients', 'id'>,
+        ]
+      >;
+      guarantee_payments: Table<
+        GuaranteePayment,
+        [
+          Relationship<'reservation_id', 'reservations', 'id'>,
+          Relationship<'client_id', 'clients', 'id'>,
+        ]
+      >;
+      refund_requests: Table<
+        RefundRequest,
+        [
+          Relationship<'guarantee_payment_id', 'guarantee_payments', 'id'>,
+          Relationship<'reservation_id', 'reservations', 'id'>,
+          Relationship<'client_id', 'clients', 'id'>,
+        ]
+      >;
       bank_settings: Table<BankSettings>;
       contact_messages: Table<ContactMessage>;
       admin_logs: Table<AdminLog>;

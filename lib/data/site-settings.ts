@@ -7,7 +7,12 @@ const DEFAULT_VIEWING_FEE = 50;
 
 export async function getSiteSettings(): Promise<SiteSettings> {
   const supabase = createClient();
-  const { data, error } = await supabase.from('site_settings').select('*').eq('id', 1).maybeSingle();
+  const { data, error } = await supabase
+    .from('site_settings')
+    .select('*')
+    .eq('id', 1)
+    .returns<SiteSettings[]>()
+    .maybeSingle();
 
   if (error) {
     throw new Error(`Impossible de charger les paramètres du site : ${error.message}`);
