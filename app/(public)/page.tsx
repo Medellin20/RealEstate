@@ -219,10 +219,10 @@ export default async function HomePage() {
                   </div>
                 </div>
                 <blockquote className="mt-5 flex-1 text-sm leading-relaxed text-ink-600" lang="nl">
-                  “{testimonial}”
+                  “{testimonial.quote}”
                 </blockquote>
-                <p className="mt-5 border-t border-ink-100 pt-4 text-xs font-semibold uppercase tracking-wide text-ink-400">
-                  Klant van RealEstate · Ervaring {index + 1}
+                <p className="mt-5 border-t border-ink-100 pt-4 text-xs font-semibold tracking-wide text-ink-400">
+                  {testimonial.name}
                 </p>
               </article>
             ))}
