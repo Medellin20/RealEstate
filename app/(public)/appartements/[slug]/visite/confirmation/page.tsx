@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { CheckCircle2, Home } from 'lucide-react';
+import { CheckCircle2, Download, Home } from 'lucide-react';
 import { getViewingByReference } from '@/lib/data/dossier';
 import { Button } from '@/components/ui/button';
 import { VIEWING_STATUS_LABELS } from '@/lib/utils/constants';
@@ -82,6 +82,12 @@ export default async function ViewingConfirmationPage({
         </p>
 
         <div className="mt-8 flex flex-col gap-2.5 sm:flex-row">
+          <Link href={`/appartements/${property.slug}/visite/recu?ref=${encodeURIComponent(viewing.reference)}`} className="flex-1">
+            <Button variant="outline" className="w-full">
+              <Download className="h-4 w-4" />
+              Reçu PDF downloaden
+            </Button>
+          </Link>
           <Link href="/mon-compte" className="flex-1">
             <Button variant="outline" className="w-full">Uw dossier volgen</Button>
           </Link>

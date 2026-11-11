@@ -14,7 +14,7 @@ export async function getViewingByReference(reference: string) {
   const supabase = createAdminClient();
   const { data, error } = await supabase
     .from('viewing_requests')
-    .select('*, properties(title, slug, city, viewing_fee), clients(first_name, last_name, email)')
+    .select('*, properties(title, slug, city, address, postal_code, viewing_fee), clients(first_name, last_name, email, phone)')
     .eq('reference', reference)
     .maybeSingle();
 
