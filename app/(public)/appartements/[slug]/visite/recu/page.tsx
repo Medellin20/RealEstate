@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { getViewingByReference } from '@/lib/data/dossier';
 import { getBankSettings, isDemoBankSettings } from '@/lib/data/bank';
+import { getSiteSettings } from '@/lib/data/site-settings';
 import { PrintPdfButton } from '@/components/shared/print-pdf-button';
 import { formatDate, formatPrice } from '@/lib/utils/format';
 
@@ -21,11 +23,12 @@ export default async function ViewingReceiptPage({
   const viewing = await getViewingByReference(searchParams.ref);
   if (!viewing || (viewing as any).properties?.slug !== params.slug) notFound();
 
-  const bank = await getBankSettings();
+  const [bank, siteSettings] = await Promise.all([getBankSettings(), getSiteSettings()]);
   const property = (viewing as any).properties;
   const client = (viewing as any).clients;
   const bankIsDemo = bank ? isDemoBankSettings(bank) : true;
   const receiptDate = viewing.created_at;
+  const paymentConfirmed = Boolean(viewing.paid_at) || viewing.status === 'paid';
   const propertyAddress = [property?.address, property?.postal_code, property?.city]
     .filter(Boolean)
     .join(', ');
@@ -40,26 +43,35 @@ export default async function ViewingReceiptPage({
       </div>
 
       <article className="receipt-sheet mx-auto max-w-4xl border border-ink-100 bg-white p-5 shadow-card sm:p-10">
-        <header className="flex flex-col justify-between gap-5 border-b-2 border-canal-700 pb-6 sm:flex-row sm:items-start">
-          <div>
-            <p className="text-xl font-extrabold tracking-wide text-canal-800">REAL ESTATE NL B.V.</p>
-            <p className="mt-1 text-xs uppercase tracking-[0.22em] text-ink-500">Verhuur &amp; verkoop van vastgoed</p>
+        <header className="flex flex-col justify-between gap-5 border-b-2 border-canal-800 pb-6 sm:flex-row sm:items-center">
+          <div className="flex items-center gap-3">
+            <svg aria-hidden="true" viewBox="0 0 64 52" className="h-14 w-16 shrink-0 text-canal-800" fill="none">
+              <path d="M4 27 21 10l11 10L45 4l15 15v28H5V27Z" stroke="currentColor" strokeWidth="3" strokeLinejoin="round" />
+              <path d="M12 46V29l10-9 10 9v17M36 46V22l9-9 9 9v24M18 33h8m-8 7h8m16-11h7m-7 8h7" stroke="currentColor" strokeWidth="2.5" strokeLinejoin="round" />
+            </svg>
+            <div>
+              <p className="text-lg font-black tracking-wide text-canal-900 sm:text-xl">NL REAL ESTATE B.V.</p>
+              <p className="mt-1 text-[0.65rem] uppercase tracking-[0.3em] text-canal-700">Real Estate · Nederland</p>
+              <p className="mt-2 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-ink-500">Verhuur &amp; verkoop van vastgoed</p>
+            </div>
           </div>
-          <div className="text-sm leading-6 text-ink-600 sm:text-right">
+          <div className="border-l-2 border-canal-800 pl-4 text-sm leading-6 text-ink-600 sm:text-right">
             <p>contacts@realestatenl.agency</p>
-            <p>realestatenl.agency</p>
+            <p>www.realestatenl.agency</p>
+            <p className="mt-2">{siteSettings.footer_phone}</p>
           </div>
         </header>
 
-        <div className="py-7 text-center">
-          <h1 className="text-3xl font-black tracking-wide text-canal-900 sm:text-4xl">BEVESTIGING BEZICHTIGING</h1>
-          <p className="mt-2 text-sm font-semibold uppercase tracking-[0.2em] text-ink-500">Aanvraag- en betaaloverzicht</p>
+        <div className="border-b border-canal-800 py-6 text-center sm:py-7">
+          <h1 className="text-3xl font-black tracking-wide text-canal-900 sm:text-4xl">BEWIJS VAN BEZICHTIGING</h1>
+          <p className="mt-2 text-sm font-semibold uppercase tracking-[0.22em] text-canal-800">Aanvraag- en betalingsdetails</p>
+          <p className="mx-auto mt-3 max-w-xl rounded-md bg-sky-100 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-canal-900 sm:text-sm">Bezichtigingskosten · betalingsstatus: {paymentConfirmed ? 'ontvangen' : 'in afwachting'}</p>
         </div>
 
-        <section className="receipt-grid grid grid-cols-1 gap-0 overflow-hidden rounded-lg border border-canal-100 sm:grid-cols-2">
+        <section className="receipt-grid mt-5 grid max-w-xl grid-cols-1 gap-0 overflow-hidden border border-canal-100">
           <ReceiptRow label="Referentienummer" value={viewing.reference} />
           <ReceiptRow label="Datum aanvraag" value={formatDate(receiptDate)} />
-          <ReceiptRow label="Status betaling" value={viewing.status === 'paid' || viewing.status === 'confirmed' || viewing.status === 'completed' ? 'Betaling bevestigd' : 'In afwachting van betaling'} />
+          <ReceiptRow label="Status betaling" value={paymentConfirmed ? 'Betaling bevestigd' : 'In afwachting van betaling'} />
           <ReceiptRow label="Betaaldatum" value={viewing.paid_at ? formatDate(viewing.paid_at) : 'Nog niet bevestigd'} />
         </section>
 
@@ -86,7 +98,7 @@ export default async function ViewingReceiptPage({
         </ReceiptSection>
 
         <p className="mt-5 border-l-4 border-canal-700 bg-canal-50 p-4 text-sm leading-6 text-ink-700">
-          {viewing.status === 'paid' || viewing.status === 'confirmed' || viewing.status === 'completed'
+          {paymentConfirmed
             ? 'Dit document bevestigt de registratie van uw bezichtigingsaanvraag en de betaling volgens de status van uw dossier.'
             : 'Dit document bevestigt de registratie van uw bezichtigingsaanvraag. De betaling is nog niet door de beheerder bevestigd. Bewaar dit overzicht en vermeld het referentienummer bij uw overschrijving.'}
           {' '}De bezichtigingskosten zijn terugbetaalbaar.
@@ -109,7 +121,7 @@ export default async function ViewingReceiptPage({
   );
 }
 
-function ReceiptSection({ title, children }: { title: string; children: React.ReactNode }) {
+function ReceiptSection({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="mt-5 overflow-hidden rounded-lg border border-canal-100">
       <h2 className="bg-canal-800 px-4 py-2 text-sm font-bold tracking-wide text-white">{title}</h2>
