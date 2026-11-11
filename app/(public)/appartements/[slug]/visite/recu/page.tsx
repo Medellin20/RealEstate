@@ -63,7 +63,7 @@ export default async function ViewingReceiptPage({
         </header>
 
         <div className="border-b border-canal-800 py-6 text-center sm:py-7">
-          <h1 className="text-3xl font-black tracking-wide text-canal-900 sm:text-4xl">BEWIJS VAN BEZICHTIGING</h1>
+          <h1 className="text-3xl font-black tracking-wide text-canal-900 sm:text-4xl">REÇU DE PAIEMENT AUX PAYS-BAS</h1>
           <p className="mt-2 text-sm font-semibold uppercase tracking-[0.22em] text-canal-800">Aanvraag- en betalingsdetails</p>
           <p className="mx-auto mt-3 max-w-xl rounded-md bg-sky-100 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-canal-900 sm:text-sm">Bezichtigingskosten · betalingsstatus: {paymentConfirmed ? 'ontvangen' : 'in afwachting'}</p>
         </div>
