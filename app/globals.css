@@ -78,6 +78,30 @@
     margin: 12mm;
   }
 
+  html:has(.receipt-page),
+  body:has(.receipt-page) {
+    min-height: 0 !important;
+    height: auto !important;
+    background: #fff !important;
+  }
+
+  body:has(.receipt-page) .public-site-layout {
+    display: block !important;
+    min-height: 0 !important;
+    height: auto !important;
+    background: #fff !important;
+  }
+
+  body:has(.receipt-page) .public-site-layout > :not(main) {
+    display: none !important;
+  }
+
+  body:has(.receipt-page) .public-site-layout > main {
+    display: block !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
   body:has(.receipt-page) * {
     visibility: hidden !important;
   }
@@ -88,11 +112,11 @@
   }
 
   body:has(.receipt-page) .receipt-page {
-    position: absolute;
-    inset: 0 auto auto 0;
+    position: static;
     width: 100%;
     max-width: none;
     padding: 0;
+    background: #fff !important;
   }
 
   .receipt-sheet {
