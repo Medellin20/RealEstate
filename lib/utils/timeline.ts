@@ -9,10 +9,10 @@ export function getReservationTimelineSteps(status: ReservationStatus): Timeline
     'confirmed',
   ];
   const labels = [
-    'Demande envoyée',
-    'Dossier en cours d’examen',
-    'Demande acceptée',
-    'Logement réservé',
+    'Aanvraag verstuurd',
+    'Dossier in behandeling',
+    'Aanvraag geaccepteerd',
+    'Woning gereserveerd',
   ];
 
   if (status === 'rejected' || status === 'cancelled') {
@@ -34,7 +34,7 @@ export function getReservationTimelineSteps(status: ReservationStatus): Timeline
 
 export function getViewingTimelineSteps(status: ViewingStatus): TimelineStep[] {
   const order: ViewingStatus[] = ['pending', 'confirmed', 'completed'];
-  const labels = ['Demande envoyée', 'Visite confirmée', 'Visite effectuée'];
+  const labels = ['Aanvraag verstuurd', 'Bezichtiging bevestigd', 'Bezichtiging afgerond'];
 
   if (status === 'cancelled') {
     return labels.map((label, i) => ({ label, state: i === 0 ? 'failed' : 'upcoming' }));

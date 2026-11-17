@@ -52,10 +52,10 @@ export function ConfirmDeleteButton({
         <p className="text-sm text-ink-500">{confirmDescription}</p>
         <div className="mt-6 flex gap-2.5">
           <Button type="button" disabled={isPending} variant="outline" className="flex-1" onClick={() => setOpen(false)}>
-            Annuler
+            Annuleren
           </Button>
           <Button type="button" variant="destructive" className="flex-1" isLoading={isPending} onClick={handleConfirm}>
-            Confirmer la suppression
+            Verwijderen bevestigen
           </Button>
         </div>
       </Modal>

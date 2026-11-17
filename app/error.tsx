@@ -11,7 +11,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
   }, [error]);
 
   return (
-    <html lang="fr">
+    <html lang="nl">
       <body>
         <div className="flex min-h-screen flex-col items-center justify-center bg-sand-100 px-4 text-center">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brick-50 text-brick-500">

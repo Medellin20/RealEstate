@@ -20,12 +20,12 @@ export async function uploadPropertyImages(propertyId: string, formData: FormDat
   const files = formData.getAll('images') as File[];
 
   if (!files || files.length === 0) {
-    return { success: false, message: 'Aucune image sélectionnée.' };
+    return { success: false, message: 'Geen afbeelding geselecteerd.' };
   }
 
   const { data: property } = await supabase.from('properties').select('slug').eq('id', propertyId).maybeSingle();
   if (!property) {
-    return { success: false, message: 'Logement introuvable.' };
+    return { success: false, message: 'Woning niet gevonden.' };
   }
 
   const { count: existingCount } = await supabase
@@ -88,7 +88,7 @@ export async function uploadPropertyImages(propertyId: string, formData: FormDat
   }
 
   if (uploaded.length === 0) {
-    return { success: false, message: 'Aucune image n’a pu être téléversée (format ou taille non supportés).' };
+    return { success: false, message: 'Er kon geen afbeelding worden geüpload (formaat of bestandsgrootte niet ondersteund).' };
   }
 
   await logAdminAction({
@@ -102,7 +102,7 @@ export async function uploadPropertyImages(propertyId: string, formData: FormDat
   revalidatePath(`/appartements/${property.slug}`);
   revalidatePath('/appartements');
 
-  return { success: true, message: `${uploaded.length} image(s) ajoutée(s).`, data: uploaded };
+  return { success: true, message: `${uploaded.length} afbeelding(en) toegevoegd.`, data: uploaded };
 }
 
 export async function deletePropertyImage(imageId: string): Promise<ActionResult> {
@@ -115,12 +115,12 @@ export async function deletePropertyImage(imageId: string): Promise<ActionResult
     .maybeSingle();
 
   if (!image) {
-    return { success: false, message: 'Image introuvable.' };
+    return { success: false, message: 'Afbeelding niet gevonden.' };
   }
 
   const { error: deleteError } = await supabase.from('property_images').delete().eq('id', imageId);
   if (deleteError) {
-    return { success: false, message: 'Impossible de supprimer la photo de la base de données.' };
+    return { success: false, message: 'De foto kon niet uit de database worden verwijderd.' };
   }
 
   const storagePath = image.storage_path.startsWith('imagekit:') ? null : image.storage_path;
@@ -156,7 +156,7 @@ export async function deletePropertyImage(imageId: string): Promise<ActionResult
   if (slug) revalidatePath(`/appartements/${slug}`);
   revalidatePath('/appartements');
 
-  return { success: true, message: 'Photo supprimée.' };
+  return { success: true, message: 'Foto verwijderd.' };
 }
 
 export async function setPrimaryPropertyImage(propertyId: string, imageId: string): Promise<ActionResult> {
@@ -164,7 +164,7 @@ export async function setPrimaryPropertyImage(propertyId: string, imageId: strin
 
   const { error } = await supabase.from('property_images').update({ is_primary: true }).eq('property_id', propertyId).eq('id', imageId).select('id').single();
   if (error) {
-    return { success: false, message: 'Impossible de définir l’image principale.' };
+    return { success: false, message: 'De hoofdafbeelding kon niet worden ingesteld.' };
   }
 
   const { data: property } = await supabase.from('properties').select('slug').eq('id', propertyId).maybeSingle();
@@ -174,7 +174,7 @@ export async function setPrimaryPropertyImage(propertyId: string, imageId: strin
   revalidatePath('/appartements');
   revalidatePath('/');
 
-  return { success: true, message: 'Image principale mise à jour.' };
+  return { success: true, message: 'Hoofdafbeelding bijgewerkt.' };
 }
 
 export async function reorderPropertyImages(propertyId: string, orderedImageIds: string[]): Promise<ActionResult> {
@@ -188,7 +188,7 @@ export async function reorderPropertyImages(propertyId: string, orderedImageIds:
 
   revalidatePath('/', 'layout');
   if (results.some((result) => result.error)) {
-    return { success: false, message: 'Impossible d’enregistrer tout l’ordre des photos. Rechargez la page avant de réessayer.' };
+    return { success: false, message: 'De volgorde van de fotos kon niet volledig worden opgeslagen. Vernieuw de pagina en probeer het opnieuw.' };
   }
-  return { success: true, message: 'Ordre des photos mis à jour.' };
+  return { success: true, message: 'Volgorde van fotos bijgewerkt.' };
 }

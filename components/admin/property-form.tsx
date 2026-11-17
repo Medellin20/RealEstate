@@ -1,5 +1,7 @@
 'use client';
 
+import { dutchLabel } from '@/lib/utils/dutch-display';
+
 import { useAdminAction } from '@/lib/hooks/use-admin-action';
 
 import * as React from 'react';
@@ -312,7 +314,7 @@ export function PropertyForm({
           </div>
           <div>
             <Label htmlFor="city">Stad</Label>
-            <Input id="city" placeholder="Ex : Amsterdam" {...register('city')} />
+            <Input id="city" placeholder="Bijv. Amsterdam" {...register('city')} />
             <FieldError message={errors.city?.message} />
           </div>
           <div>
@@ -475,7 +477,7 @@ export function PropertyForm({
                         else field.onChange((field.value ?? []).filter((id) => id !== amenity.id));
                       }}
                     />
-                    {amenity.label_fr}
+                    {dutchLabel(amenity.label_fr)}
                   </label>
                 );
               })}

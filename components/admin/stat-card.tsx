@@ -26,7 +26,7 @@ export function StatCard({
     <Link
       href={href}
       className="group block rounded-2xl border border-ink-100 bg-white p-5 shadow-soft transition hover:-translate-y-0.5 hover:border-ink-200 hover:shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-canal-500 focus-visible:ring-offset-2"
-      aria-label={`${label} : ${value}. Ouvrir la liste correspondante`}
+      aria-label={`${label} : ${value}. Bijbehorende lijst openen`}
     >
       <div className={cn('flex h-10 w-10 items-center justify-center rounded-xl', toneClasses[tone])}>
         <Icon className="h-5 w-5 transition-transform group-hover:scale-110" />

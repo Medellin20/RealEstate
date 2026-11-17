@@ -79,7 +79,7 @@ export function AdminSidebar() {
         <button
           onClick={() => setMobileOpen(true)}
           className="rounded-lg p-2 text-ink-700"
-          aria-label="Ouvrir de menu admin"
+          aria-label="Beheerdersmenu openen"
         >
           <Menu className="h-5.5 w-5.5" />
         </button>
@@ -94,7 +94,7 @@ export function AdminSidebar() {
               <button
                 onClick={() => setMobileOpen(false)}
                 className="rounded-lg p-1.5 text-sand-300 hover:bg-white/10"
-                aria-label="Fermer de menu"
+                aria-label="Menu sluiten"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -116,7 +116,7 @@ function SidebarHeader({ compact }: { compact?: boolean }) {
       </span>
       <div>
         <p className="text-sm font-extrabold text-white">Real Estate NL</p>
-        <p className="text-[11px] font-medium uppercase tracking-wide text-sand-400">Administration</p>
+        <p className="text-[11px] font-medium uppercase tracking-wide text-sand-400">Beheer</p>
       </div>
     </Link>
   );

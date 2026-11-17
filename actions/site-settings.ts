@@ -11,7 +11,7 @@ export async function updateSiteSettings(input: SiteSettingsInput): Promise<Acti
   if (!parsed.success) {
     return {
       success: false,
-      message: 'Merci de corriger les paramètres indiqués.',
+      message: 'Corrigeer de aangegeven instellingen.',
       fieldErrors: parsed.error.flatten().fieldErrors,
     };
   }
@@ -29,7 +29,7 @@ export async function updateSiteSettings(input: SiteSettingsInput): Promise<Acti
 
   if (error) {
     console.error('SITE SETTINGS UPDATE ERROR:', error);
-    return { success: false, message: 'Impossible de mettre à jour les paramètres du site.' };
+    return { success: false, message: 'De website-instellingen konden niet worden bijgewerkt.' };
   }
 
   await logAdminAction({ action: 'site_settings.update' });
@@ -39,5 +39,5 @@ export async function updateSiteSettings(input: SiteSettingsInput): Promise<Acti
   revalidatePath('/appartements/[slug]/reserver/confirmation', 'page');
   revalidatePath('/appartements/[slug]/visite/confirmation', 'page');
   revalidatePath('/appartements/[slug]/visite', 'page');
-  return { success: true, message: 'Paramètres du site mis à jour avec succès.' };
+  return { success: true, message: 'De website-instellingen zijn bijgewerkt.' };
 }

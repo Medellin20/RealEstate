@@ -41,7 +41,7 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
           <a href="/api/admin/export/reservations" download className="w-full sm:w-auto">
             <Button variant="outline" size="sm" className="w-full sm:w-auto">
               <Download className="h-3.5 w-3.5" />
-              Export CSV
+              CSV exporteren
             </Button>
           </a>
           <form action="/admin/reservations" method="get" className="w-full sm:w-auto">
@@ -86,7 +86,7 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
                 <p><span className="text-ink-400">Klant: </span>{reservation.clients?.first_name} {reservation.clients?.last_name}</p>
                 <p className="break-all"><span className="text-ink-400">E-mail: </span>{reservation.clients?.email}</p>
                 <p><span className="text-ink-400">Intrek: </span>{formatDate(reservation.desired_move_in_date)}</p>
-                <p><span className="text-ink-400">duur : </span>{reservation.duration_months} mois · {reservation.occupants_count} occupant(s)</p>
+                <p><span className="text-ink-400">Duur: </span>{reservation.duration_months} maanden · {reservation.occupants_count} bewoner(s)</p>
                 <p><span className="text-ink-400">Huisdieren: </span>{reservation.has_pets ? 'Ja' : 'Nee'}</p>
               </div>
 
@@ -112,7 +112,7 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
                           <span className="text-ink-600">
                             {entry.from_status ? `${RESERVATION_STATUS_LABELS[entry.from_status] ?? entry.from_status} → ` : ''}
                             <strong>{RESERVATION_STATUS_LABELS[entry.to_status] ?? entry.to_status}</strong>
-                            <span className="ml-1 text-ink-400">par {entry.changed_by}</span>
+                            <span className="ml-1 text-ink-400">door {entry.changed_by}</span>
                           </span>
                           <time className="text-ink-400">{formatDateTime(entry.created_at)}</time>
                         </li>

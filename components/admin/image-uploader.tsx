@@ -136,7 +136,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
           <>
             <Loader2 className="h-6 w-6 animate-spin text-ink-500" />
             <p className="text-sm font-medium text-ink-600">
-              Uploaden van {pendingCount} image{pendingCount > 1 ? 's' : ''} en cours...
+              Bezig met uploaden van {pendingCount} afbeelding{pendingCount > 1 ? 'en' : ''}...
             </p>
           </>
         ) : (
@@ -145,7 +145,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
             <p className="text-sm font-medium text-ink-600">
               Klik om foto’s te selecteren of sleep ze hiernaartoe
             </p>
-            <p className="text-xs text-ink-400">JPG, PNG of WebP — 10 Mo max. par image</p>
+            <p className="text-xs text-ink-400">JPG, PNG of WebP — maximaal 10 MB per afbeelding</p>
           </>
         )}
       </label>
@@ -175,7 +175,7 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
               {image.is_primary && (
                 <span className="absolute left-1.5 top-1.5 flex items-center gap-1 rounded-full bg-canal-600 px-2 py-0.5 text-[10px] font-bold text-white">
                   <Star className="h-2.5 w-2.5 fill-white" />
-                  Principale
+                  Hoofdfoto
                 </span>
               )}
 
@@ -234,11 +234,11 @@ export function ImageUploader({ propertyId, initialImages }: { propertyId: strin
         </p>
         <div className="mt-6 flex gap-2.5">
           <Button variant="outline" className="flex-1" onClick={() => setImageToDelete(null)}>
-            Annuler
+            Annuleren
           </Button>
           <Button variant="destructive" className="flex-1" onClick={handleDelete}>
             <Trash2 className="h-4 w-4" />
-            Supprimer
+            Verwijderen
           </Button>
         </div>
       </Modal>

@@ -108,7 +108,7 @@ export async function createProperty(input: PropertyInput): Promise<ActionResult
   if (!parsed.success) {
     return {
       success: false,
-      message: 'Merci de corriger les champs indiqués.',
+      message: 'Corrigeer de aangegeven velden.',
       fieldErrors: parsed.error.flatten().fieldErrors,
     };
   }
@@ -124,8 +124,8 @@ export async function createProperty(input: PropertyInput): Promise<ActionResult
   if (existingSlug) {
     return {
       success: false,
-      message: 'Ce slug est déjà utilisé par un autre logement.',
-      fieldErrors: { slug: ['Ce slug est déjà utilisé.'] },
+      message: 'Deze slug wordt al gebruikt door een andere woning.',
+      fieldErrors: { slug: ['Deze slug wordt al gebruikt.'] },
     };
   }
 
@@ -137,14 +137,14 @@ export async function createProperty(input: PropertyInput): Promise<ActionResult
     .single();
 
   if (error || !property) {
-    return { success: false, message: 'Une erreur est survenue lors de la création du logement.' };
+    return { success: false, message: 'Er is een fout opgetreden bij het toevoegen van de woning.' };
   }
 
   await syncAmenities(property.id, parsed.data.amenityIds);
   await logAdminAction({ action: 'property.create', entityType: 'property', entityId: property.id });
   revalidateStatusViews();
 
-  return { success: true, message: 'Appartement ajouté avec succès.', data: { id: property.id } };
+  return { success: true, message: 'Appartement toegevoegd.', data: { id: property.id } };
 }
 
 export async function updateProperty(id: string, input: PropertyInput): Promise<ActionResult> {
@@ -152,7 +152,7 @@ export async function updateProperty(id: string, input: PropertyInput): Promise<
   if (!parsed.success) {
     return {
       success: false,
-      message: 'Merci de corriger les champs indiqués.',
+      message: 'Corrigeer de aangegeven velden.',
       fieldErrors: parsed.error.flatten().fieldErrors,
     };
   }
@@ -169,8 +169,8 @@ export async function updateProperty(id: string, input: PropertyInput): Promise<
   if (existingSlug) {
     return {
       success: false,
-      message: 'Ce slug est déjà utilisé par un autre logement.',
-      fieldErrors: { slug: ['Ce slug est déjà utilisé.'] },
+      message: 'Deze slug wordt al gebruikt door een andere woning.',
+      fieldErrors: { slug: ['Deze slug wordt al gebruikt.'] },
     };
   }
 
@@ -181,14 +181,14 @@ export async function updateProperty(id: string, input: PropertyInput): Promise<
     .eq('id', id);
 
   if (error) {
-    return { success: false, message: 'Une erreur est survenue lors de la mise à jour du logement.' };
+    return { success: false, message: 'Er is een fout opgetreden bij het bijwerken van de woning.' };
   }
 
   await syncAmenities(id, parsed.data.amenityIds);
   await logAdminAction({ action: 'property.update', entityType: 'property', entityId: id });
   revalidateStatusViews();
 
-  return { success: true, message: 'Appartement mis à jour avec succès.' };
+  return { success: true, message: 'Appartement bijgewerkt.' };
 }
 
 /** Régénère les descriptions des appartements actuellement publics et disponibles. */
@@ -201,7 +201,7 @@ export async function regenerateAvailablePropertyDescriptions(): Promise<ActionR
     .eq('status', 'available');
 
   if (error) {
-    return { success: false, message: 'Impossible de récupérer les logements disponibles.' };
+    return { success: false, message: 'De beschikbare woningen konden niet worden opgehaald.' };
   }
 
   const results = await Promise.all((data ?? []).map(async (property: any) => {
@@ -217,11 +217,11 @@ export async function regenerateAvailablePropertyDescriptions(): Promise<ActionR
   const failures = results.filter(Boolean).length;
 
   if (failures > 0) {
-    return { success: false, message: `${failures} description(s) n’ont pas pu être générée(s).` };
+    return { success: false, message: `${failures} beschrijving(en) konden niet worden gegenereerd.` };
   }
 
   revalidateStatusViews();
-  return { success: true, message: `${data?.length ?? 0} description(s) générée(s).`, data: { updated: data?.length ?? 0 } };
+  return { success: true, message: `${data?.length ?? 0} beschrijving(en) gegenereerd.`, data: { updated: data?.length ?? 0 } };
 }
 
 export async function deleteProperty(id: string): Promise<ActionResult> {
@@ -229,13 +229,13 @@ export async function deleteProperty(id: string): Promise<ActionResult> {
 
   const { error } = await supabase.from('properties').delete().eq('id', id);
   if (error) {
-    return { success: false, message: 'Impossible de supprimer ce logement.' };
+    return { success: false, message: 'Deze woning kon niet worden verwijderd.' };
   }
 
   await logAdminAction({ action: 'property.delete', entityType: 'property', entityId: id });
   revalidateStatusViews();
 
-  return { success: true, message: 'Appartement supprimé.' };
+  return { success: true, message: 'Appartement verwijderd.' };
 }
 
 export async function updatePropertyStatus(id: string, status: PropertyStatus): Promise<ActionResult> {
@@ -243,13 +243,13 @@ export async function updatePropertyStatus(id: string, status: PropertyStatus): 
   const { data, error } = await supabase.from('properties').update({ status }).eq('id', id).select('slug').single();
 
   if (error) {
-    return { success: false, message: 'Impossible de mettre à jour le statut.' };
+    return { success: false, message: 'De status kon niet worden bijgewerkt.' };
   }
 
   await logAdminAction({ action: 'property.status_change', entityType: 'property', entityId: id, details: { status } });
   revalidateStatusViews();
 
-  return { success: true, message: 'Statut mis à jour.' };
+  return { success: true, message: 'Status bijgewerkt.' };
 }
 
 export async function togglePropertyPublish(id: string, isPublished: boolean): Promise<ActionResult> {
@@ -262,7 +262,7 @@ export async function togglePropertyPublish(id: string, isPublished: boolean): P
     .single();
 
   if (error) {
-    return { success: false, message: 'Impossible de mettre à jour la publication.' };
+    return { success: false, message: 'De publicatie kon niet worden bijgewerkt.' };
   }
 
   await logAdminAction({
@@ -272,5 +272,5 @@ export async function togglePropertyPublish(id: string, isPublished: boolean): P
   });
   revalidateStatusViews();
 
-  return { success: true, message: isPublished ? 'Logement publié.' : 'Logement dépublié.' };
+  return { success: true, message: isPublished ? 'Woning gepubliceerd.' : 'Publicatie van woning ingetrokken.' };
 }

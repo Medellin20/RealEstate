@@ -56,9 +56,9 @@ export default async function AdminPropertiesPage({
 
       <PropertySearch search={searchParams.search ?? ''} status={status} />
 
-      <div aria-live="polite" aria-atomic="true" className="sr-only">{total} appartement(s) trouvé(s)</div>
+      <div aria-live="polite" aria-atomic="true" className="sr-only">{total} appartement(en) gevonden</div>
       {properties.length === 0 ? (
-        <EmptyState title="Aucun appartement trouvé" />
+        <EmptyState title="Geen appartementen gevonden" />
       ) : (
         <>
           {/* Vue tableau — desktop */}

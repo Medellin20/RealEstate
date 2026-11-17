@@ -15,7 +15,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     .maybeSingle();
 
   if (error) {
-    throw new Error(`Impossible de charger les paramètres du site : ${error.message}`);
+    throw new Error(`De website-instellingen konden niet worden geladen: ${error.message}`);
   }
 
   return {

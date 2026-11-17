@@ -9,26 +9,26 @@ function optionalNumber(schema: z.ZodNumber) {
 }
 
 export const propertySchema = z.object({
-  title: z.string().trim().min(5, 'Le titre doit contenir au moins 5 caractères.'),
+  title: z.string().trim().min(5, 'De titel moet minimaal 5 tekens bevatten.'),
   slug: z
     .string()
     .trim()
-    .min(5, 'Le slug doit contenir au moins 5 caractères.')
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Le slug ne doit contenir que des minuscules, chiffres et tirets.'),
+    .min(5, 'De slug moet minimaal 5 tekens bevatten.')
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'De slug mag alleen kleine letters, cijfers en koppeltekens bevatten.'),
   propertyType: z.enum(['appartement', 'studio', 'maison', 'chambre', 'loft', 'duplex']),
 
   address: z.string().trim().optional().or(z.literal('')),
-  city: z.string().trim().min(2, 'Merci d’indiquer la ville de l’appartement.'),
+  city: z.string().trim().min(2, 'Vul de plaats van het appartement in.'),
   postalCode: z.string().trim().optional().or(z.literal('')),
   neighborhood: z.string().trim().optional().or(z.literal('')),
   latitude: optionalNumber(z.coerce.number().min(-90).max(90)),
   longitude: optionalNumber(z.coerce.number().min(-180).max(180)),
 
-  monthlyPrice: z.coerce.number().positive('Le prix mensuel doit être positif.'),
+  monthlyPrice: z.coerce.number().positive('De maandprijs moet positief zijn.'),
   serviceCharges: z.coerce.number().min(0).default(0),
   depositAmount: z.coerce.number().min(0).default(0),
 
-  surfaceM2: z.coerce.number().positive('La surface doit être positive.'),
+  surfaceM2: z.coerce.number().positive('De oppervlakte moet positief zijn.'),
   bedrooms: z.coerce.number().int().min(0),
   bathrooms: z.coerce.number().int().min(0),
   rooms: optionalNumber(z.coerce.number().int().min(0)),

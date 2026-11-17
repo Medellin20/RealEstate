@@ -1,3 +1,4 @@
+import { dutchLabel } from '@/lib/utils/dutch-display';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import Link from 'next/link';
@@ -9,7 +10,7 @@ import { getSiteSettings } from '@/lib/data/site-settings';
 import { PrintPdfButton } from '@/components/shared/print-pdf-button';
 import { formatDate, formatPrice } from '@/lib/utils/format';
 
-export const metadata: Metadata = { title: 'Reçu de visite' };
+export const metadata: Metadata = { title: 'Betalingsbewijs bezichtiging' };
 
 export default async function ViewingReceiptPage({
   params,
@@ -103,7 +104,7 @@ export default async function ViewingReceiptPage({
             : 'Dit document bevestigt de registratie van uw bezichtigingsaanvraag. De betaling is nog niet door de beheerder bevestigd. Bewaar dit overzicht en vermeld het referentienummer bij uw overschrijving.'}
           {' '}De bezichtigingskosten zijn terugbetaalbaar.
           {bankIsDemo && <span className="mt-2 block font-semibold text-red-700">Let op: de op de website ingestelde bankgegevens zijn demo- of voorbeeldgegevens. Controleer de actuele betaalgegevens bij de beheerder voordat u geld overmaakt.</span>}
-          {bank?.payment_instructions && <span className="mt-2 block">{bank.payment_instructions}</span>}
+          {bank?.payment_instructions && <span className="mt-2 block">{dutchLabel(bank.payment_instructions)}</span>}
         </p>
 
         <footer className="mt-8 flex flex-col justify-between gap-5 border-t border-ink-200 pt-5 text-sm text-ink-600 sm:flex-row sm:items-end">

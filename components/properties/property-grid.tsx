@@ -10,7 +10,7 @@ export function PropertyGrid({ properties }: { properties: PropertyWithRelations
     return (
       <EmptyState
         icon={<SearchX className="h-10 w-10" />}
-        title="geen woning ne correspond aan uw zoektocht"
+        title="Geen woningen gevonden die aan uw zoekcriteria voldoen"
         description="Probeer uw criteria te verruimen: budget, stad of aantal slaapkamers."
       />
     );

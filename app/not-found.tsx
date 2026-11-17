@@ -12,7 +12,7 @@ export default function NotFound() {
         <div className="container-app text-center">
           <p className="text-eyebrow text-canal-600">Fout 404</p>
           <h1 className="mt-3 text-display-md font-extrabold text-ink-900 sm:text-display-lg">
-            Page introuvable
+            Pagina niet gevonden
           </h1>
           <p className="mx-auto mt-4 max-w-md text-ink-500">
             De woning of pagina die u zoekt bestaat niet of is niet meer beschikbaar.
@@ -27,7 +27,7 @@ export default function NotFound() {
             <Link href="/appartements">
               <Button>
                 <Search className="h-4 w-4" />
-                Voir les appartements
+                Appartementen bekijken
               </Button>
             </Link>
           </div>

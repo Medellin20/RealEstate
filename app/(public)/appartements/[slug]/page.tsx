@@ -1,3 +1,4 @@
+import { dutchLabel } from '@/lib/utils/dutch-display';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -29,7 +30,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const property = await getPropertyBySlug(params.slug);
-  if (!property) return { title: 'woning introuvable' };
+  if (!property) return { title: 'Woning niet gevonden' };
   const dutchDescription = generateDutchPropertyDescription(property);
 
   const primaryImage = property.property_images.find((i) => i.is_primary) ?? property.property_images[0];
@@ -54,7 +55,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
 
   const dutchDescription = generateDutchPropertyDescription(
     property,
-    property.amenities.map((amenity) => amenity.label_fr)
+    property.amenities.map((amenity) => dutchLabel(amenity.label_fr))
   );
   const similar = await getSimilarProperties(property, 3);
   const statusMeta = PROPERTY_STATUS_LABELS[property.status];
@@ -109,7 +110,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                 </h1>
                 <p className="mt-1 text-ink-500">
                   {property.neighborhood ? `${property.neighborhood}, ` : ''}
-                  {property.city} · Pays-Bas
+                  {property.city} · Nederland
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -128,7 +129,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
               <Feature
                 icon={Building}
                 label="Verdieping"
-                value={property.floor != null ? `${property.floor}${property.floor === 0 ? ' (RDC)' : ''}` : '—'}
+                value={property.floor != null ? `${property.floor}${property.floor === 0 ? ' (begane grond)' : ''}` : '—'}
               />
             </div>
 
@@ -142,30 +143,30 @@ export default async function PropertyDetailPage({ params }: PageProps) {
             <div className="mt-10">
               <h2 className="text-lg font-bold text-ink-900">Details van de woning</h2>
               <dl className="mt-4 grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
-                <DetailRow label="Offert vanaf" value={formatDate(property.created_at)} />
-                <DetailRow label="Caution" value={formatPrice(property.deposit_amount)} />
-                <DetailRow label="Type de contrat" value={property.contract_type} />
-                <DetailRow label="Interieur" value={property.interior_type} />
-                <DetailRow label="Onderhoudstoestand" value={property.maintenance_condition} />
+                <DetailRow label="Aangeboden sinds" value={formatDate(property.created_at)} />
+                <DetailRow label="Waarborgsom" value={formatPrice(property.deposit_amount)} />
+                <DetailRow label="Contracttype" value={dutchLabel(property.contract_type)} />
+                <DetailRow label="Interieur" value={dutchLabel(property.interior_type)} />
+                <DetailRow label="Onderhoudstoestand" value={dutchLabel(property.maintenance_condition)} />
                 <DetailRow
-                  label="Ameublement"
-                  value={property.is_furnished ? 'Meublé' : 'Non meublé'}
+                  label="Meubilering"
+                  value={property.is_furnished ? 'Gemeubileerd' : 'Ongemeubileerd'}
                 />
                 <DetailRow
-                  label="beschikbaar aan partir van de"
-                  value={property.available_from ? formatDate(property.available_from) : 'Nous consulter'}
+                  label="Beschikbaar vanaf"
+                  value={property.available_from ? formatDate(property.available_from) : 'Neem contact met ons op'}
                 />
                 <DetailRow
-                  label="duur minimale de verhuur"
-                  value={`${property.minimum_stay_months ?? 12} mois`}
+                  label="Minimale huurperiode"
+                  value={`${property.minimum_stay_months ?? 12} maanden`}
                 />
                 <DetailRow label="Volume" value={property.volume_m3 ? `${property.volume_m3} m³` : '—'} />
                 <DetailRow label="Aantal verdiepingen" value={property.floors_count ? String(property.floors_count) : '—'} />
-                <DetailRow label="Bouwtype" value={property.construction_type} />
+                <DetailRow label="Bouwtype" value={dutchLabel(property.construction_type)} />
                 <DetailRow label="Bouwjaar" value={property.construction_year ? String(property.construction_year) : '—'} />
                 <DetailRow label="Energielabel" value={property.energy_label || '—'} />
-                <DetailRow label="Parking" value={property.has_parking ? 'Oui' : 'Non'} />
-                <DetailRow label="Garage" value={property.has_garage ? 'Oui' : 'Non'} />
+                <DetailRow label="Parking" value={property.has_parking ? 'Ja' : 'Nee'} />
+                <DetailRow label="Garage" value={property.has_garage ? 'Ja' : 'Nee'} />
               </dl>
             </div>
 
@@ -179,7 +180,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                       className="flex items-center gap-2.5 rounded-xl border border-ink-100 bg-white px-3.5 py-3 text-sm text-ink-600"
                     >
                       <AmenityIcon name={a.icon} className="h-4.5 w-4.5 text-canal-600" />
-                      {a.label_fr}
+                      {dutchLabel(a.label_fr)}
                     </div>
                   ))}
                 </div>
@@ -217,11 +218,11 @@ export default async function PropertyDetailPage({ params }: PageProps) {
               <div className="mt-5 space-y-2 border-t border-ink-100 pt-5 text-sm text-ink-500">
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-1.5"><Sofa className="h-3.5 w-3.5" /> Gemeubileerd</span>
-                  <span className="font-medium text-ink-700">{property.is_furnished ? 'Oui' : 'Non'}</span>
+                  <span className="font-medium text-ink-700">{property.is_furnished ? 'Ja' : 'Nee'}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-1.5"><ArrowUpDown className="h-3.5 w-3.5" /> Lift</span>
-                  <span className="font-medium text-ink-700">{property.has_elevator ? 'Oui' : 'Non'}</span>
+                  <span className="font-medium text-ink-700">{property.has_elevator ? 'Ja' : 'Nee'}</span>
                 </div>
               </div>
             </div>
@@ -231,7 +232,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
 
       {similar.length > 0 && (
         <div className="mt-16">
-          <h2 className="text-lg font-bold text-ink-900">woningen similaires</h2>
+          <h2 className="text-lg font-bold text-ink-900">Vergelijkbare woningen</h2>
           <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {similar.map((p) => (
               <PropertyCard key={p.id} property={p} />

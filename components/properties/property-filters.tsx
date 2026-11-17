@@ -148,7 +148,7 @@ export function PropertyFilters({ resultCount, cities }: { resultCount: number; 
           Resetten
         </Button>
         <Button type="button" className="flex-1" onClick={() => apply(filters)}>
-          Appliquer
+          Toepassen
         </Button>
       </div>
     </div>
@@ -167,7 +167,7 @@ export function PropertyFilters({ resultCount, cities }: { resultCount: number; 
           onChange={(e) => update('sort', e.target.value)}
           className="!h-10 min-w-0 flex-1 text-xs sm:w-auto sm:min-w-[9.5rem]"
         >
-          <option value="recent">Nieuwstes</option>
+          <option value="recent">Nieuwste</option>
           <option value="price_asc">Prijs oplopend</option>
           <option value="price_desc">Prijs aflopend</option>
           <option value="surface">Oppervlakte</option>
@@ -175,7 +175,7 @@ export function PropertyFilters({ resultCount, cities }: { resultCount: number; 
 
         <Button variant="outline" size="sm" onClick={() => setDrawerOpen(true)} className="shrink-0">
           <SlidersHorizontal className="h-3.5 w-3.5" />
-          Filtres
+          Filters
           {activeCount > 0 && (
             <span className="ml-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-ink-700 text-[10px] font-bold text-white">
               {activeCount}

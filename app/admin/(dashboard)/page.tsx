@@ -53,17 +53,17 @@ export default async function AdminDashboardPage() {
         <Link href="/admin/appartements/nouveau" className="w-full sm:w-auto">
           <Button className="w-full sm:w-auto">
             <PlusCircle className="h-4 w-4" />
-            Ajouter un appartement
+            Appartement toevoegen
           </Button>
         </Link>
       </div>
 
       <div className="grid grid-cols-1 gap-4 min-[380px]:grid-cols-2 sm:grid-cols-3 xl:grid-cols-5">
-        <StatCard href="/admin/appartements" icon={Building2} label="Total appartementen" value={stats.totalProperties} />
+        <StatCard href="/admin/appartements" icon={Building2} label="Totaal appartementen" value={stats.totalProperties} />
         <StatCard href="/admin/appartements?status=available" icon={Home} label="beschikbare" value={stats.availableProperties} tone="positive" />
         <StatCard href="/admin/appartements?status=reserved" icon={Clock} label="Gereserveerd" value={stats.reservedProperties} tone="warning" />
         <StatCard href="/admin/appartements?status=rented" icon={CheckCircle2} label="Verhuurd" value={stats.rentedProperties} />
-        <StatCard href="/admin/appartements?status=draft" icon={FileText} label="Brouillons" value={stats.draftProperties} />
+        <StatCard href="/admin/appartements?status=draft" icon={FileText} label="Concepten" value={stats.draftProperties} />
       </div>
 
       <div className="mt-8 rounded-2xl border border-ink-100 bg-white p-5 sm:p-6">

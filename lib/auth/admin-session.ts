@@ -12,7 +12,7 @@ function getSecret(): string {
   const secret = process.env.ADMIN_SESSION_SECRET;
   if (!secret || secret.length < 16) {
     throw new Error(
-      'ADMIN_SESSION_SECRET manquant ou trop court. Définissez une chaîne aléatoire d’au moins 16 caractères dans .env.local.'
+      'ADMIN_SESSION_SECRET ontbreekt of is te kort. Stel in .env.local een willekeurige tekenreeks van minimaal 16 tekens in.'
     );
   }
   return secret;

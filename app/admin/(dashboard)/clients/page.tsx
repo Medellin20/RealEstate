@@ -23,7 +23,7 @@ export default async function AdminClientsPage({ searchParams }: { searchParams:
       <form className="mb-5 flex flex-col gap-3 sm:flex-row" action="/admin/clients" method="get">
         <div className="relative flex-1">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-300" />
-          <Input name="search" placeholder="Zoeken par naam of e-mail..." defaultValue={searchParams.search} className="pl-10" />
+          <Input name="search" placeholder="Zoeken op naam of e-mail..." defaultValue={searchParams.search} className="pl-10" />
         </div>
         <Button type="submit" variant="outline" className="w-full sm:w-auto">Zoeken</Button>
         {searchParams.search?.trim() && (

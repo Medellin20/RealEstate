@@ -4,7 +4,7 @@ import { getSiteUrl } from '@/lib/utils/site-url';
 type EmailDetails = Record<string, string | number | null | undefined>;
 
 function formatPrice(value: number): string {
-  return new Intl.NumberFormat('fr-FR', {
+  return new Intl.NumberFormat('nl-NL', {
     style: 'currency',
     currency: 'EUR',
     maximumFractionDigits: 0,
@@ -16,7 +16,7 @@ function formatDate(value: string): string {
 
   if (!year || !month || !day) return value;
 
-  return new Intl.DateTimeFormat('fr-FR', {
+  return new Intl.DateTimeFormat('nl-NL', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
@@ -59,17 +59,17 @@ export function getPropertyEmailDetails(
     Volume: property.volume_m3 === null ? undefined : `${property.volume_m3} m³`,
     Contrat: property.contract_type,
     Intérieur: property.interior_type,
-    Meublé: property.is_furnished ? 'Oui' : 'Non',
+    Meublé: property.is_furnished ? 'Ja' : 'Nee',
     'État d’entretien': property.maintenance_condition,
     Construction: property.construction_type,
     'Année de construction': property.construction_year,
     'Label énergétique': property.energy_label,
-    Ascenseur: property.has_elevator ? 'Oui' : 'Non',
-    Balcon: property.has_balcony ? 'Oui' : 'Non',
-    Terrasse: property.has_terrace ? 'Oui' : 'Non',
-    Parking: property.has_parking ? 'Oui' : 'Non',
-    Garage: property.has_garage ? 'Oui' : 'Non',
-    Jardin: property.has_garden ? 'Oui' : 'Non',
+    Ascenseur: property.has_elevator ? 'Ja' : 'Nee',
+    Balcon: property.has_balcony ? 'Ja' : 'Nee',
+    Terrasse: property.has_terrace ? 'Ja' : 'Nee',
+    Parking: property.has_parking ? 'Ja' : 'Nee',
+    Garage: property.has_garage ? 'Ja' : 'Nee',
+    Jardin: property.has_garden ? 'Ja' : 'Nee',
     Équipements: amenityLabels.length > 0 ? amenityLabels.join(', ') : 'Aucun renseigné',
     'Disponible à partir du': property.available_from
       ? formatDate(property.available_from)

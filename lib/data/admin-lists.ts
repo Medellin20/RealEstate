@@ -27,7 +27,7 @@ export async function getAllViewingsAdmin(params: { status?: string; date?: stri
     console.error('ADMIN VIEWINGS SETUP ERROR:', error);
     return {
       viewings: [],
-      error: 'La connexion à la base de données a échoué. Vérifiez la configuration Supabase.',
+      error: 'De verbinding met de database is mislukt. Controleer de Supabase-configuratie.',
     };
   }
 }
@@ -57,7 +57,7 @@ export async function getAllReservationsAdmin(params: { status?: string; scope?:
     console.error('ADMIN RESERVATIONS SETUP ERROR:', error);
     return {
       reservations: [],
-      error: 'La connexion à la base de données a échoué. Vérifiez la configuration Supabase.',
+      error: 'De verbinding met de database is mislukt. Controleer de Supabase-configuratie.',
     };
   }
 }

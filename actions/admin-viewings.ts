@@ -16,24 +16,24 @@ export async function updateViewingStatus(
 ): Promise<ActionResult> {
   const token = cookies().get(ADMIN_SESSION_COOKIE)?.value;
   if (!(await isValidAdminSessionToken(token))) {
-    return { success: false, message: 'Votre session administrateur a expiré. Connectez-vous à nouveau.' };
+    return { success: false, message: 'Uw beheerderssessie is verlopen. Log opnieuw in.' };
   }
 
   if (!['pending', 'payment_pending', 'paid', 'confirmed', 'cancelled', 'completed'].includes(status)) {
-    return { success: false, message: 'Statut de visite invalide.' };
+    return { success: false, message: 'Ongeldige bezichtigingsstatus.' };
   }
 
   const supabase = createAdminClient();
 
   const { data: current } = await supabase.from('viewing_requests').select('status').eq('id', id).maybeSingle();
-  if (!current) return { success: false, message: 'Demande de visite introuvable.' };
+  if (!current) return { success: false, message: 'Bezichtigingsaanvraag niet gevonden.' };
 
   const { error } = await supabase
     .from('viewing_requests')
     .update({ status, ...(adminNotes !== undefined ? { admin_notes: adminNotes } : {}) })
     .eq('id', id);
 
-  if (error) return { success: false, message: 'Impossible de mettre à jour le statut.' };
+  if (error) return { success: false, message: 'De status kon niet worden bijgewerkt.' };
 
   await recordStatusChange({
     entityType: 'viewing_request',
@@ -46,7 +46,7 @@ export async function updateViewingStatus(
 
   revalidateStatusViews();
 
-  return { success: true, message: 'Statut de la visite mis à jour.' };
+  return { success: true, message: 'Bezichtigingsstatus bijgewerkt.' };
 }
 
 export async function approveViewing(viewingId: string): Promise<ActionResult> {

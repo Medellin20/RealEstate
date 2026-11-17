@@ -31,7 +31,7 @@ function getStripeClient(): Stripe {
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) {
     throw new Error(
-      'STRIPE_SECRET_KEY manquant. Ajoutez votre clé secrète Stripe dans .env.local pour activer le paiement des frais de visite.'
+      'STRIPE_SECRET_KEY ontbreekt. Voeg uw geheime Stripe-sleutel toe aan .env.local om de betaling van bezichtigingskosten in te schakelen.'
     );
   }
   return new Stripe(key, { apiVersion: '2024-06-20' });
@@ -73,7 +73,7 @@ export const stripeProvider: PaymentProvider = {
     });
 
     if (!session.url) {
-      throw new Error('Stripe n’a pas renvoyé d’URL de paiement.');
+      throw new Error('Stripe heeft geen betaal-URL teruggestuurd.');
     }
 
     return { url: session.url, sessionId: session.id };

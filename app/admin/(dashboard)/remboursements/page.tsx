@@ -26,7 +26,7 @@ export default async function AdminRefundsPage({ searchParams }: { searchParams:
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-ink-900">Terugbetalingsaanvragen</h1>
-          <p className="mt-1 text-sm text-ink-500">{refunds.length} demande(s).</p>
+          <p className="mt-1 text-sm text-ink-500">{refunds.length} aanvraag/aanvragen.</p>
         </div>
         <form action="/admin/remboursements" method="get" className="w-full sm:w-auto">
           <AutoSubmitSelect name="status" defaultValue={searchParams.status} className="sm:w-56">
@@ -65,7 +65,7 @@ export default async function AdminRefundsPage({ searchParams }: { searchParams:
 
               {refund.reason && (
                 <p className="mt-2 rounded-lg bg-sand-100/60 px-3 py-2 text-xs text-ink-500">
-                  Raison : {refund.reason}
+                  Reden: {refund.reason}
                 </p>
               )}
 

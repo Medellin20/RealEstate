@@ -3,7 +3,7 @@ import { Lock, Home } from 'lucide-react';
 import Link from 'next/link';
 import { AdminLoginForm } from '@/components/admin/login-form';
 
-export const metadata: Metadata = { title: 'Connexion administrateur' };
+export const metadata: Metadata = { title: 'Inloggen als beheerder' };
 
 export default function AdminLoginPage() {
   return (
@@ -20,7 +20,7 @@ export default function AdminLoginPage() {
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white">
             <Lock className="h-5 w-5" />
           </div>
-          <h1 className="mt-4 text-center text-lg font-bold text-white">Espace administrateur</h1>
+          <h1 className="mt-4 text-center text-lg font-bold text-white">Beheeromgeving</h1>
           <p className="mt-1 text-center text-sm text-sand-400">
             Log in om advertenties en klantdossiers te beheren.
           </p>

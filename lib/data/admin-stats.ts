@@ -68,7 +68,7 @@ export async function getAdminAlerts() {
   ]);
 
   return [
-    ...(reservations ?? []).map((item) => ({ ...item, label: `Réservation ${item.reference} à examiner`, href: '/admin/reservations', tone: 'warning' as const })),
-    ...(viewings ?? []).map((item) => ({ ...item, label: `Visite ${item.reference} à organiser`, href: '/admin/visites', tone: 'info' as const })),
+    ...(reservations ?? []).map((item) => ({ ...item, label: `Reservering ${item.reference} beoordelen`, href: '/admin/reservations', tone: 'warning' as const })),
+    ...(viewings ?? []).map((item) => ({ ...item, label: `Bezichtiging ${item.reference} plannen`, href: '/admin/visites', tone: 'info' as const })),
   ].sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, 10);
 }

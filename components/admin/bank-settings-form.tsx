@@ -60,7 +60,7 @@ export function BankSettingsForm({ settings }: { settings: BankSettings }) {
           <FieldError message={errors.iban?.message} />
         </div>
         <div>
-          <Label htmlFor="bic">BIC / SWIFT (facultatif)</Label>
+          <Label htmlFor="bic">BIC / SWIFT (optioneel)</Label>
           <Input id="bic" {...register('bic')} className="font-mono" />
           <FieldError message={errors.bic?.message} />
         </div>
@@ -84,7 +84,7 @@ export function BankSettingsForm({ settings }: { settings: BankSettings }) {
 
       <Button type="submit" isLoading={isPending}>
         <Save className="h-4 w-4" />
-        Enregistrer
+        Opslaan
       </Button>
     </form>
   );

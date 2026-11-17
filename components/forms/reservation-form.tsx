@@ -201,7 +201,7 @@ export function ReservationForm({
                   <Label htmlFor="employmentContract">Arbeidscontract</Label>
                   <Select id="employmentContract" {...register('employmentContract')}>
                     <option value="">Selecteer uw contract</option>
-                    <option value="CDI">CDI</option><option value="CDD">CDD</option>
+                    <option value="CDI">Vast contract</option><option value="CDD">Contract voor bepaalde tijd</option>
                     <option value="Indépendant">Zelfstandig</option><option value="Intérim">Tijdelijk contract</option>
                     <option value="Étudiant">Student</option><option value="Autre">Anders</option>
                   </Select>

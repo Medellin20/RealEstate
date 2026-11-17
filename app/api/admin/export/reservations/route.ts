@@ -17,7 +17,7 @@ export async function GET(_request: NextRequest) {
   const isAuthenticated = await isValidAdminSessionToken(token);
 
   if (!isAuthenticated) {
-    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
+    return NextResponse.json({ error: 'Niet geautoriseerd' }, { status: 401 });
   }
 
   const supabase = createAdminClient();
@@ -27,24 +27,24 @@ export async function GET(_request: NextRequest) {
     .order('created_at', { ascending: false });
 
   if (error) {
-    return NextResponse.json({ error: 'Erreur lors de la récupération des données.' }, { status: 500 });
+    return NextResponse.json({ error: 'Er is een fout opgetreden bij het ophalen van de gegevens.' }, { status: 500 });
   }
 
   const headers = [
-    'Référence',
-    'Logement',
-    'Ville',
+    'Referentie',
+    'Woning',
+    'Stad',
     'Client',
     'E-mail',
-    'Téléphone',
-    'Entrée souhaitée',
-    'Durée (mois)',
-    'Occupants',
-    'Animaux de compagnie',
-    'Profession',
-    'Revenu mensuel',
-    'Statut',
-    'Créée le',
+    'Telefoon',
+    'Gewenste ingangsdatum',
+    'Duur (maanden)',
+    'Bewoners',
+    'Huisdieren',
+    'Beroep',
+    'Maandinkomen',
+    'Status',
+    'Aangemaakt op',
   ];
 
   const rows = (reservations ?? []).map((r: any) => [
@@ -57,7 +57,7 @@ export async function GET(_request: NextRequest) {
     r.desired_move_in_date,
     r.duration_months,
     r.occupants_count,
-    r.has_pets ? 'Oui' : 'Non',
+    r.has_pets ? 'Ja' : 'Nee',
     r.profession,
     r.monthly_income,
     r.status,

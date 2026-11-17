@@ -79,7 +79,7 @@ export function ContactForm() {
 
       <Button type="submit" isLoading={isPending} size="lg" className="w-full sm:w-auto">
         <Send className="h-4 w-4" />
-        Envoyer le message
+        Bericht versturen
       </Button>
     </form>
   );

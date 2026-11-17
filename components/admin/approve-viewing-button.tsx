@@ -33,7 +33,7 @@ export function ApproveViewingButton({ viewingId }: { viewingId: string }) {
   return (
     <Button type="button" size="sm" variant="secondary" isLoading={isPending} onClick={handleApprove}>
       <CheckCircle2 className="h-4 w-4" />
-      Approuver la visite
+      Bezichtiging goedkeuren
     </Button>
   );
 }

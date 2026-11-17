@@ -229,7 +229,7 @@ export async function createViewingRequest(
           await getAmenityLabels(property.id)
         ),
         'Frais de visite': formatPrice(viewingFee),
-        'Lien de paiement': siteSettings.payment_link,
+        'Betaallink': siteSettings.payment_link,
 
         Client:
           `${parsed.data.firstName} ${parsed.data.lastName}`,

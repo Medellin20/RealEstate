@@ -89,7 +89,7 @@ export default async function ViewingConfirmationPage({
           <Link href={`/appartements/${property.slug}/visite/recu?ref=${encodeURIComponent(viewing.reference)}`} className="min-w-0">
             <Button variant="outline" className="w-full whitespace-normal text-center leading-tight">
               <Download className="h-4 w-4" />
-              Reçu PDF downloaden
+              PDF-betalingsbewijs downloaden
             </Button>
           </Link>
           <Link href="/mon-compte" className="min-w-0">

@@ -36,14 +36,14 @@ export function DeclareTransferForm({ guaranteePaymentId }: { guaranteePaymentId
         </div>
         <div>
           <Label htmlFor="bankName">Uitgevende bank</Label>
-          <Input id="bankName" name="bankName" placeholder="Ex : ING, BNP Paribas..." required />
+          <Input id="bankName" name="bankName" placeholder="Bijv. ING, BNP Paribas..." required />
           <FieldError message={state.fieldErrors?.bankName?.[0]} />
         </div>
       </div>
 
       <div>
         <Label htmlFor="reference">Gebruikte referentie</Label>
-        <Input id="reference" name="reference" placeholder="Ex : GUARANTEE-REN-000123" required />
+        <Input id="reference" name="reference" placeholder="Bijv. GUARANTEE-REN-000123" required />
         <FieldError message={state.fieldErrors?.reference?.[0]} />
       </div>
 

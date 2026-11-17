@@ -76,7 +76,7 @@ export function HeroSearchBar() {
 
         <div>
           <label className="mb-1 flex items-center gap-1.5 text-xs font-semibold text-ink-500">
-            <BedDouble className="h-3.5 w-3.5" /> Chambres
+            <BedDouble className="h-3.5 w-3.5" /> Slaapkamers
           </label>
           <Select value={bedrooms} onChange={(e) => setBedrooms(e.target.value)}>
             <option value="">Geen voorkeur</option>

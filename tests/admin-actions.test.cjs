@@ -49,6 +49,7 @@ test('photo ordering reports database failures and scopes every update to the pr
     single: async () => ({ error: { message: 'database unavailable' } }),
   };
   const { reorderPropertyImages } = load('actions/admin-images.ts', {
+    'node:crypto': require('node:crypto'),
     'next/cache': { revalidatePath: (...args) => invalidations.push(args) },
     '@/lib/supabase/admin': { createAdminClient: () => ({ from: () => query }) },
     '@/lib/data/history': { logAdminAction: async () => {} },

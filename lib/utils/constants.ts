@@ -25,18 +25,18 @@ export type DutchCity = (typeof DUTCH_CITIES)[number];
 export const PROPERTY_TYPES = [
   { value: 'appartement', label: 'Appartement' },
   { value: 'studio', label: 'Studio' },
-  { value: 'maison', label: 'Maison' },
-  { value: 'chambre', label: 'Chambre' },
+  { value: 'maison', label: 'Woning' },
+  { value: 'chambre', label: 'Kamer' },
   { value: 'loft', label: 'Loft' },
   { value: 'duplex', label: 'Duplex' },
 ] as const;
 
 export const PROPERTY_STATUS_LABELS: Record<string, { label: string; colorClass: string }> = {
-  draft: { label: 'Brouillon', colorClass: 'bg-status-draft' },
-  available: { label: 'Disponible', colorClass: 'bg-status-available' },
-  reserved: { label: 'Réservé', colorClass: 'bg-status-reserved' },
-  rented: { label: 'Loué', colorClass: 'bg-status-rented' },
-  unavailable: { label: 'Indisponible', colorClass: 'bg-status-draft' },
+  draft: { label: 'Concept', colorClass: 'bg-status-draft' },
+  available: { label: 'Beschikbaar', colorClass: 'bg-status-available' },
+  reserved: { label: 'Gereserveerd', colorClass: 'bg-status-reserved' },
+  rented: { label: 'Verhuurd', colorClass: 'bg-status-rented' },
+  unavailable: { label: 'Niet beschikbaar', colorClass: 'bg-status-draft' },
 };
 
 export const VIEWING_STATUS_LABELS: Record<string, string> = {
@@ -53,33 +53,33 @@ export const PAYMENT_LINK = 'https://bunq.me/EtelaHorvathova';
 export const PAYMENT_CONFIRMATION_WHATSAPP = '+31684130011';
 
 export const RESERVATION_STATUS_LABELS: Record<string, string> = {
-  submitted: 'Envoyée',
-  under_review: 'En cours d’examen',
-  accepted: 'Acceptée',
-  rejected: 'Refusée',
-  awaiting_guarantee: 'En attente de garantie',
-  guarantee_paid: 'Garantie versée',
-  confirmed: 'Confirmée',
-  cancelled: 'Annulée',
+  submitted: 'Verstuurd',
+  under_review: 'In behandeling',
+  accepted: 'Geaccepteerd',
+  rejected: 'Afgewezen',
+  awaiting_guarantee: 'Wacht op waarborgsom',
+  guarantee_paid: 'Waarborgsom betaald',
+  confirmed: 'Bevestigd',
+  cancelled: 'Geannuleerd',
 };
 
 export const GUARANTEE_STATUS_LABELS: Record<string, string> = {
-  awaiting_payment: 'En attente de virement',
-  payment_declared: 'Virement déclaré',
-  payment_received: 'Virement reçu',
-  reservation_confirmed: 'Réservation confirmée',
-  refund_requested: 'Remboursement demandé',
-  refund_processing: 'Remboursement en cours',
-  refunded: 'Remboursée',
-  cancelled: 'Annulée',
+  awaiting_payment: 'Wacht op overschrijving',
+  payment_declared: 'Overschrijving gemeld',
+  payment_received: 'Overschrijving ontvangen',
+  reservation_confirmed: 'Reservering bevestigd',
+  refund_requested: 'Terugbetaling aangevraagd',
+  refund_processing: 'Terugbetaling in behandeling',
+  refunded: 'Terugbetaald',
+  cancelled: 'Geannuleerd',
 };
 
 export const REFUND_STATUS_LABELS: Record<string, string> = {
-  requested: 'Demandé',
-  approved: 'Approuvé',
-  processing: 'En cours de traitement',
-  refunded: 'Remboursé',
-  rejected: 'Refusé',
+  requested: 'Aangevraagd',
+  approved: 'Goedgekeurd',
+  processing: 'In behandeling',
+  refunded: 'Terugbetaald',
+  rejected: 'Afgewezen',
 };
 
 export const TIME_SLOTS = [

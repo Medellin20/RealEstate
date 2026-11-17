@@ -1,3 +1,4 @@
+import { dutchLabel } from '@/lib/utils/dutch-display';
 import { AlertTriangle, Landmark } from 'lucide-react';
 import type { BankSettings } from '@/types/database';
 import { formatPrice } from '@/lib/utils/format';
@@ -45,7 +46,7 @@ export function BankTransferInstructions({
 
       {bankSettings.payment_instructions && (
         <p className="mt-4 rounded-xl bg-sand-100/70 p-3.5 text-xs leading-relaxed text-ink-500">
-          {bankSettings.payment_instructions}
+          {dutchLabel(bankSettings.payment_instructions)}
         </p>
       )}
     </div>

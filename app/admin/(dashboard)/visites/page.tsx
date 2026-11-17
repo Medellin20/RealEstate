@@ -56,7 +56,7 @@ export default async function AdminViewingsPage({ searchParams }: { searchParams
 
       {error ? (
         <div role="alert" className="rounded-2xl border border-brick-200 bg-brick-50 p-5 text-sm text-brick-700">
-          Impossible de charger les visites : {error}
+          De bezichtigingen konden niet worden geladen: {error}
         </div>
       ) : viewings.length === 0 ? (
         <EmptyState title="Geen bezichtigingsaanvragen" />

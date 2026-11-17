@@ -63,7 +63,7 @@ export function RefundRequestButton({ guaranteePaymentId }: { guaranteePaymentId
 
         <div className="mt-6 flex gap-2.5">
           <Button variant="outline" className="flex-1" onClick={() => setOpen(false)}>
-            Annuler
+            Annuleren
           </Button>
           <Button
             variant="destructive"

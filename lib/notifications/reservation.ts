@@ -55,7 +55,7 @@ export async function notifyAdminOfReservation(
       'Date souhaitée': reservation.desired_move_in_date,
       Durée: `${reservation.duration_months} mois`,
       Occupants: reservation.occupants_count,
-      'Animaux de compagnie': reservation.has_pets ? 'Oui' : 'Non',
+      'Animaux de compagnie': reservation.has_pets ? 'Ja' : 'Nee',
       'Contrat de travail': reservation.employment_contract,
       'Revenu mensuel': reservation.monthly_income === null ? undefined : `${reservation.monthly_income} €`,
       'Ville d’origine': reservation.origin_city,

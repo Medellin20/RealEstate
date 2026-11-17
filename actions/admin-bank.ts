@@ -11,7 +11,7 @@ export async function updateBankSettings(input: BankSettingsInput): Promise<Acti
   if (!parsed.success) {
     return {
       success: false,
-      message: 'Merci de corriger les champs indiqués.',
+      message: 'Corrigeer de aangegeven velden.',
       fieldErrors: parsed.error.flatten().fieldErrors,
     };
   }
@@ -33,12 +33,12 @@ export async function updateBankSettings(input: BankSettingsInput): Promise<Acti
 
   if (error) {
     console.error('Failed to update bank settings:', error);
-    return { success: false, message: 'Impossible de mettre à jour la configuration bancaire.' };
+    return { success: false, message: 'De bankinstellingen konden niet worden bijgewerkt.' };
   }
 
   await logAdminAction({ action: 'bank_settings.update' });
   revalidatePath('/admin/configuration-bancaire');
   revalidatePath('/mon-compte');
 
-  return { success: true, message: 'Configuration bancaire mise à jour avec succès.' };
+  return { success: true, message: 'Bankinstellingen bijgewerkt.' };
 }

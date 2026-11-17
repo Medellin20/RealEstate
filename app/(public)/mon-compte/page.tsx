@@ -162,7 +162,7 @@ function EmailLookupScreen({ notFoundEmail }: { notFoundEmail?: string }) {
         )}
 
         <form action="/mon-compte" method="get" className="mt-6 space-y-3">
-          <Input type="email" name="email" placeholder="u@exemple.com" required defaultValue={notFoundEmail} />
+          <Input type="email" name="email" placeholder="u@voorbeeld.nl" required defaultValue={notFoundEmail} />
           <Button type="submit" className="w-full">
             <Search className="h-4 w-4" />
             Naar mijn dossier

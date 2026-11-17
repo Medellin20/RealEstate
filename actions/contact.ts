@@ -9,13 +9,13 @@ export async function submitContactMessage(input: ContactInput): Promise<ActionR
   if (!parsed.success) {
     return {
       success: false,
-      message: 'Merci de corriger les champs indiqués.',
+      message: 'Corrigeer de aangegeven velden.',
       fieldErrors: parsed.error.flatten().fieldErrors,
     };
   }
 
   if (parsed.data.website) {
-    return { success: true, message: 'Votre message a été envoyé.' };
+    return { success: true, message: 'Uw bericht is verstuurd.' };
   }
 
   const supabase = createAdminClient();
@@ -28,8 +28,8 @@ export async function submitContactMessage(input: ContactInput): Promise<ActionR
   });
 
   if (error) {
-    return { success: false, message: 'Une erreur est survenue, merci de réessayer.' };
+    return { success: false, message: 'Er is een fout opgetreden. Probeer het opnieuw.' };
   }
 
-  return { success: true, message: 'Votre message a été envoyé. Nous vous répondrons rapidement.' };
+  return { success: true, message: 'Uw bericht is verstuurd. Wij nemen spoedig contact met u op.' };
 }

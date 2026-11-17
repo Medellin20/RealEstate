@@ -11,7 +11,7 @@ function load(sendMail) {
     process: { env: {
       GMAIL_USER: 'sender@example.com', GMAIL_APP_PASSWORD: 'test-password', ALERT_EMAIL: 'admin@example.com',
     } },
-    require: (name) => name === 'server-only' ? {} : {
+    require: (name) => name === '@/lib/utils/dutch-display' ? loadDutchDisplay() : name === 'server-only' ? {} : {
       createTransport: () => ({
         verify: () => { throw new Error('Redundant SMTP verification'); },
         sendMail,
@@ -53,4 +53,36 @@ test('preserves delivery failure reporting', async () => {
   const result = await send('Test', {});
   assert.equal(result.sent, false);
   assert.equal(result.reason, 'delivery_failed');
+});
+
+function loadDutchDisplay() {
+  const context = { exports: {} };
+  vm.runInNewContext(ts.transpileModule(fs.readFileSync('lib/utils/dutch-display.ts', 'utf8'), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2017 },
+  }).outputText, context);
+  return context.exports;
+}
+
+test('localizes email labels and known values while preserving submitted content', async () => {
+  const details = {
+    'Animaux de compagnie': 'Oui',
+    'Contrat de travail': 'CDI',
+    'Intérieur': 'Non meublé',
+    Message: 'Oui, je souhaite visiter. <script>test</script>',
+    Client: 'François Dupont',
+    Email: 'francois@example.com',
+  };
+  const before = JSON.stringify(details);
+  let delivered;
+  const send = load(async (message) => { delivered = message; return { messageId: 'test-id' }; });
+  assert.equal((await send('Nouvelle demande de visite — VIS-123', details)).sent, true);
+  assert.equal(delivered.subject, 'Nieuwe bezichtigingsaanvraag — VIS-123');
+  assert.match(delivered.text, /Huisdieren: Ja/);
+  assert.match(delivered.text, /Arbeidscontract: Vast contract/);
+  assert.match(delivered.text, /Interieur: Ongemeubileerd/);
+  assert(delivered.text.includes(details.Message));
+  assert(delivered.text.includes(details.Client));
+  assert(delivered.html.includes('lang="nl"'));
+  assert(!delivered.html.includes('<script>'));
+  assert.equal(JSON.stringify(details), before);
 });

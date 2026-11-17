@@ -27,7 +27,7 @@ export async function declareGuaranteeTransfer(
   if (!parsed.success) {
     return {
       success: false,
-      message: 'Merci de corriger les champs indiqués.',
+      message: 'Corrigeer de aangegeven velden.',
       fieldErrors: parsed.error.flatten().fieldErrors,
     };
   }
@@ -41,7 +41,7 @@ export async function declareGuaranteeTransfer(
     .maybeSingle();
 
   if (fetchError || !guarantee) {
-    return { success: false, message: 'Dossier de garantie introuvable.' };
+    return { success: false, message: 'Waarborgdossier niet gevonden.' };
   }
 
   let proofStoragePath: string | null = guarantee.proof_storage_path;
@@ -49,7 +49,7 @@ export async function declareGuaranteeTransfer(
 
   if (proofFile && proofFile.size > 0) {
     if (proofFile.size > 8 * 1024 * 1024) {
-      return { success: false, message: 'Le justificatif ne doit pas dépasser 8 Mo.' };
+      return { success: false, message: 'Het betaalbewijs mag niet groter zijn dan 8 MB.' };
     }
     const extension = proofFile.name.split('.').pop() || 'pdf';
     const path = `guarantees/${guarantee.reference}/${Date.now()}.${extension}`;
@@ -59,7 +59,7 @@ export async function declareGuaranteeTransfer(
       .upload(path, proofFile, { upsert: true, contentType: proofFile.type });
 
     if (uploadError) {
-      return { success: false, message: 'Le téléversement du justificatif a échoué. Merci de réessayer.' };
+      return { success: false, message: 'Het uploaden van het betaalbewijs is mislukt. Probeer het opnieuw.' };
     }
     proofStoragePath = path;
   }
@@ -76,7 +76,7 @@ export async function declareGuaranteeTransfer(
     .eq('id', guarantee.id);
 
   if (updateError) {
-    return { success: false, message: 'Une erreur est survenue, merci de réessayer.' };
+    return { success: false, message: 'Er is een fout opgetreden. Probeer het opnieuw.' };
   }
 
   await recordStatusChange({
@@ -89,5 +89,5 @@ export async function declareGuaranteeTransfer(
 
   revalidateStatusViews();
 
-  return { success: true, message: 'Votre virement a bien été déclaré. Notre équipe va le vérifier.' };
+  return { success: true, message: 'Uw overschrijving is gemeld. Ons team zal deze controleren.' };
 }

@@ -37,20 +37,20 @@ export async function loginAdmin(_prevState: AdminLoginState, formData: FormData
   if (!rateLimit.allowed) {
     return {
       success: false,
-      message: `Trop de tentatives. Réessayez dans ${Math.ceil((rateLimit.retryAfterSeconds ?? 60) / 60)} minute(s).`,
+      message: `Te veel pogingen. Probeer het opnieuw over ${Math.ceil((rateLimit.retryAfterSeconds ?? 60) / 60)} minuut/minuten.`,
     };
   }
 
   const parsed = adminLoginSchema.safeParse({ password: formData.get('password') });
   if (!parsed.success) {
-    return { success: false, message: 'Merci de saisir le mot de passe.' };
+    return { success: false, message: 'Vul het wachtwoord in.' };
   }
 
   const expectedPassword = process.env.ADMIN_PASSWORD;
   if (!expectedPassword) {
     return {
       success: false,
-      message: 'ADMIN_PASSWORD n’est pas configuré côté serveur. Ajoutez-le dans .env.local.',
+      message: 'ADMIN_PASSWORD is niet ingesteld op de server. Voeg het toe aan .env.local.',
     };
   }
 
@@ -58,7 +58,7 @@ export async function loginAdmin(_prevState: AdminLoginState, formData: FormData
 
   if (!isValid) {
     registerFailedAttempt(clientKey);
-    return { success: false, message: 'Mot de passe incorrect.' };
+    return { success: false, message: 'Onjuist wachtwoord.' };
   }
 
   clearRateLimit(clientKey);
@@ -70,7 +70,7 @@ export async function loginAdmin(_prevState: AdminLoginState, formData: FormData
     console.error('ADMIN SESSION CREATION ERROR:', error);
     return {
       success: false,
-      message: 'La configuration de session administrateur est invalide. Vérifiez ADMIN_SESSION_SECRET.',
+      message: 'De beheerderssessie is onjuist geconfigureerd. Controleer ADMIN_SESSION_SECRET.',
     };
   }
   cookies().set(ADMIN_SESSION_COOKIE, token, {

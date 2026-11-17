@@ -28,7 +28,7 @@ export function Pagination({
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
-    <nav className="mt-10 flex items-center justify-center gap-1.5" aria-label="Pagination">
+    <nav className="mt-10 flex items-center justify-center gap-1.5" aria-label="Paginanavigatie">
       <Link
         href={buildHref(Math.max(1, currentPage - 1))}
         aria-disabled={currentPage === 1}

@@ -149,7 +149,7 @@ export function Navbar() {
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.2 }}
               role="menu"
-              aria-label="Navigation principale"
+              aria-label="Hoofdnavigatie"
               className="absolute inset-x-0 top-full z-50 max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-ink-100 bg-white shadow-lifted md:hidden"
             >
               <div className="container-app py-3">
@@ -187,7 +187,7 @@ export function Navbar() {
                   className="flex min-h-11 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-ink-600 hover:bg-sand-100"
                 >
                   <User className="h-4.5 w-4.5" />
-                  Mon compte
+                  Mijn account
                 </Link>
               </div>
             </motion.div>

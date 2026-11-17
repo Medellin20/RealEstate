@@ -55,20 +55,20 @@ export function PropertyRowActions({
 
       <Button className="w-full sm:w-auto" variant="outline" size="sm" onClick={handleTogglePublish} disabled={isPending}>
         {isPublished ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
-        {isPublished ? 'Dépublier' : 'Publier'}
+        {isPublished ? 'Publicatie intrekken' : 'Publiceren'}
       </Button>
 
       <Link href={`/admin/appartements/${id}`} className="w-full sm:w-auto">
         <Button className="w-full" variant="outline" size="sm">
           <Pencil className="h-3.5 w-3.5" />
-          Modifier
+          Bewerken
         </Button>
       </Link>
 
       <ConfirmDeleteButton
         action={() => deleteProperty(id)}
-        confirmTitle="verwijderen cet appartement ?"
-        confirmDescription="deze action is irréversible en supprimera ook alle de photos associées."
+        confirmTitle="Dit appartement verwijderen?"
+        confirmDescription="Deze actie kan niet ongedaan worden gemaakt en verwijdert ook alle bijbehorende fotos."
       />
     </div>
   );

@@ -20,7 +20,7 @@ export async function requestGuaranteeRefund(input: RefundRequestInput): Promise
   if (!parsed.success) {
     return {
       success: false,
-      message: 'Merci de confirmer votre demande de remboursement.',
+      message: 'Bevestig uw verzoek om terugbetaling.',
       fieldErrors: parsed.error.flatten().fieldErrors,
     };
   }
@@ -34,13 +34,13 @@ export async function requestGuaranteeRefund(input: RefundRequestInput): Promise
     .maybeSingle();
 
   if (fetchError || !guarantee) {
-    return { success: false, message: 'Dossier de garantie introuvable.' };
+    return { success: false, message: 'Waarborgdossier niet gevonden.' };
   }
 
   if (!['payment_received', 'payment_declared', 'reservation_confirmed'].includes(guarantee.status)) {
     return {
       success: false,
-      message: 'Une demande de remboursement ne peut être faite que pour une garantie versée.',
+      message: 'Een terugbetaling kan alleen worden aangevraagd voor een betaalde waarborgsom.',
     };
   }
 
@@ -62,7 +62,7 @@ export async function requestGuaranteeRefund(input: RefundRequestInput): Promise
     .single();
 
   if (insertError || !refund) {
-    return { success: false, message: 'Une erreur est survenue, merci de réessayer.' };
+    return { success: false, message: 'Er is een fout opgetreden. Probeer het opnieuw.' };
   }
 
   await supabase
@@ -82,6 +82,6 @@ export async function requestGuaranteeRefund(input: RefundRequestInput): Promise
 
   return {
     success: true,
-    message: `Votre demande de remboursement (${reference}) a été transmise à notre équipe.`,
+    message: `Uw verzoek om terugbetaling (${reference}) is doorgestuurd naar ons team.`,
   };
 }

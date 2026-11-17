@@ -14,8 +14,8 @@ export default async function ContactPage() {
   const info = [
     { icon: Mail, label: 'contacts@realestatenl.agency' },
     { icon: Phone, label: footerPhone },
-    { icon: MapPin, label: 'Amsterdam, Pays-Bas' },
-    { icon: Clock, label: 'Lun–Ven, 9h–18h (CET)' },
+    { icon: MapPin, label: 'Amsterdam, Nederland' },
+    { icon: Clock, label: 'Ma–vr, 09:00–18:00 (CET)' },
   ];
 
   return (

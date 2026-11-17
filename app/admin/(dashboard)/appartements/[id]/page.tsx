@@ -31,7 +31,7 @@ export default async function EditPropertyPage({ params }: { params: { id: strin
             target="_blank"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-canal-600 hover:underline"
           >
-            Voir la page publique
+            Openbare pagina bekijken
             <ExternalLink className="h-3.5 w-3.5" />
           </Link>
         )}

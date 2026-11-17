@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: 'Algemene voorwaarden' };
 export default function ConditionsGeneralesPage() {
   return (
     <LegalPage title="Algemene gebruiksvoorwaarden" updatedAt="21 augustus 2026">
-      <h2>Objet</h2>
+      <h2>Doel</h2>
       <p>
         Deze algemene voorwaarden regelen het gebruik van de website Real Estate NL en de diensten
         voor het tot stand brengen van contacten voor de verhuur van appartementen in Nederland.

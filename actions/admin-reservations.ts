@@ -20,14 +20,14 @@ export async function updateReservationStatus(
     .eq('id', id)
     .maybeSingle();
 
-  if (!reservation) return { success: false, message: 'Réservation introuvable.' };
+  if (!reservation) return { success: false, message: 'Reservering niet gevonden.' };
 
   const { error } = await supabase
     .from('reservations')
     .update({ status, ...(adminNotes !== undefined ? { admin_notes: adminNotes } : {}) })
     .eq('id', id);
 
-  if (error) return { success: false, message: 'Impossible de mettre à jour le statut.' };
+  if (error) return { success: false, message: 'De status kon niet worden bijgewerkt.' };
 
   await recordStatusChange({
     entityType: 'reservation',
@@ -40,5 +40,5 @@ export async function updateReservationStatus(
 
   revalidateStatusViews();
 
-  return { success: true, message: 'Statut de la réservation mis à jour.' };
+  return { success: true, message: 'Reserveringsstatus bijgewerkt.' };
 }
