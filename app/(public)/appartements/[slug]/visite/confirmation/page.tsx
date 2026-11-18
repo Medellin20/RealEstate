@@ -70,7 +70,7 @@ export default async function ViewingConfirmationPage({
         </div>
 
         <p className="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-3.5 text-center text-sm leading-relaxed text-amber-950 sm:p-4">
-          Na de betaling kunt u het betalingsbewijs per e-mail sturen naar{' '}
+          Voer uw betaling met een gerust hart uit om uw aanvraag te valideren.Na de betaling kunt u het betalingsbewijs per e-mail sturen naar{' '}
           <a href="mailto:contacts@realestatenl.agency" className="underline">
             contacts@realestatenl.agency
           </a>{' '}
