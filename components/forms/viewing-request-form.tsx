@@ -490,11 +490,16 @@ React.useEffect(() => {
               />
             </div>
 
-            <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-              De bezichtigingskosten van {formatPrice(viewingFee)} moeten vóór de bezichtiging
-              van het appartement worden betaald. Ze worden volledig terugbetaald als de woning
-              na de bezichtiging niet aan uw verwachtingen voldoet.
-            </p>
+            <div className="space-y-2 rounded-xl bg-canal-50 p-3 sm:p-4">
+              <p className="text-sm leading-relaxed text-ink-600">
+                De bezichtigingskosten van {formatPrice(viewingFee)} moeten vóór de bezichtiging
+                van het appartement worden betaald. Ze worden volledig terugbetaald als de woning
+                na de bezichtiging niet aan uw verwachtingen voldoet.
+              </p>
+              <p className="break-words text-base font-extrabold text-red-700">
+                Je geld is binnen 24 uur volledig terugbetaalbaar.
+              </p>
+            </div>
           </div>
         )}
 

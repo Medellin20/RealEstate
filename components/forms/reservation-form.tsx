@@ -10,7 +10,6 @@ import { ArrowLeft, ArrowRight, ClipboardList, User } from 'lucide-react';
 import { reservationSchema, type ReservationInput } from '@/lib/validations/reservation';
 import { createReservation } from '@/actions/reservations';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Select } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label, FieldError } from '@/components/ui/label';
@@ -213,11 +212,9 @@ export function ReservationForm({
                 <Input id="originCity" {...register('originCity')} />
                 <FieldError message={errors.originCity?.message} />
               </div>
-              <div>
-                <Label htmlFor="message">Aanvullend bericht (optioneel)</Label>
-                <Textarea id="message" rows={4} {...register('message')} />
-                <FieldError message={errors.message?.message} />
-              </div>
+              <p className="text-base font-extrabold text-red-700">
+                Je geld is binnen 24 uur volledig terugbetaalbaar.
+              </p>
             </motion.div>
           )}
 
