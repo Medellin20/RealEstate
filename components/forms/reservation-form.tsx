@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
-import { ArrowLeft, ArrowRight, ClipboardList, User } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ClipboardList, ShieldCheck, User } from 'lucide-react';
 import { reservationSchema, type ReservationInput } from '@/lib/validations/reservation';
 import { createReservation } from '@/actions/reservations';
 import { Input } from '@/components/ui/input';
@@ -212,25 +212,18 @@ export function ReservationForm({
                 <Input id="originCity" {...register('originCity')} />
                 <FieldError message={errors.originCity?.message} />
               </div>
-              <p className="text-base font-extrabold text-red-700">
-                Je geld is binnen 24 uur volledig terugbetaalbaar.
-              </p>
-            </motion.div>
-          )}
-
-          {step === 1 && (
-            <motion.div
-              key="s1"
-              initial={{ opacity: 0, x: 16 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -16 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-4"
-            >
-              <p className="rounded-xl bg-canal-50 p-4 text-sm leading-relaxed text-ink-600">
-                De reserveringskosten bedragen 50% van één maand huur ({reservationFee}).
-                Klik op « Doorgaan » om uw dossier te verzenden en naar de betaling te gaan.
-              </p>
+              <div className="overflow-hidden rounded-xl border border-canal-100 bg-canal-50">
+                <p className="flex items-start gap-3 border-b border-canal-100 bg-white px-4 py-3.5 text-sm font-bold leading-6 text-red-700 sm:px-5 sm:text-base">
+                  <ShieldCheck aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0" />
+                  <span>Je geld is binnen 24 uur volledig terugbetaalbaar.</span>
+                </p>
+                <div className="space-y-1.5 px-4 py-3.5 text-sm leading-relaxed text-ink-700 sm:px-5">
+                  <p>
+                    De reserveringskosten bedragen 50% van één maand huur (<strong className="whitespace-nowrap font-semibold">{reservationFee}</strong>).
+                  </p>
+                  <p>Klik op « Doorgaan » om uw dossier te verzenden en naar de betaling te gaan.</p>
+                </div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

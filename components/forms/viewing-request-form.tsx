@@ -10,6 +10,7 @@ import {
   ArrowRight,
   CalendarClock,
   FileCheck2,
+  ShieldCheck,
   User,
 } from 'lucide-react';
 
@@ -490,14 +491,18 @@ React.useEffect(() => {
               />
             </div>
 
-            <div className="space-y-2 rounded-xl bg-canal-50 p-3 sm:p-4">
-              <p className="text-sm leading-relaxed text-ink-600">
-                De bezichtigingskosten van {formatPrice(viewingFee)} moeten vóór de bezichtiging
-                van het appartement worden betaald. Ze worden volledig terugbetaald als de woning
-                na de bezichtiging niet aan uw verwachtingen voldoet.
-              </p>
-              <p className="break-words text-base font-extrabold text-red-700">
-                Je geld is binnen 24 uur volledig terugbetaalbaar.
+            <div className="overflow-hidden rounded-xl border border-canal-100 bg-canal-50">
+              <div className="space-y-1.5 px-4 py-3.5 text-sm leading-relaxed text-ink-700 sm:px-5">
+                <p>
+                  De bezichtigingskosten van{' '}
+                  <strong className="whitespace-nowrap font-semibold">{formatPrice(viewingFee)}</strong>{' '}
+                  moeten vóór de bezichtiging van het appartement worden betaald.
+                </p>
+                <p>Ze worden volledig terugbetaald als de woning na de bezichtiging niet aan uw verwachtingen voldoet.</p>
+              </div>
+              <p className="flex items-start gap-3 border-t border-canal-100 bg-white px-4 py-3.5 text-sm font-bold leading-6 text-red-700 sm:px-5 sm:text-base">
+                <ShieldCheck aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0" />
+                <span>Je geld is binnen 24 uur volledig terugbetaalbaar.</span>
               </p>
             </div>
           </div>
