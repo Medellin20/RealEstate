@@ -1,3 +1,4 @@
+import { PROFESSIONAL_EMAIL } from '@/lib/payments/bank-transfer';
 import Link from 'next/link';
 import { Facebook, Home, Instagram, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
 import { getSiteSettings } from '@/lib/data/site-settings';
@@ -95,11 +96,11 @@ export async function Footer() {
           <ul className="mt-4 space-y-3">
             <li>
               <a
-                href="mailto:contacts@realestatenl.agency"
+                href={`mailto:${PROFESSIONAL_EMAIL}`}
                 className="flex min-w-0 items-center gap-2.5 break-all text-sm text-sand-300 transition-colors hover:text-white"
               >
                 <Mail className="h-4 w-4 shrink-0" />
-                contacts@realestatenl.agency
+                {PROFESSIONAL_EMAIL}
               </a>
             </li>
             <li>

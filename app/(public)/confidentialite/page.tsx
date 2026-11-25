@@ -1,3 +1,4 @@
+import { PROFESSIONAL_EMAIL } from '@/lib/payments/bank-transfer';
 import type { Metadata } from 'next';
 import { LegalPage } from '@/components/shared/legal-page';
 
@@ -29,7 +30,7 @@ export default function ConfidentialitePage() {
       <p>
         Volgens de Algemene Verordening Gegevensbescherming (AVG) heeft u recht op inzage, correctie
         en verwijdering van uw gegevens. Neem voor het uitoefenen van deze rechten contact op via
-        contacts@realestatenl.agency.
+        <a href={`mailto:${PROFESSIONAL_EMAIL}`} className="underline">{PROFESSIONAL_EMAIL}</a>.
       </p>
 
       <h2>Cookies</h2>

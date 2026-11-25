@@ -1,3 +1,4 @@
+import { PROFESSIONAL_EMAIL } from '@/lib/payments/bank-transfer';
 import type { Metadata } from 'next';
 import { Mail, Phone, MapPin, Clock } from 'lucide-react';
 import { ContactForm } from '@/components/forms/contact-form';
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 export default async function ContactPage() {
   const { footer_phone: footerPhone } = await getSiteSettings();
   const info = [
-    { icon: Mail, label: 'contacts@realestatenl.agency' },
+    { icon: Mail, label: PROFESSIONAL_EMAIL, href: `mailto:${PROFESSIONAL_EMAIL}` },
     { icon: Phone, label: footerPhone },
     { icon: MapPin, label: 'Amsterdam, Nederland' },
     { icon: Clock, label: 'Ma–vr, 09:00–18:00 (CET)' },
@@ -46,7 +47,9 @@ export default async function ContactPage() {
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10">
                     <item.icon className="h-4 w-4" />
                   </span>
-                  {item.label}
+                  {item.href ? (
+                    <a href={item.href} className="underline hover:text-white">{item.label}</a>
+                  ) : item.label}
                 </li>
               ))}
             </ul>

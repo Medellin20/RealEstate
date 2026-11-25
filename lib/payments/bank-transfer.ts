@@ -1,5 +1,5 @@
 export const VIEWING_FEE = 100;
-export const PROFESSIONAL_EMAIL = 'contacts@realestatenl.agency';
+export const PROFESSIONAL_EMAIL = 'contacts@nlrealestate.agency';
 
 export function getReservationPaymentAmount(monthlyPrice: number): number {
   // 50 % du premier loyer + une caution équivalente à un mois de loyer.

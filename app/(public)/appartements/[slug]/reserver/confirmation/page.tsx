@@ -1,3 +1,4 @@
+import { PROFESSIONAL_EMAIL } from '@/lib/payments/bank-transfer';
 import Link from 'next/link';
 import { CheckCircle2, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -47,8 +48,8 @@ export default async function ReservationConfirmationPage() {
 
         <p className="mt-3 rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold leading-relaxed text-red-700">
           Voer uw betaling met een gerust hart uit om uw aanvraag te valideren.Stuur na de betaling de bevestiging per e-mail naar{' '}
-          <a href="mailto:contacts@realestatenl.agency" className="underline">
-            contacts@realestatenl.agency
+          <a href={`mailto:${PROFESSIONAL_EMAIL}`} className="underline">
+            {PROFESSIONAL_EMAIL}
           </a>{' '}
           of via WhatsApp naar{' '}
           <a

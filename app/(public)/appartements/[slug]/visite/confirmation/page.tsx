@@ -1,3 +1,4 @@
+import { PROFESSIONAL_EMAIL } from '@/lib/payments/bank-transfer';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { CheckCircle2, Download, Home } from 'lucide-react';
@@ -71,8 +72,8 @@ export default async function ViewingConfirmationPage({
 
         <p className="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-3.5 text-center text-sm leading-relaxed text-amber-950 sm:p-4">
           Voer uw betaling met een gerust hart uit om uw aanvraag te valideren.Na de betaling kunt u het betalingsbewijs per e-mail sturen naar{' '}
-          <a href="mailto:contacts@realestatenl.agency" className="underline">
-            contacts@realestatenl.agency
+          <a href={`mailto:${PROFESSIONAL_EMAIL}`} className="underline">
+            {PROFESSIONAL_EMAIL}
           </a>{' '}
           of via WhatsApp naar{' '}
           <a

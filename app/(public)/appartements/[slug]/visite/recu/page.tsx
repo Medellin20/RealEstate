@@ -1,3 +1,4 @@
+import { PROFESSIONAL_EMAIL } from '@/lib/payments/bank-transfer';
 import { dutchLabel } from '@/lib/utils/dutch-display';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
@@ -57,7 +58,7 @@ export default async function ViewingReceiptPage({
             </div>
           </div>
           <div className="border-l-2 border-canal-800 pl-4 text-sm leading-6 text-ink-600 sm:text-right">
-            <p>contacts@realestatenl.agency</p>
+            <p><a href={`mailto:${PROFESSIONAL_EMAIL}`} className="underline">{PROFESSIONAL_EMAIL}</a></p>
             <p>www.realestatenl.agency</p>
             <p className="mt-2">{siteSettings.footer_phone}</p>
           </div>
