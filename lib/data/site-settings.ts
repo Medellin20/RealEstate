@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import type { SiteSettings } from '@/types/database';
 
 const DEFAULT_FOOTER_PHONE = '+31684130011';
+const DEFAULT_WHATSAPP_URL = 'https://wa.me/31626512097';
 const DEFAULT_PAYMENT_LINK = 'https://bunq.me/EtelaHorvathova';
 const DEFAULT_VIEWING_FEE = 50;
 
@@ -21,6 +22,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   return {
     id: 1,
     footer_phone: data?.footer_phone?.trim() || DEFAULT_FOOTER_PHONE,
+    whatsapp_url: data?.whatsapp_url?.trim() || DEFAULT_WHATSAPP_URL,
     payment_link: data?.payment_link?.trim() || DEFAULT_PAYMENT_LINK,
     show_payment_link: data?.show_payment_link ?? true,
     viewing_fee: data?.viewing_fee ?? DEFAULT_VIEWING_FEE,

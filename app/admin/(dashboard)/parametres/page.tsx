@@ -74,7 +74,7 @@ async function SiteSettingsSection() {
     <div className="rounded-2xl border border-ink-100 bg-white p-5 sm:p-6">
       <h2 className="font-bold text-ink-900">Openbare contactgegevens</h2>
       <p className="mt-2 mb-4 text-sm text-ink-500">
-        Wijzig het telefoonnummer in de voettekst en de betaallink voor bezichtigingen en reserveringen.
+        Wijzig het telefoonnummer in de voettekst, de WhatsApp-link en de betaallink voor bezichtigingen en reserveringen.
       </p>
       <SiteSettingsForm settings={settings} bankSettings={bankSettings} />
     </div>

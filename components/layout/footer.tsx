@@ -1,6 +1,6 @@
 import { PROFESSIONAL_EMAIL } from '@/lib/payments/bank-transfer';
 import Link from 'next/link';
-import { Facebook, Home, Instagram, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
+import { Facebook, Home, Instagram, Linkedin, Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
 import { getSiteSettings } from '@/lib/data/site-settings';
 
 const COLUMN_LINKS = [
@@ -135,6 +135,16 @@ export async function Footer() {
           <p>Appartementen huren in Nederland</p>
         </div>
       </div>
+      <a
+        href={settings.whatsapp_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Open een gesprek via WhatsApp"
+        className="fixed bottom-4 right-4 z-40 inline-flex min-h-12 items-center gap-2 rounded-full bg-green-700 px-4 py-2 text-sm font-semibold text-white shadow-lg hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700 sm:bottom-6 sm:right-6 print:hidden"
+      >
+        <MessageCircle className="h-5 w-5" aria-hidden="true" />
+        WhatsApp
+      </a>
     </footer>
   );
 }

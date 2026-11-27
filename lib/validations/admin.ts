@@ -18,6 +18,10 @@ export type BankSettingsInput = z.infer<typeof bankSettingsSchema>;
 
 export const siteSettingsSchema = z.object({
   footerPhone: z.string().trim().min(6, 'Vul een geldig telefoonnummer in.').max(30),
+  whatsappUrl: z.string().trim().regex(
+    /^https:\/\/wa\.me\/[1-9]\d{5,14}$/,
+    'Vul een WhatsApp-link in met een internationaal nummer, bijvoorbeeld https://wa.me/31626512097.'
+  ),
   paymentLink: z.string().trim().url('Vul een geldige betaallink in.'),
   showPaymentLink: z.boolean(),
   viewingFee: z.coerce.number().min(0, 'De bezichtigingskosten mogen niet negatief zijn.'),

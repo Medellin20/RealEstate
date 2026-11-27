@@ -28,6 +28,7 @@ export function SiteSettingsForm({
     resolver: zodResolver(siteSettingsSchema),
     defaultValues: {
       footerPhone: settings.footer_phone,
+      whatsappUrl: settings.whatsapp_url,
       paymentLink: settings.payment_link,
       showPaymentLink: settings.show_payment_link,
       viewingFee: settings.viewing_fee,
@@ -42,7 +43,8 @@ export function SiteSettingsForm({
         toast.error(result.message);
         return;
       }
-      toast.success('De betaallink is opgeslagen.');
+      toast.success(result.message);
+      if (data.showOnConfirmations === bankSettings.show_on_confirmations) return;
 
       const bankResult = await updateBankSettings({
         beneficiaryName: bankSettings.beneficiary_name,
@@ -53,7 +55,7 @@ export function SiteSettingsForm({
         defaultDepositAmount: bankSettings.default_deposit_amount,
         showOnConfirmations: data.showOnConfirmations,
       });
-      if (!bankResult.success) toast.error(`De betaallink is opgeslagen, maar de bankgegevens zijn niet bijgewerkt: ${bankResult.message}`);
+      if (!bankResult.success) toast.error(`De website-instellingen zijn opgeslagen, maar de bankgegevens zijn niet bijgewerkt: ${bankResult.message}`);
     });
   }
 
@@ -64,6 +66,12 @@ export function SiteSettingsForm({
         <Input id="footerPhone" type="tel" placeholder="+31649496257" {...register('footerPhone')} />
         <FieldError message={errors.footerPhone?.message} />
         <p className="mt-1 text-xs text-ink-400">Dit nummer wordt gebruikt in de voettekst, contactgegevens en betalingsbevestigingen via WhatsApp.</p>
+      </div>
+      <div>
+        <Label htmlFor="whatsappUrl">WhatsApp-link</Label>
+        <Input id="whatsappUrl" type="url" placeholder="https://wa.me/31626512097" {...register('whatsappUrl')} />
+        <FieldError message={errors.whatsappUrl?.message} />
+        <p className="mt-1 text-xs text-ink-400">Deze link opent het gesprek via de WhatsApp-knop op de website.</p>
       </div>
       <div>
         <Label htmlFor="viewingFee">Bezichtigingskosten (€)</Label>

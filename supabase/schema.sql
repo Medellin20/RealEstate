@@ -38,6 +38,7 @@ create type contact_status as enum ('new', 'in_progress', 'closed');
 create table site_settings (
   id integer primary key default 1 check (id = 1),
   footer_phone text not null default '+31684130011',
+  whatsapp_url text not null default 'https://wa.me/31626512097',
   payment_link text not null default 'https://bunq.me/EtelaHorvathova',
   show_payment_link boolean not null default true,
   viewing_fee numeric(10, 2) not null default 50,

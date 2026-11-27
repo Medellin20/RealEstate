@@ -254,6 +254,7 @@ export interface Favorite {
 export interface SiteSettings {
   id: number;
   footer_phone: string;
+  whatsapp_url: string;
   payment_link: string;
   show_payment_link: boolean;
   viewing_fee: number;
